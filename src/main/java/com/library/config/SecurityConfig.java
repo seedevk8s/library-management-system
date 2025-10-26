@@ -77,9 +77,17 @@ public class SecurityConfig {
                 // AuthenticationProvider 등록 (필수)
                 .authenticationProvider(authenticationProvider())
 
+                /*
+                    CSRF 보호 설정 (게시글 삭제 기능을 위해 필수)
+                        - CSRF 보호 활성화 (기본값)
+                            - 모든 POST/PUT/DELETE요청에 CSRF 토큰 검증
+                            - 토큰이 없거나 잘못된 요청은 403 Forbidden 응답
+                        - REST API는 CSRF 토큰 검증에서 제외
+                            - /api/** 경로는 JSON 기반 API이므로 CSRF 공격 위험이 낮음
+                 */
                 .csrf(csrf -> {
-                    csrf.disable();     //개발 단계에서는 비활성화
-                    log.info("1. CSRF 보호 비활성화 (운영에서는 활성화 필요!)");
+                    csrf.ignoringRequestMatchers("/api/**");  // REST API는 CSRF 검증 제외
+                    log.info("1. CSRF 보호 활성화 (REST API는 제외)");
                 })
 
                 .authorizeHttpRequests(authz -> {
@@ -90,6 +98,18 @@ public class SecurityConfig {
                             .requestMatchers("/auth/**", "/register", "/login").permitAll()
                             // 게시판 URL (목록/상세 조회는 모두 허용)
                             .requestMatchers("/boards/**").permitAll()
+                            
+                            // 댓글 API 권한 설정
+                            // - GET (조회): 누구나 접근 가능 (로그인 불필요)
+                            // - POST/PUT/DELETE (작성/수정/삭제): 인증된 사용자만 가능
+                            .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/comments/**").permitAll()
+                            .requestMatchers("/api/comments/**").authenticated()
+                            
+                            // 좋아요 API 권한 설정
+                            // - GET (상태 조회): 누구나 접근 가능 (로그인 불필요)
+                            // - POST (토글): 인증된 사용자만 가능
+                            .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/boards/*/like").permitAll()
+                            .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/boards/*/like").authenticated()
 
                             // 그 외 모든 요청은 인증 필요
                             .anyRequest().authenticated();

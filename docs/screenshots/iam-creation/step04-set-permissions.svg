@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1000">
+  <!-- 배경 -->
+  <rect width="1200" height="1000" fill="#f0f0f0"/>
+  
+  <!-- AWS Console 상단 바 -->
+  <rect x="0" y="0" width="1200" height="60" fill="#232f3e"/>
+  <text x="20" y="40" font-family="Arial" font-size="24" fill="#ff9900" font-weight="bold">AWS</text>
+  <text x="120" y="40" font-family="Arial" font-size="18" fill="#ffffff">IAM &gt; Users &gt; Create user</text>
+  
+  <!-- 메인 콘텐츠 -->
+  <rect x="100" y="100" width="1000" height="850" fill="#ffffff" stroke="#aab7b8" stroke-width="1"/>
+  
+  <!-- 제목 -->
+  <text x="120" y="140" font-family="Arial" font-size="32" fill="#232f3e" font-weight="bold">Set permissions</text>
+  
+  <!-- Permission options -->
+  <text x="120" y="190" font-family="Arial" font-size="18" fill="#232f3e" font-weight="bold">Permission options</text>
+  
+  <!-- 옵션 1 -->
+  <rect x="120" y="210" width="950" height="60" fill="#f0f0f0" stroke="#aab7b8" stroke-width="1" rx="4"/>
+  <circle cx="140" cy="240" r="10" fill="#ffffff" stroke="#aab7b8" stroke-width="2"/>
+  <text x="165" y="245" font-family="Arial" font-size="16" fill="#232f3e">Add user to group</text>
+  
+  <!-- 옵션 2 - 선택됨 -->
+  <rect x="120" y="280" width="950" height="60" fill="#ffffff" stroke="#ff9900" stroke-width="3" rx="4"/>
+  <circle cx="140" cy="310" r="10" fill="#ff9900" stroke="#ff9900" stroke-width="2"/>
+  <circle cx="140" cy="310" r="4" fill="#ffffff"/>
+  <text x="165" y="315" font-family="Arial" font-size="16" fill="#232f3e" font-weight="bold">Attach policies directly</text>
+  
+  <!-- 선택 화살표 -->
+  <path d="M 70 310 L 110 310" stroke="#ff0000" stroke-width="4" marker-end="url(#arrowred)"/>
+  <text x="10" y="315" font-family="Arial" font-size="14" fill="#ff0000" font-weight="bold">선택!</text>
+  
+  <!-- 옵션 3 -->
+  <rect x="120" y="350" width="950" height="60" fill="#f0f0f0" stroke="#aab7b8" stroke-width="1" rx="4"/>
+  <circle cx="140" cy="380" r="10" fill="#ffffff" stroke="#aab7b8" stroke-width="2"/>
+  <text x="165" y="385" font-family="Arial" font-size="16" fill="#232f3e">Copy permissions</text>
+  
+  <!-- Permissions policies 섹션 -->
+  <text x="120" y="450" font-family="Arial" font-size="18" fill="#232f3e" font-weight="bold">Permissions policies</text>
+  
+  <!-- 검색창 -->
+  <rect x="120" y="470" width="950" height="40" fill="#ffffff" stroke="#aab7b8" stroke-width="2" rx="4"/>
+  <text x="135" y="495" font-family="Arial" font-size="14" fill="#879596">Search</text>
+  
+  <!-- 첫 번째 정책 -->
+  <text x="120" y="540" font-family="Arial" font-size="16" fill="#232f3e" font-weight="bold">1. 첫 번째 정책 추가:</text>
+  
+  <rect x="120" y="550" width="950" height="40" fill="#ffffff" stroke="#aab7b8" stroke-width="2" rx="4"/>
+  <text x="135" y="575" font-family="Arial" font-size="14" fill="#232f3e">AmazonEC2ContainerRegistryPowerUser</text>
+  
+  <!-- 체크박스 -->
+  <rect x="120" y="600" width="950" height="50" fill="#e8f4f8" stroke="#232f3e" stroke-width="2" rx="4"/>
+  <rect x="135" y="615" width="20" height="20" fill="#232f3e" stroke="#232f3e" stroke-width="2" rx="2"/>
+  <path d="M 138 625 L 143 630 L 152 618" stroke="#ffffff" stroke-width="3" fill="none"/>
+  <text x="165" y="630" font-family="Arial" font-size="14" fill="#232f3e" font-weight="bold">AmazonEC2ContainerRegistryPowerUser</text>
+  
+  <!-- 선택 화살표 -->
+  <path d="M 70 625 L 110 625" stroke="#ff0000" stroke-width="4" marker-end="url(#arrowred)"/>
+  <text x="10" y="630" font-family="Arial" font-size="14" fill="#ff0000" font-weight="bold">체크!</text>
+  
+  <!-- 두 번째 정책 -->
+  <text x="120" y="680" font-family="Arial" font-size="16" fill="#232f3e" font-weight="bold">2. 두 번째 정책 추가:</text>
+  
+  <rect x="120" y="690" width="950" height="40" fill="#ffffff" stroke="#aab7b8" stroke-width="2" rx="4"/>
+  <text x="135" y="715" font-family="Arial" font-size="14" fill="#232f3e">AmazonECS_FullAccess</text>
+  
+  <!-- 체크박스 -->
+  <rect x="120" y="740" width="950" height="50" fill="#e8f4f8" stroke="#232f3e" stroke-width="2" rx="4"/>
+  <rect x="135" y="755" width="20" height="20" fill="#232f3e" stroke="#232f3e" stroke-width="2" rx="2"/>
+  <path d="M 138 765 L 143 770 L 152 758" stroke="#ffffff" stroke-width="3" fill="none"/>
+  <text x="165" y="770" font-family="Arial" font-size="14" fill="#232f3e" font-weight="bold">AmazonECS_FullAccess</text>
+  
+  <!-- 선택 화살표 -->
+  <path d="M 70 765 L 110 765" stroke="#ff0000" stroke-width="4" marker-end="url(#arrowred)"/>
+  <text x="10" y="770" font-family="Arial" font-size="14" fill="#ff0000" font-weight="bold">체크!</text>
+  
+  <!-- 선택된 정책 개수 -->
+  <text x="120" y="820" font-family="Arial" font-size="14" fill="#232f3e">2 policies selected</text>
+  
+  <!-- Next 버튼 -->
+  <rect x="900" y="880" width="150" height="45" fill="#ff9900" rx="4"/>
+  <text x="975" y="908" font-family="Arial" font-size="18" fill="#ffffff" font-weight="bold" text-anchor="middle">Next</text>
+  
+  <!-- Next 버튼 클릭 화살표 -->
+  <circle cx="975" cy="902" r="60" fill="none" stroke="#00ff00" stroke-width="4"/>
+  <path d="M 1050 902 L 1100 902" stroke="#00ff00" stroke-width="4" marker-end="url(#arrowgreen)"/>
+  <text x="1110" y="908" font-family="Arial" font-size="18" fill="#00ff00" font-weight="bold">Next!</text>
+  
+  <defs>
+    <marker id="arrowred" markerWidth="10" markerHeight="10" refX="5" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#ff0000"/>
+    </marker>
+    <marker id="arrowgreen" markerWidth="10" markerHeight="10" refX="5" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#00ff00"/>
+    </marker>
+  </defs>
+</svg>

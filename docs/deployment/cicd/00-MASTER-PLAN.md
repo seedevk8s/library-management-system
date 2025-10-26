@@ -27,7 +27,18 @@ Library Management System을 AWS ECS에 Blue-Green 배포 방식으로 배포하
 - ✅ Step 1-4: 로컬 Docker 배포 완료
 - ✅ Git 저장소: https://github.com/seedevk8s/library-management-system
 - ✅ 모든 변경사항 커밋 완료
-- 🔄 Step 5: CI/CD + ECS 배포 진행 중
+- 🔄 **Step 5: CI/CD + ECS 배포 진행 중**
+  - ✅ **Phase 1 완료**: IAM 사용자 생성 및 설정
+  - ✅ **Phase 2 완료**: 로컬 Docker 환경 구축 및 테스트
+    - ✅ Dockerfile 작성 (Multi-stage build, 보안 설정)
+    - ✅ .dockerignore 생성
+    - ✅ docker-compose.yml 작성 (MySQL 8.0 + App)
+    - ✅ application.yml prod 프로파일 설정
+    - ✅ 로컬 빌드 및 테스트 성공
+    - ✅ 완전한 소스 코드 반영
+  - ✅ **Phase 3 부분 완료**: ECR Repository, ECS Cluster 생성
+  - ✅ **GitHub Secrets** 설정 (5/6 완료)
+  - 🔄 **현재 작업**: ECS Task Definition 및 GitHub Actions 워크플로우 작성
 
 ### 기술 스택
 - **소스 코드**: Spring Boot 3.5.6, Java 17, Gradle
@@ -47,31 +58,70 @@ Library Management System을 AWS ECS에 Blue-Green 배포 방식으로 배포하
 
 ## 전체 작업 로드맵
 
-### Phase 1: 준비 단계 (현재)
-- [ ] 마스터 플랜 문서 작성
-- [ ] AWS 계정 설정 및 IAM 사용자 생성
-- [ ] 비용 알림 설정
-- [ ] Git 브랜치 생성: `feature/cicd-ecs-blue-green-deployment`
+### Phase 1: 준비 단계 ✅ **완료**
+- [x] 마스터 플랜 문서 작성
+- [x] AWS 계정 설정 및 IAM 사용자 생성
+  - [x] IAM 사용자: `github-actions-deploy2` 생성
+  - [x] 필수 권한 5개 정책 연결
+  - [x] Access Key 생성 및 안전하게 저장
+  - [x] IAM 사용자 생성 가이드 문서 작성 (`AWS_IAM_USER_CREATION_GUIDE.md`)
+- [ ] 비용 알림 설정 (선택사항)
+- [x] Git 브랜치 생성: `feature/cicd-ecs-blue-green-deployment`
 
-### Phase 2: 로컬 검증 단계
-- [ ] GitHub Actions 워크플로우 작성 (초안)
-- [ ] ECS Task Definition 작성
-- [ ] CodeDeploy AppSpec 작성
-- [ ] 로컬에서 Docker 이미지 빌드 테스트
+### Phase 2: 로컬 검증 단계 ✅ **완료**
+- [x] Dockerfile 작성
+  - [x] Multi-stage build 구성 (builder + runtime)
+  - [x] 보안 설정 (non-root user)
+  - [x] Health check 설정
+- [x] .dockerignore 생성
+- [x] docker-compose.yml 작성
+  - [x] MySQL 8.0 컨테이너 추가
+  - [x] 애플리케이션 컨테이너 설정
+  - [x] 볼륨 마운트 (uploads, logs)
+  - [x] 네트워크 설정
+  - [x] Health check 및 depends_on 설정
+- [x] application.yml 운영 환경 설정
+  - [x] prod 프로파일 추가
+  - [x] 환경 변수 설정 (DB_URL, DB_USERNAME, DB_PASSWORD)
+  - [x] HikariCP 연결 풀 설정
+- [x] 로컬 Docker 이미지 빌드 및 테스트
+  - [x] Docker 이미지 빌드 성공 (483.26 MB)
+  - [x] MySQL + App 컨테이너 동시 실행
+  - [x] 애플리케이션 정상 동작 확인
+  - [x] 게시판 CRUD 기능 테스트
+- [x] 완전한 소스 코드 반영
+  - [x] BoardController 전체 기능 구현
+  - [x] 파일 첨부, 좋아요, 댓글 기능 포함
+- [ ] GitHub Actions 워크플로우 작성 (초안) - **다음 단계**
+- [ ] ECS Task Definition 작성 - **다음 단계**
+- [ ] CodeDeploy AppSpec 작성 - **다음 단계**
 
-### Phase 3: AWS 인프라 구축
-- [ ] ECR 리포지토리 생성
+### Phase 3: AWS 인프라 구축 🔄 **진행 중**
+- [x] ECR 리포지토리 생성
+  - [x] Repository: `library-management-system`
+  - [x] Region: `ap-northeast-2` (서울)
+  - [x] GitHub Secret 등록: `ECR_REPOSITORY`
 - [ ] VPC 및 서브넷 구성 (기본 VPC 사용 가능)
 - [ ] Security Groups 생성
 - [ ] Application Load Balancer 생성
 - [ ] Target Groups 생성 (Blue/Green)
-- [ ] ECS 클러스터 생성
-- [ ] ECS Task Definition 등록
+- [x] ECS 클러스터 생성
+  - [x] Cluster: `library-management-cluster`
+  - [x] 유형: AWS Fargate (serverless)
+  - [x] Region: `ap-northeast-2`
+  - [x] GitHub Secret 등록: `ECS_CLUSTER`
+- [ ] ECS Task Definition 등록 (진행 중)
 - [ ] ECS 서비스 생성
 - [ ] CodeDeploy 애플리케이션 및 배포 그룹 생성
 
-### Phase 4: GitHub Actions 연동
-- [ ] GitHub Secrets 설정 (AWS 자격증명)
+### Phase 4: GitHub Actions 연동 🔄 **일부 완료**
+- [x] GitHub Secrets 설정 (5/6 완료)
+  - [x] `AWS_ACCESS_KEY_ID`
+  - [x] `AWS_SECRET_ACCESS_KEY`
+  - [x] `AWS_REGION` (ap-northeast-2)
+  - [x] `ECR_REPOSITORY` (library-management-system)
+  - [x] `ECS_CLUSTER` (library-management-cluster)
+  - [ ] `ECS_SERVICE` (ECS 서비스 생성 후 등록)
 - [ ] GitHub Actions 워크플로우 최종 수정
 - [ ] 첫 배포 테스트
 - [ ] Blue-Green 전환 테스트
@@ -690,17 +740,23 @@ aws/
 #### 3. 문서
 ```
 docs/
+├── AWS_IAM_USER_CREATION_GUIDE.md              # ✅ IAM 사용자 생성 가이드
+├── screenshots/                                 # ✅ 작업 스크린샷
 └── deployment/
     └── cicd/
-        ├── 00-MASTER-PLAN.md                    # ✅ 현재 파일
-        ├── 01-AWS-RESOURCES-CHECKLIST.md        # AWS 리소스 체크리스트
-        ├── 02-GITHUB-ACTIONS-SETUP.md           # GitHub Actions 설정 가이드
-        ├── 03-DEPLOYMENT-GUIDE.md               # 배포 실행 가이드
-        ├── 04-TROUBLESHOOTING.md                # 트러블슈팅
+        ├── 00-MASTER-PLAN.md                    # ✅ 현재 파일 (마스터 플랜)
+        ├── 01-AWS-RESOURCES-CHECKLIST.md        # ✅ AWS 리소스 체크리스트
+        ├── 03-AWS-IAM-SETUP-GUIDE.md            # ✅ IAM 설정 가이드
+        ├── QUICK-RECOVERY-GUIDE.md              # ✅ 빠른 복구 가이드
+        ├── README.md                            # ✅ 문서 가이드
+        ├── SESSION-RECOVERY.md                  # ✅ 세션 복구 가이드
+        ├── 02-GITHUB-ACTIONS-SETUP.md           # (곧 생성 예정)
+        ├── 03-DEPLOYMENT-GUIDE.md               # (곧 생성 예정)
+        ├── 04-TROUBLESHOOTING.md                # (곧 생성 예정)
         └── diagrams/
-            ├── blue-green-architecture.svg      # 아키텍처 다이어그램
-            ├── cicd-pipeline-flow.svg           # CI/CD 흐름도
-            └── aws-network-topology.svg         # 네트워크 토폴로지
+            ├── blue-green-architecture.svg      # (곧 생성 예정)
+            ├── cicd-pipeline-flow.svg           # (곧 생성 예정)
+            └── aws-network-topology.svg         # (곧 생성 예정)
 ```
 
 #### 4. 환경 설정 (검토)
@@ -715,7 +771,12 @@ src/main/resources/
 
 **우선순위 1 (Phase 1):**
 1. ✅ `docs/deployment/cicd/00-MASTER-PLAN.md` (현재 파일)
-2. `docs/deployment/cicd/01-AWS-RESOURCES-CHECKLIST.md`
+2. ✅ `docs/deployment/cicd/01-AWS-RESOURCES-CHECKLIST.md`
+3. ✅ `docs/deployment/cicd/03-AWS-IAM-SETUP-GUIDE.md`
+4. ✅ `docs/deployment/cicd/README.md`
+5. ✅ `docs/deployment/cicd/QUICK-RECOVERY-GUIDE.md`
+6. ✅ `docs/deployment/cicd/SESSION-RECOVERY.md`
+7. ✅ `docs/AWS_IAM_USER_CREATION_GUIDE.md`
 
 **우선순위 2 (Phase 2):**
 3. `.github/workflows/deploy-to-ecs.yml`
@@ -891,11 +952,30 @@ aws ecr get-login-password --region ap-northeast-2 | \
 
 ### ✅ 즉시 진행할 작업
 
-- [x] 마스터 플랜 문서 완성
-- [ ] AWS 계정 로그인 및 IAM 사용자 생성
-- [ ] Git 브랜치 생성
-- [ ] AWS 리소스 체크리스트 문서 작성
-- [ ] GitHub Actions 워크플로우 초안 작성
+**Phase 2 완료 항목:**
+- [x] Dockerfile 생성 및 최적화
+- [x] .dockerignore 생성
+- [x] docker-compose.yml 작성 (MySQL + App)
+- [x] application.yml prod 프로파일 설정
+- [x] 로컬 Docker 빌드 및 테스트 성공
+- [x] 완전한 소스 코드 반영
+
+**Phase 3 진행 중:**
+- [x] IAM 사용자 생성 (`github-actions-deploy2`)
+- [x] ECR Repository 생성 (`library-management-system`)
+- [x] ECS Cluster 생성 (`library-management-cluster`, Fargate)
+- [x] GitHub Secrets 설정 (5/6 완료)
+
+**다음 작업 (우선순위):**
+- [ ] **Git 커밋**: 현재까지 작업 내용 커밋
+- [ ] **ECS Task Definition 작성**: `aws/ecs-task-definition.json`
+- [ ] **GitHub Actions 워크플로우 작성**: `.github/workflows/deploy-to-ecs.yml`
+- [ ] **CodeDeploy AppSpec 작성**: `aws/appspec.yml`
+- [ ] **VPC 및 보안 그룹 설정**
+- [ ] **Application Load Balancer 생성**
+- [ ] **ECS Service 생성**
+- [ ] **CodeDeploy 설정**
+- [ ] **첫 배포 테스트**
 
 ### 📅 단계별 예상 소요 시간
 
@@ -931,6 +1011,9 @@ aws ecr get-login-password --region ap-northeast-2 | \
 
 | 날짜 | 버전 | 변경 내용 | 작성자 |
 |------|------|-----------|--------|
+| 2025-10-26 | 1.3 | Git 브랜치 생성 완료 반영, 문서 파일 목록 업데이트 (AWS_IAM_USER_CREATION_GUIDE.md 등 6개 문서 추가), 스크린샷 디렉토리 추가 | Claude |
+| 2025-10-26 | 1.2 | Phase 2 완료 - Docker 환경 구축 및 로컬 테스트 성공, 완전한 소스 반영 | Claude |
+| 2025-10-26 | 1.1 | Phase 1 완료, Phase 3 부분 완료, GitHub Secrets 설정 내용 반영 | Claude |
 | 2025-10-24 | 1.0 | 마스터 플랜 초안 작성 | Claude |
 
 ---
@@ -944,10 +1027,31 @@ aws ecr get-login-password --region ap-northeast-2 | \
 4. ✅ 비용 최적화 전략 제시
 5. ✅ 트러블슈팅 가이드 포함
 
+**📌 현재 진행 상황 (2025-10-26 v1.3):**
+- ✅ **Phase 1 완료**: IAM 사용자 생성 및 Git 브랜치 설정
+  - ✅ IAM 사용자: `github-actions-deploy2`
+  - ✅ Git 브랜치: `feature/cicd-ecs-blue-green-deployment` 생성 완료
+  - ✅ 관련 문서 6개 작성 완료 (README, QUICK-RECOVERY-GUIDE 등)
+- ✅ **Phase 2 완료**: 로컬 Docker 환경 구축
+  - ✅ Dockerfile 작성 (Multi-stage build, 보안 설정, Health check)
+  - ✅ .dockerignore 생성
+  - ✅ docker-compose.yml 작성 (MySQL 8.0 + App)
+  - ✅ application.yml prod 프로파일 설정
+  - ✅ 로컬 빌드 성공 (이미지 크기: 483.26 MB)
+  - ✅ MySQL + App 컨테이너 동시 실행 성공
+  - ✅ 웹 애플리케이션 정상 동작 확인 (http://localhost:8081)
+  - ✅ 완전한 소스 코드 반영 (BoardController, 파일첨부, 좋아요 등)
+- ✅ **Phase 3 부분 완료**: 
+  - ✅ ECR Repository 생성 (`library-management-system`)
+  - ✅ ECS Cluster 생성 (`library-management-cluster`, Fargate)
+  - ✅ GitHub Secrets 5/6 완료
+- 🔄 **현재 작업**: Git 커밋 후 ECS Task Definition 및 GitHub Actions 워크플로우 작성
+
 **📌 다음 작업:**
-- `01-AWS-RESOURCES-CHECKLIST.md` 작성
-- Git 브랜치 생성
-- AWS 계정 설정
+- Git 커밋 및 푸시
+- ECS Task Definition 생성 (`aws/ecs-task-definition.json`)
+- GitHub Actions 워크플로우 작성 (`.github/workflows/deploy-to-ecs.yml`)
+- CodeDeploy AppSpec 작성 (`aws/appspec.yml`)
 
 ---
 

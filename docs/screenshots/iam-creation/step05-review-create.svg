@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <!-- 배경 -->
+  <rect width="1200" height="900" fill="#f0f0f0"/>
+  
+  <!-- AWS Console 상단 바 -->
+  <rect x="0" y="0" width="1200" height="60" fill="#232f3e"/>
+  <text x="20" y="40" font-family="Arial" font-size="24" fill="#ff9900" font-weight="bold">AWS</text>
+  <text x="120" y="40" font-family="Arial" font-size="18" fill="#ffffff">IAM &gt; Users &gt; Create user</text>
+  
+  <!-- 메인 콘텐츠 -->
+  <rect x="100" y="100" width="1000" height="750" fill="#ffffff" stroke="#aab7b8" stroke-width="1"/>
+  
+  <!-- 제목 -->
+  <text x="120" y="140" font-family="Arial" font-size="32" fill="#232f3e" font-weight="bold">Review and create</text>
+  
+  <!-- User details 섹션 -->
+  <rect x="120" y="180" width="950" height="200" fill="#fafafa" stroke="#aab7b8" stroke-width="1" rx="4"/>
+  <text x="140" y="210" font-family="Arial" font-size="18" fill="#232f3e" font-weight="bold">User details</text>
+  
+  <text x="140" y="240" font-family="Arial" font-size="14" fill="#879596">User name</text>
+  <text x="140" y="265" font-family="Arial" font-size="16" fill="#232f3e" font-weight="bold">github-actions-deployer</text>
+  
+  <text x="140" y="300" font-family="Arial" font-size="14" fill="#879596">AWS Management Console access</text>
+  <text x="140" y="325" font-family="Arial" font-size="16" fill="#232f3e">Disabled</text>
+  
+  <text x="140" y="360" font-family="Arial" font-size="14" fill="#879596">Permissions boundary</text>
+  <text x="140" y="385" font-family="Arial" font-size="16" fill="#232f3e">Not set</text>
+  
+  <!-- Permissions 섹션 -->
+  <rect x="120" y="400" width="950" height="250" fill="#fafafa" stroke="#aab7b8" stroke-width="1" rx="4"/>
+  <text x="140" y="430" font-family="Arial" font-size="18" fill="#232f3e" font-weight="bold">Permissions</text>
+  
+  <text x="140" y="460" font-family="Arial" font-size="14" fill="#879596">Permissions policies - 2 policies</text>
+  
+  <!-- 정책 1 -->
+  <rect x="140" y="475" width="900" height="40" fill="#e8f4f8" stroke="#232f3e" stroke-width="1" rx="4"/>
+  <text x="160" y="500" font-family="Arial" font-size="14" fill="#232f3e" font-weight="bold">AmazonEC2ContainerRegistryPowerUser</text>
+  <text x="800" y="500" font-family="Arial" font-size="12" fill="#879596">AWS managed</text>
+  
+  <!-- 정책 2 -->
+  <rect x="140" y="525" width="900" height="40" fill="#e8f4f8" stroke="#232f3e" stroke-width="1" rx="4"/>
+  <text x="160" y="550" font-family="Arial" font-size="14" fill="#232f3e" font-weight="bold">AmazonECS_FullAccess</text>
+  <text x="800" y="550" font-family="Arial" font-size="12" fill="#879596">AWS managed</text>
+  
+  <!-- 확인 체크 -->
+  <rect x="140" y="590" width="30" height="30" fill="#00ff00" stroke="#00ff00" stroke-width="2" rx="4"/>
+  <path d="M 145 605 L 152 612 L 165 595" stroke="#ffffff" stroke-width="4" fill="none"/>
+  <text x="180" y="610" font-family="Arial" font-size="16" fill="#00ff00" font-weight="bold">설정 확인 완료!</text>
+  
+  <!-- 버튼들 -->
+  <rect x="750" y="770" width="150" height="45" fill="#ffffff" stroke="#232f3e" stroke-width="2" rx="4"/>
+  <text x="825" y="798" font-family="Arial" font-size="18" fill="#232f3e" font-weight="bold" text-anchor="middle">Previous</text>
+  
+  <rect x="920" y="770" width="150" height="45" fill="#ff9900" rx="4"/>
+  <text x="995" y="798" font-family="Arial" font-size="18" fill="#ffffff" font-weight="bold" text-anchor="middle">Create user</text>
+  
+  <!-- Create user 버튼 클릭 화살표 -->
+  <circle cx="995" cy="792" r="65" fill="none" stroke="#00ff00" stroke-width="5"/>
+  <path d="M 995 865 L 995 890" stroke="#00ff00" stroke-width="5" marker-end="url(#arrowgreen)"/>
+  <text x="800" y="885" font-family="Arial" font-size="20" fill="#00ff00" font-weight="bold">Create user 클릭!</text>
+  
+  <defs>
+    <marker id="arrowgreen" markerWidth="10" markerHeight="10" refX="5" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#00ff00"/>
+    </marker>
+  </defs>
+</svg>

@@ -99,9 +99,49 @@
                 text-decoration: underline;
             }
 
-            /*댓글 수 */
+            /*댓글 수 표시 스타일 */
             .comment-count {
+                color: #007bff;              /* 파란색 (클릭 가능한 요소처럼 보임) */
+                font-size: 14px;             /* 제목보다 작은 크기 */
+                font-weight: 500;            /* 중간 굵기 */
+                margin-left: 8px;            /* 제목과의 간격 */
+            }
 
+            /* === 좋아요 버튼 스타일 === */
+            .like-button-small {
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+                padding: 5px 10px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                background-color: white;
+                cursor: pointer;
+                transition: all 0.2s;
+                font-size: 14px;
+            }
+
+            .like-button-small:hover {
+                background-color: #f8f9fa;
+                border-color: #ff6b6b;
+            }
+
+            .like-button-small.liked {
+                background-color: #ffe8e8;
+                border-color: #ff6b6b;
+            }
+
+            .like-button-small i {
+                color: #ccc;
+                transition: color 0.2s;
+            }
+
+            .like-button-small.liked i {
+                color: #ff6b6b;
+            }
+
+            .like-button-small:hover i {
+                color: #ff6b6b;
             }
 
             /*=== 카테고리 배치 ===*/
@@ -252,14 +292,14 @@
                         </td>
                         <!--제목 (클릭 시 상세 페이지로 이동)-->
                         <td class="title">
-                            <a th:href="@{/boards/{id}(id=${board.id})}"
+                            <a th:href="@{/boards/{id}(id=${board.id}, page=${currentPage})}"
                                 th:text="${board.title}">
                                 게시글 제목
                             </a>
                             <!--댓글 수 표시 (댓글이 있을 때만)-->
                             <!--th:if: 조건이 참일 때만 랜더링-->
-                            <span class="comment-count">
-                                <span></span>
+                            <span class="comment-count" th:if="${board.commentCount > 0}">
+                                💬 [<span th:text="${board.commentCount}">0</span>]
                             </span>
                         </td>
 
@@ -269,8 +309,18 @@
                         <!--조회수-->
                         <td class="center" th:text="${board.viewCount}">0</td>
 
-                        <!--좋아요 수-->
-                        <td class="center" th:text="${board.likeCount}">0</td>
+                        <!--좋아요 (버튼 + 수)-->
+                        <td class="center">
+                            <button class="like-button-small"
+                                    th:data-board-id="${board.id}"
+                                    th:data-liked="${board.userLiked}"
+                                    th:classappend="${board.userLiked} ? 'liked' : ''"
+                                    onclick="toggleLikeInList(this)"
+                                    th:disabled="${!#authorization.expression('isAuthenticated()')}">
+                                <i th:class="${board.userLiked} ? 'fas fa-heart' : 'far fa-heart'"></i>
+                                <span class="like-count" th:text="${board.likeCount}">0</span>
+                            </button>
+                        </td>
 
                         <!--작성일시-->
                         <!--#temporals: Thymeleaf의 날짜/시간 유틸리티-->
@@ -313,7 +363,59 @@
 
     <!--게시판 전용 JavaScript (layout.html 의 </body> 직전에 삽입됨)-->
     <th:block th:fragment="scripts">
+        <script>
+            // 목록 페이지에서 좋아요 토글
+            function toggleLikeInList(button) {
+                const boardId = button.dataset.boardId;
+                const isLiked = button.classList.contains('liked');
 
+                // 로그인 확인
+                const isAuthenticated = [[${#authorization.expression('isAuthenticated()')}]];
+                if (!isAuthenticated) {
+                    alert('로그인이 필요한 서비스입니다.');
+                    location.href = '/auth/login';
+                    return;
+                }
+
+                // CSRF 토큰 가져오기
+                const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+
+                // API 호출
+                fetch(`/api/boards/${boardId}/like`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        [csrfHeader]: csrfToken
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('좋아요 처리 실패');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // UI 업데이트
+                    const likeCountSpan = button.querySelector('.like-count');
+                    const icon = button.querySelector('i');
+
+                    likeCountSpan.textContent = data.likeCount;
+
+                    if (data.liked) {
+                        button.classList.add('liked');
+                        icon.className = 'fas fa-heart';
+                    } else {
+                        button.classList.remove('liked');
+                        icon.className = 'far fa-heart';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('좋아요 처리 중 오류가 발생했습니다.');
+                });
+            }
+        </script>
     </th:block>
 </body>
 </html>

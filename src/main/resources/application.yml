@@ -68,7 +68,34 @@ spring:
     activate:
       on-profile: prod
 
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/librarydb?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:12345}
+    # 연결 풀 설정 (HikariCP)
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 30000
+      # MySQL 연결 재시도 설정
+      connection-init-sql: SELECT 1
+
   jpa:
     hibernate:
-      ddl-auto: validate    # 운영환경에서는 검증만
+      ddl-auto: update    # 로컬 테스트: 테이블 자동 생성/업데이트
     show-sql: false         # 운영환경에서는 SQL 출력 안함
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    # 데이터베이스 초기화 모드
+    open-in-view: false
+
+# 파일 업로드 경로 (운영 환경)
+file:
+  upload-dir: ${FILE_UPLOAD_DIR:./uploads}
+
+# 로깅 설정 (운영 환경)
+logging:
+  level:
+    com.library: INFO
+    org.springframework.web: INFO
+    org.hibernate: WARN

@@ -33,10 +33,12 @@ public class BoardListDTO {
     private Integer commentCount;
     private BoardCategory category;
     private LocalDateTime createdAt;
+    private boolean userLiked;  // 현재 사용자가 좋아요를 눌렀는지 여부
 
     /*
         Board Entity를 BoardListDTO로 변환하는 정적 메서드
             - Board Entity와 연관된 Member Entity의 정보를 함께 추출함.
+            - commentCount: Board의 comments 컬렉션에서 ACTIVE 상태 댓글만 카운트
      */
     public static BoardListDTO from(Board board) {
         return BoardListDTO.builder()
@@ -45,9 +47,12 @@ public class BoardListDTO {
                 .authorName(board.getAuthor().getName())    // 실제 이름 사용(화면표시용)
                 .viewCount(board.getViewCount())
                 .likeCount(board.getLikeCount())
-                .commentCount(0)        // 댓글 기능 구현시 실제 count로 반경
+                .commentCount((int) board.getComments().stream()
+                        .filter(comment -> comment.getStatus() == com.library.entity.board.CommentStatus.ACTIVE)
+                        .count())  // ACTIVE 상태의 댓글만 카운트
                 .category(board.getCategory())
                 .createdAt(board.getCreatedAt())
+                .userLiked(false)  // 기본값 false, Service에서 설정
                 .build();
     }
 }
