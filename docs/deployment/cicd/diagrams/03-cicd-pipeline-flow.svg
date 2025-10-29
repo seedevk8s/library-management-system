@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1000">
+  <defs>
+    <style>
+      .step-box { fill: #fff; stroke: #333; stroke-width: 2; }
+      .step-complete { fill: #4CAF50; stroke: #388E3C; stroke-width: 2; }
+      .step-current { fill: #FFC107; stroke: #F57C00; stroke-width: 3; }
+      .step-pending { fill: #E0E0E0; stroke: #9E9E9E; stroke-width: 2; }
+      .text-white { fill: #fff; font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; }
+      .text-black { fill: #000; font-family: Arial, sans-serif; font-size: 12px; }
+      .text-small { fill: #666; font-family: Arial, sans-serif; font-size: 10px; }
+      .arrow { fill: none; stroke: #666; stroke-width: 2; }
+      .arrow-thick { fill: none; stroke: #E74C3C; stroke-width: 3; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#666" />
+    </marker>
+    <marker id="arrowhead-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#E74C3C" />
+    </marker>
+  </defs>
+  
+  <text x="600" y="35" text-anchor="middle" style="font-family: Arial, sans-serif; font-size: 26px; font-weight: bold; fill: #333;">
+    🔄 CI/CD 파이프라인 플로우
+  </text>
+  <text x="600" y="58" text-anchor="middle" style="font-family: Arial, sans-serif; font-size: 14px; fill: #666;">
+    GitHub Actions → AWS ECS Blue-Green Deployment
+  </text>
+  
+  <g transform="translate(50, 100)">
+    <rect width="200" height="90" class="step-complete" rx="10"/>
+    <text x="100" y="30" text-anchor="middle" class="text-white">Step 1: Code Push</text>
+    <text x="100" y="50" text-anchor="middle" class="text-white">📝 git push</text>
+    <text x="100" y="75" text-anchor="middle" style="font-size: 11px; fill: #fff;">feature → main 병합</text>
+  </g>
+  
+  <g transform="translate(300, 100)">
+    <rect width="200" height="90" class="step-complete" rx="10"/>
+    <text x="100" y="30" text-anchor="middle" class="text-white">Step 2: Trigger</text>
+    <text x="100" y="50" text-anchor="middle" class="text-white">🚀 GitHub Actions</text>
+    <text x="100" y="75" text-anchor="middle" style="font-size: 11px; fill: #fff;">on: push [main]</text>
+  </g>
+  
+  <g transform="translate(550, 100)">
+    <rect width="200" height="90" class="step-complete" rx="10"/>
+    <text x="100" y="30" text-anchor="middle" class="text-white">Step 3: Checkout</text>
+    <text x="100" y="50" text-anchor="middle" class="text-white">📥 소스코드</text>
+    <text x="100" y="75" text-anchor="middle" style="font-size: 11px; fill: #fff;">actions/checkout@v4</text>
+  </g>
+  
+  <g transform="translate(800, 100)">
+    <rect width="200" height="90" class="step-complete" rx="10"/>
+    <text x="100" y="30" text-anchor="middle" class="text-white">Step 4: Setup</text>
+    <text x="100" y="50" text-anchor="middle" class="text-white">☕ Java 17</text>
+    <text x="100" y="75" text-anchor="middle" style="font-size: 11px; fill: #fff;">setup-java@v4</text>
+  </g>
+  
+  <g transform="translate(50, 230)">
+    <rect width="200" height="90" class="step-complete" rx="10"/>
+    <text x="100" y="30" text-anchor="middle" class="text-white">Step 5: Build</text>
+    <text x="100" y="50" text-anchor="middle" class="text-white">🔨 Gradle Build</text>
+    <text x="100" y="75" text-anchor="middle" style="font-size: 11px; fill: #fff;">./gradlew clean build</text>
+  </g>
+  
+  <g transform="translate(300, 230)">
+    <rect width="200" height="90" class="step-complete" rx="10"/>
+    <text x="100" y="30" text-anchor="middle" class="text-white">Step 6: Test</text>
+    <text x="100" y="50" text-anchor="middle" class="text-white">✅ Unit Tests</text>
+    <text x="100" y="75" text-anchor="middle" style="font-size: 11px; fill: #fff;">./gradlew test</text>
+  </g>
+  
+  <g transform="translate(550, 230)">
+    <rect width="200" height="90" class="step-current" rx="10"/>
+    <text x="100" y="30" text-anchor="middle" style="fill: #000; font-family: Arial, sans-serif; font-size: 13px; font-weight: bold;">
+      Step 7: Docker Build
+    </text>
+    <text x="100" y="50" text-anchor="middle" style="fill: #000; font-family: Arial, sans-serif; font-size: 13px; font-weight: bold;">
+      🐳 Build Image
+    </text>
+    <text x="100" y="75" text-anchor="middle" style="font-size: 11px; fill: #666;">docker build -t ...</text>
+  </g>
+  
+  <g transform="translate(800, 230)">
+    <rect width="200" height="90" class="step-pending" rx="10"/>
+    <text x="100" y="30" text-anchor="middle" class="text-black">Step 8: AWS Auth</text>
+    <text x="100" y="50" text-anchor="middle" class="text-black">🔐 Credentials</text>
+    <text x="100" y="75" text-anchor="middle" class="text-small">configure-aws-credentials</text>
+  </g>
+  
+  <g transform="translate(50, 360)">
+    <rect width="200" height="90" class="step-pending" rx="10"/>
+    <text x="100" y="30" text-anchor="middle" class="text-black">Step 9: ECR Login</text>
+    <text x="100" y="50" text-anchor="middle" class="text-black">🔓 ECR Access</text>
+    <text x="100" y="75" text-anchor="middle" class="text-small">amazon-ecr-login@v2</text>
+  </g>
+  
+  <g transform="translate(300, 360)">
+    <rect width="200" height="90" class="step-pending" rx="10"/>
+    <text x="100" y="30" text-anchor="middle" class="text-black">Step 10: Push ECR</text>
+    <text x="100" y="50" text-anchor="middle" class="text-black">📤 Upload Image</text>
+    <text x="100" y="75" text-anchor="middle" class="text-small">docker push ECR_URI</text>
+  </g>
+  
+  <g transform="translate(550, 360)">
+    <rect width="200" height="90" class="step-pending" rx="10"/>
+    <text x="100" y="30" text-anchor="middle" class="text-black">Step 11: Task Def</text>
+    <text x="100" y="50" text-anchor="middle" class="text-black">📋 Update Task</text>
+    <text x="100" y="75" text-anchor="middle" class="text-small">render-task-definition</text>
+  </g>
+  
+  <g transform="translate(800, 360)">
+    <rect width="200" height="90" class="step-pending" rx="10"/>
+    <text x="100" y="30" text-anchor="middle" class="text-black">Step 12: Deploy</text>
+    <text x="100" y="50" text-anchor="middle" class="text-black">🚢 ECS Deploy</text>
+    <text x="100" y="75" text-anchor="middle" class="text-small">deploy-task-definition</text>
+  </g>
+  
+  <g transform="translate(175, 490)">
+    <rect width="200" height="90" class="step-pending" rx="10"/>
+    <text x="100" y="30" text-anchor="middle" class="text-black">Step 13: Health</text>
+    <text x="100" y="50" text-anchor="middle" class="text-black">💚 Health Check</text>
+    <text x="100" y="75" text-anchor="middle" class="text-small">ALB Health Check</text>
+  </g>
+  
+  <g transform="translate(425, 490)">
+    <rect width="200" height="90" class="step-pending" rx="10"/>
+    <text x="100" y="30" text-anchor="middle" class="text-black">Step 14: Switch</text>
+    <text x="100" y="50" text-anchor="middle" class="text-black">🔄 Blue → Green</text>
+    <text x="100" y="75" text-anchor="middle" class="text-small">Traffic Shift</text>
+  </g>
+  
+  <g transform="translate(675, 490)">
+    <rect width="200" height="90" class="step-pending" rx="10"/>
+    <text x="100" y="30" text-anchor="middle" class="text-black">Step 15: Verify</text>
+    <text x="100" y="50" text-anchor="middle" class="text-black">✓ Verification</text>
+    <text x="100" y="75" text-anchor="middle" class="text-small">Final Check</text>
+  </g>
+  
+  <g transform="translate(325, 620)">
+    <rect width="220" height="100" style="fill: #4CAF50; stroke: #388E3C; stroke-width: 3;" rx="10"/>
+    <text x="110" y="35" text-anchor="middle" class="text-white">🎉 배포 성공</text>
+    <text x="110" y="60" text-anchor="middle" style="font-size: 12px; fill: #fff;">Green 환경 활성화</text>
+    <text x="110" y="80" text-anchor="middle" style="font-size: 11px; fill: #fff;">Old Blue 제거</text>
+  </g>
+  
+  <g transform="translate(625, 620)">
+    <rect width="220" height="100" style="fill: #F44336; stroke: #C62828; stroke-width: 3;" rx="10"/>
+    <text x="110" y="35" text-anchor="middle" class="text-white">❌ 배포 실패</text>
+    <text x="110" y="60" text-anchor="middle" style="font-size: 12px; fill: #fff;">자동 롤백</text>
+    <text x="110" y="80" text-anchor="middle" style="font-size: 11px; fill: #fff;">Blue로 복구</text>
+  </g>
+  
+  <path d="M 250 145 L 300 145" class="arrow-thick" marker-end="url(#arrowhead-red)"/>
+  <path d="M 500 145 L 550 145" class="arrow-thick" marker-end="url(#arrowhead-red)"/>
+  <path d="M 750 145 L 800 145" class="arrow-thick" marker-end="url(#arrowhead-red)"/>
+  <path d="M 900 190 L 900 210 L 150 210 L 150 230" class="arrow-thick" marker-end="url(#arrowhead-red)"/>
+  <path d="M 250 275 L 300 275" class="arrow-thick" marker-end="url(#arrowhead-red)"/>
+  <path d="M 500 275 L 550 275" class="arrow-thick" marker-end="url(#arrowhead-red)"/>
+  <path d="M 750 275 L 800 275" class="arrow" marker-end="url(#arrowhead)"/>
+  <path d="M 900 320 L 900 340 L 150 340 L 150 360" class="arrow" marker-end="url(#arrowhead)"/>
+  <path d="M 250 405 L 300 405" class="arrow" marker-end="url(#arrowhead)"/>
+  <path d="M 500 405 L 550 405" class="arrow" marker-end="url(#arrowhead)"/>
+  <path d="M 750 405 L 800 405" class="arrow" marker-end="url(#arrowhead)"/>
+  <path d="M 900 450 L 900 470 L 275 470 L 275 490" class="arrow" marker-end="url(#arrowhead)"/>
+  <path d="M 375 535 L 425 535" class="arrow" marker-end="url(#arrowhead)"/>
+  <path d="M 625 535 L 675 535" class="arrow" marker-end="url(#arrowhead)"/>
+  
+  <path d="M 775 580 L 775 600 L 435 600 L 435 620" style="fill: none; stroke: #4CAF50; stroke-width: 3;" marker-end="url(#arrowhead)"/>
+  <path d="M 775 580 L 775 600 L 735 600 L 735 620" style="fill: none; stroke: #F44336; stroke-width: 3;" marker-end="url(#arrowhead)"/>
+  
+  <g transform="translate(50, 800)">
+    <text x="0" y="0" style="font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; fill: #333;">
+      📍 현재 상태:
+    </text>
+    <rect x="0" y="15" width="30" height="20" class="step-complete" rx="3"/>
+    <text x="40" y="30" style="font-family: Arial, sans-serif; font-size: 13px; fill: #333;">완료 (Step 1-6)</text>
+    
+    <rect x="200" y="15" width="30" height="20" class="step-current" rx="3"/>
+    <text x="240" y="30" style="font-family: Arial, sans-serif; font-size: 13px; fill: #333;">진행 중 (Step 7)</text>
+    
+    <rect x="400" y="15" width="30" height="20" class="step-pending" rx="3"/>
+    <text x="440" y="30" style="font-family: Arial, sans-serif; font-size: 13px; fill: #333;">대기 (Step 8-15)</text>
+  </g>
+  
+  <g transform="translate(50, 870)">
+    <text x="0" y="0" style="font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; fill: #333;">
+      ⏱️ 예상 소요 시간:
+    </text>
+    <text x="0" y="25" style="font-family: Arial, sans-serif; font-size: 13px; fill: #666;">
+      • Build &amp; Test: 2-3분
+    </text>
+    <text x="0" y="45" style="font-family: Arial, sans-serif; font-size: 13px; fill: #666;">
+      • Docker Build: 1-2분
+    </text>
+    <text x="0" y="65" style="font-family: Arial, sans-serif; font-size: 13px; fill: #666;">
+      • Push to ECR: 1-2분
+    </text>
+    <text x="300" y="25" style="font-family: Arial, sans-serif; font-size: 13px; fill: #666;">
+      • ECS Deploy: 3-5분
+    </text>
+    <text x="300" y="45" style="font-family: Arial, sans-serif; font-size: 13px; fill: #666;">
+      • Health Check: 1-2분
+    </text>
+    <text x="300" y="65" style="font-family: Arial, sans-serif; font-size: 13px; fill: #666;">
+      • Traffic Shift: 1분
+    </text>
+    
+    <text x="600" y="35" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #E74C3C;">
+      총: 약 10-15분
+    </text>
+  </g>
+  
+  <text x="1150" y="990" text-anchor="end" style="font-family: Arial, sans-serif; font-size: 10px; fill: #999;">
+    Updated: 2025-10-26
+  </text>
+</svg>

@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 1600">
+  <defs>
+    <style>
+      .github-box { fill: #24292E; stroke: #000; stroke-width: 2; }
+      .aws-cloud { fill: #FFF4E6; stroke: #FF9900; stroke-width: 3; }
+      .layer-infra { fill: #E8F5E9; stroke: #27AE60; stroke-width: 2; }
+      .layer-platform { fill: #E3F2FD; stroke: #3498DB; stroke-width: 2; }
+      .layer-app { fill: #FFEBEE; stroke: #E74C3C; stroke-width: 2; }
+      .blue-box { fill: #EBF5FF; stroke: #2196F3; stroke-width: 2; }
+      .green-box { fill: #E8F5E9; stroke: #4CAF50; stroke-width: 2; }
+      .db-box { fill: #FFF3E0; stroke: #FF9800; stroke-width: 2; }
+      .alb-box { fill: #F3E5F5; stroke: #9C27B0; stroke-width: 2; }
+      .text-title { fill: #2C3E50; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; }
+      .text-normal { fill: #555; font-family: Arial, sans-serif; font-size: 12px; }
+      .text-small { fill: #777; font-family: Arial, sans-serif; font-size: 10px; }
+      .text-white { fill: #fff; font-family: Arial, sans-serif; font-size: 12px; font-weight: bold; }
+      .arrow-flow { fill: none; stroke: #E74C3C; stroke-width: 3; }
+      .arrow-traffic { fill: none; stroke: #2196F3; stroke-width: 2.5; }
+      .arrow-green { fill: none; stroke: #4CAF50; stroke-width: 2; stroke-dasharray: 5,3; }
+    </style>
+    <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#E74C3C" />
+    </marker>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#2196F3" />
+    </marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#4CAF50" />
+    </marker>
+  </defs>
+  
+  <!-- Main Title -->
+  <text x="1000" y="40" text-anchor="middle" style="font-size: 32px; fill: #2C3E50; font-weight: bold;">
+    AWS ECS Blue-Green 배포 아키텍처 완전 가이드
+  </text>
+  <text x="1000" y="70" text-anchor="middle" style="font-size: 14px; fill: #7F8C8D;">
+    GitHub Actions CI/CD - AWS 계층별 구조 - Blue-Green 무중단 배포
+  </text>
+  
+  <!-- Legend -->
+  <g transform="translate(50, 90)">
+    <text x="0" y="0" style="font-size: 14px; fill: #2C3E50; font-weight: bold;">배포 흐름:</text>
+    <line x1="0" y1="10" x2="60" y2="10" class="arrow-flow" marker-end="url(#arrow-red)"/>
+    <text x="70" y="14" class="text-small">CI/CD 파이프라인</text>
+    
+    <line x1="200" y1="10" x2="260" y2="10" class="arrow-traffic" marker-end="url(#arrow-blue)"/>
+    <text x="270" y="14" class="text-small">현재 트래픽 (Blue)</text>
+    
+    <line x1="430" y1="10" x2="490" y2="10" class="arrow-green" marker-end="url(#arrow-green)"/>
+    <text x="500" y="14" class="text-small">새 배포 (Green)</text>
+  </g>
+  
+  <!-- LEFT: GitHub Actions CI/CD -->
+  <g transform="translate(50, 150)">
+    <rect width="280" height="400" class="github-box" rx="10"/>
+    <text x="140" y="30" text-anchor="middle" class="text-white" style="font-size: 18px;">GitHub Actions</text>
+    <text x="140" y="50" text-anchor="middle" style="font-size: 11px; fill: #95A5A6;">CI/CD Pipeline</text>
+    
+    <!-- Step 1: Code Push -->
+    <g transform="translate(20, 70)">
+      <rect width="240" height="60" style="fill: #34495E; stroke: #2C3E50; stroke-width: 1;" rx="5"/>
+      <text x="120" y="20" text-anchor="middle" style="font-size: 13px; fill: #fff; font-weight: bold;">Step 1: Code Push</text>
+      <text x="120" y="38" text-anchor="middle" style="font-size: 10px; fill: #ECF0F1;">git push origin main</text>
+      <text x="120" y="52" text-anchor="middle" style="font-size: 10px; fill: #ECF0F1;">Trigger Workflow</text>
+    </g>
+    
+    <!-- Step 2: Build & Test -->
+    <g transform="translate(20, 145)">
+      <rect width="240" height="60" style="fill: #34495E; stroke: #2C3E50; stroke-width: 1;" rx="5"/>
+      <text x="120" y="20" text-anchor="middle" style="font-size: 13px; fill: #fff; font-weight: bold;">Step 2: Build and Test</text>
+      <text x="120" y="38" text-anchor="middle" style="font-size: 10px; fill: #ECF0F1;">Gradle Build</text>
+      <text x="120" y="52" text-anchor="middle" style="font-size: 10px; fill: #ECF0F1;">Unit Tests</text>
+    </g>
+    
+    <!-- Step 3: Docker Build -->
+    <g transform="translate(20, 220)">
+      <rect width="240" height="60" style="fill: #34495E; stroke: #2C3E50; stroke-width: 1;" rx="5"/>
+      <text x="120" y="20" text-anchor="middle" style="font-size: 13px; fill: #fff; font-weight: bold;">Step 3: Docker Build</text>
+      <text x="120" y="38" text-anchor="middle" style="font-size: 10px; fill: #ECF0F1;">docker build -t app:latest</text>
+      <text x="120" y="52" text-anchor="middle" style="font-size: 10px; fill: #ECF0F1;">Image Creation</text>
+    </g>
+    
+    <!-- Step 4: Push to ECR -->
+    <g transform="translate(20, 295)">
+      <rect width="240" height="60" style="fill: #34495E; stroke: #2C3E50; stroke-width: 1;" rx="5"/>
+      <text x="120" y="20" text-anchor="middle" style="font-size: 13px; fill: #fff; font-weight: bold;">Step 4: Push to ECR</text>
+      <text x="120" y="38" text-anchor="middle" style="font-size: 10px; fill: #ECF0F1;">docker push to ECR</text>
+      <text x="120" y="52" text-anchor="middle" style="font-size: 10px; fill: #ECF0F1;">Image Registry</text>
+    </g>
+    
+    <!-- Step 5: Deploy -->
+    <g transform="translate(20, 370)">
+      <rect width="240" height="20" style="fill: #E74C3C; stroke: #C0392B; stroke-width: 1;" rx="3"/>
+      <text x="120" y="14" text-anchor="middle" style="font-size: 11px; fill: #fff; font-weight: bold;">Step 5: Trigger CodeDeploy</text>
+    </g>
+  </g>
+  
+  <!-- Arrow: GitHub to AWS -->
+  <path d="M 330 325 L 400 325" class="arrow-flow" marker-end="url(#arrow-red)"/>
+  <text x="350" y="315" class="text-small" style="fill: #E74C3C; font-weight: bold;">Deploy</text>
+  
+  <!-- CENTER & RIGHT: AWS Cloud -->
+  <g transform="translate(400, 150)">
+    <!-- AWS Cloud Border -->
+    <rect width="1550" height="1350" class="aws-cloud" rx="20"/>
+    <text x="775" y="35" text-anchor="middle" style="font-size: 24px; fill: #FF9900; font-weight: bold;">
+      AWS Cloud (ap-northeast-2)
+    </text>
+    
+    <!-- LAYER 1: Infrastructure (Bottom) -->
+    <g transform="translate(30, 70)">
+      <rect width="1490" height="380" class="layer-infra" rx="15"/>
+      <text x="20" y="30" style="font-size: 20px; fill: #27AE60; font-weight: bold;">
+        Layer 1: Infrastructure (Network and Security)
+      </text>
+      
+      <!-- VPC -->
+      <g transform="translate(30, 50)">
+        <rect width="1430" height="300" style="fill: #fff; stroke: #27AE60; stroke-width: 2; stroke-dasharray: 5,5;" rx="10"/>
+        <text x="715" y="25" text-anchor="middle" class="text-title" style="fill: #27AE60;">
+          VPC (10.0.0.0/16)
+        </text>
+        
+        <!-- Public Subnets -->
+        <g transform="translate(20, 50)">
+          <rect width="330" height="220" style="fill: #E8F5E9; stroke: #66BB6A; stroke-width: 2;" rx="8"/>
+          <text x="165" y="25" text-anchor="middle" class="text-title" style="fill: #2E7D32;">Public Subnets</text>
+          
+          <!-- ALB -->
+          <g transform="translate(30, 50)">
+            <rect width="270" height="80" class="alb-box" rx="5"/>
+            <text x="135" y="25" text-anchor="middle" class="text-title">Application Load Balancer</text>
+            <text x="135" y="45" text-anchor="middle" class="text-small">library-alb</text>
+            <text x="135" y="60" text-anchor="middle" class="text-small">Port: 80 (HTTP)</text>
+            <text x="135" y="73" text-anchor="middle" class="text-small">Public IP: Auto-assigned</text>
+          </g>
+          
+          <!-- Internet Gateway -->
+          <g transform="translate(30, 145)">
+            <rect width="120" height="50" style="fill: #FFF3E0; stroke: #FF9800; stroke-width: 2;" rx="5"/>
+            <text x="60" y="20" text-anchor="middle" class="text-normal">Internet</text>
+            <text x="60" y="35" text-anchor="middle" class="text-normal">Gateway</text>
+          </g>
+          
+          <!-- NAT Gateway -->
+          <g transform="translate(180, 145)">
+            <rect width="120" height="50" style="fill: #FFF3E0; stroke: #FF9800; stroke-width: 2;" rx="5"/>
+            <text x="60" y="20" text-anchor="middle" class="text-normal">NAT</text>
+            <text x="60" y="35" text-anchor="middle" class="text-normal">Gateway</text>
+          </g>
+        </g>
+        
+        <!-- Private Subnets (ECS Tasks) -->
+        <g transform="translate(380, 50)">
+          <rect width="500" height="220" style="fill: #FFF3E0; stroke: #FFA726; stroke-width: 2;" rx="8"/>
+          <text x="250" y="25" text-anchor="middle" class="text-title" style="fill: #E65100;">Private Subnets (ECS)</text>
+          
+          <!-- Blue Task -->
+          <g transform="translate(30, 50)">
+            <rect width="200" height="140" class="blue-box" rx="5"/>
+            <text x="100" y="20" text-anchor="middle" class="text-title" style="fill: #1976D2;">ECS Task (Blue)</text>
+            <text x="100" y="40" text-anchor="middle" class="text-small">Container: app:v1.0</text>
+            <text x="100" y="55" text-anchor="middle" class="text-small">Port: 8081</text>
+            <text x="100" y="70" text-anchor="middle" class="text-small">CPU: 512</text>
+            <text x="100" y="85" text-anchor="middle" class="text-small">Memory: 1024MB</text>
+            <text x="100" y="105" text-anchor="middle" style="font-size: 11px; fill: #1976D2; font-weight: bold;">현재 트래픽 처리중</text>
+            <circle cx="100" cy="125" r="8" fill="#2196F3"/>
+          </g>
+          
+          <!-- Green Task -->
+          <g transform="translate(260, 50)">
+            <rect width="200" height="140" class="green-box" rx="5"/>
+            <text x="100" y="20" text-anchor="middle" class="text-title" style="fill: #2E7D32;">ECS Task (Green)</text>
+            <text x="100" y="40" text-anchor="middle" class="text-small">Container: app:v2.0</text>
+            <text x="100" y="55" text-anchor="middle" class="text-small">Port: 8081</text>
+            <text x="100" y="70" text-anchor="middle" class="text-small">CPU: 512</text>
+            <text x="100" y="85" text-anchor="middle" class="text-small">Memory: 1024MB</text>
+            <text x="100" y="105" text-anchor="middle" style="font-size: 11px; fill: #4CAF50; font-weight: bold;">새 버전 대기중</text>
+            <circle cx="100" cy="125" r="8" fill="#4CAF50"/>
+          </g>
+        </g>
+        
+        <!-- Private Subnets (RDS) -->
+        <g transform="translate(910, 50)">
+          <rect width="480" height="220" style="fill: #FFF3E0; stroke: #FFA726; stroke-width: 2;" rx="8"/>
+          <text x="240" y="25" text-anchor="middle" class="text-title" style="fill: #E65100;">Private Subnets (Database)</text>
+          
+          <!-- RDS -->
+          <g transform="translate(90, 50)">
+            <rect width="300" height="140" class="db-box" rx="5"/>
+            <text x="150" y="25" text-anchor="middle" class="text-title" style="fill: #E65100;">Amazon RDS MySQL</text>
+            <text x="150" y="50" text-anchor="middle" class="text-small">library-db</text>
+            <text x="150" y="70" text-anchor="middle" class="text-small">MySQL 8.0</text>
+            <text x="150" y="85" text-anchor="middle" class="text-small">db.t3.micro</text>
+            <text x="150" y="100" text-anchor="middle" class="text-small">Port: 3306</text>
+            <text x="150" y="115" text-anchor="middle" class="text-small">Multi-AZ: No</text>
+            <text x="150" y="130" text-anchor="middle" class="text-small">Storage: 20GB</text>
+          </g>
+        </g>
+        
+        <!-- Security Groups Info -->
+        <g transform="translate(20, 240)">
+          <text x="0" y="0" class="text-small" style="fill: #27AE60; font-weight: bold;">Security Groups:</text>
+          <text x="0" y="15" class="text-small">- library-alb-sg: 0.0.0.0/0:80 to ALB</text>
+          <text x="0" y="30" class="text-small">- library-ecs-task-sg: ALB to ECS:8081</text>
+          <text x="0" y="45" class="text-small">- library-rds-sg: ECS to RDS:3306</text>
+        </g>
+      </g>
+    </g>
+    
+    <!-- LAYER 2: Platform (Middle) -->
+    <g transform="translate(30, 480)">
+      <rect width="1490" height="360" class="layer-platform" rx="15"/>
+      <text x="20" y="30" style="font-size: 20px; fill: #3498DB; font-weight: bold;">
+        Layer 2: Platform (Container and Deployment)
+      </text>
+      
+      <!-- ECR -->
+      <g transform="translate(50, 60)">
+        <rect width="280" height="120" style="fill: #FFF; stroke: #FF9900; stroke-width: 2;" rx="8"/>
+        <text x="140" y="25" text-anchor="middle" class="text-title" style="fill: #FF9900;">Amazon ECR</text>
+        <text x="140" y="45" text-anchor="middle" class="text-small">Container Registry</text>
+        <text x="140" y="65" text-anchor="middle" class="text-small">library-management-system</text>
+        <text x="140" y="85" text-anchor="middle" class="text-small">Images: app:latest, app:v1.0, app:v2.0</text>
+        <text x="140" y="105" text-anchor="middle" class="text-small">Scan on Push: Enabled</text>
+      </g>
+      
+      <!-- ECS Cluster -->
+      <g transform="translate(370, 60)">
+        <rect width="380" height="260" style="fill: #E1F5FE; stroke: #03A9F4; stroke-width: 2;" rx="8"/>
+        <text x="190" y="25" text-anchor="middle" class="text-title" style="fill: #01579B;">ECS Cluster (Fargate)</text>
+        <text x="190" y="45" text-anchor="middle" class="text-small">library-management-cluster</text>
+        
+        <!-- Task Definition -->
+        <g transform="translate(20, 60)">
+          <rect width="340" height="80" style="fill: #fff; stroke: #0288D1; stroke-width: 1;" rx="5"/>
+          <text x="170" y="20" text-anchor="middle" class="text-normal" style="font-weight: bold;">Task Definition</text>
+          <text x="10" y="40" class="text-small">Family: library-app-task</text>
+          <text x="10" y="55" class="text-small">CPU: 512 (0.5 vCPU)</text>
+          <text x="10" y="70" class="text-small">Memory: 1024 (1GB)</text>
+          <text x="200" y="40" class="text-small">Network: awsvpc</text>
+          <text x="200" y="55" class="text-small">Port: 8081</text>
+          <text x="200" y="70" class="text-small">Log: CloudWatch</text>
+        </g>
+        
+        <!-- ECS Service -->
+        <g transform="translate(20, 155)">
+          <rect width="340" height="80" style="fill: #fff; stroke: #0288D1; stroke-width: 1;" rx="5"/>
+          <text x="170" y="20" text-anchor="middle" class="text-normal" style="font-weight: bold;">ECS Service</text>
+          <text x="10" y="40" class="text-small">Service: library-app-service</text>
+          <text x="10" y="55" class="text-small">Desired Count: 2</text>
+          <text x="10" y="70" class="text-small">Launch Type: Fargate</text>
+          <text x="200" y="40" class="text-small">Deployment: CodeDeploy</text>
+          <text x="200" y="55" class="text-small">Load Balancer: library-alb</text>
+          <text x="200" y="70" class="text-small">Health Check Grace: 60s</text>
+        </g>
+      </g>
+      
+      <!-- CodeDeploy -->
+      <g transform="translate(790, 60)">
+        <rect width="320" height="260" style="fill: #FFF; stroke: #FF5722; stroke-width: 2;" rx="8"/>
+        <text x="160" y="25" text-anchor="middle" class="text-title" style="fill: #D84315;">AWS CodeDeploy</text>
+        <text x="160" y="45" text-anchor="middle" class="text-small">Blue-Green Deployment</text>
+        
+        <!-- Deployment Config -->
+        <g transform="translate(20, 60)">
+          <rect width="280" height="180" style="fill: #FFEBEE; stroke: #EF5350; stroke-width: 1;" rx="5"/>
+          <text x="140" y="20" text-anchor="middle" class="text-normal" style="font-weight: bold;">Deployment Configuration</text>
+          
+          <text x="10" y="45" class="text-small" style="font-weight: bold;">Application:</text>
+          <text x="10" y="60" class="text-small">library-ecs-app</text>
+          
+          <text x="10" y="80" class="text-small" style="font-weight: bold;">Deployment Group:</text>
+          <text x="10" y="95" class="text-small">library-ecs-dg</text>
+          
+          <text x="10" y="115" class="text-small" style="font-weight: bold;">Traffic Shift:</text>
+          <text x="10" y="130" class="text-small">1. Deploy to Green</text>
+          <text x="10" y="145" class="text-small">2. Test Green (5 min)</text>
+          <text x="10" y="160" class="text-small">3. Shift Traffic 100%</text>
+          <text x="10" y="175" class="text-small">4. Terminate Blue</text>
+        </g>
+      </g>
+      
+      <!-- Target Groups -->
+      <g transform="translate(1150, 60)">
+        <rect width="300" height="260" style="fill: #FFF; stroke: #9C27B0; stroke-width: 2;" rx="8"/>
+        <text x="150" y="25" text-anchor="middle" class="text-title" style="fill: #6A1B9A;">Target Groups</text>
+        
+        <!-- Blue TG -->
+        <g transform="translate(20, 50)">
+          <rect width="260" height="80" class="blue-box" rx="5"/>
+          <text x="130" y="20" text-anchor="middle" class="text-normal" style="font-weight: bold;">Blue Target Group</text>
+          <text x="10" y="40" class="text-small">Name: library-blue-tg</text>
+          <text x="10" y="55" class="text-small">Protocol: HTTP</text>
+          <text x="10" y="70" class="text-small">Port: 8081</text>
+          <text x="150" y="40" class="text-small">Health: /actuator/health</text>
+          <text x="150" y="55" class="text-small">현재 활성</text>
+        </g>
+        
+        <!-- Green TG -->
+        <g transform="translate(20, 145)">
+          <rect width="260" height="80" class="green-box" rx="5"/>
+          <text x="130" y="20" text-anchor="middle" class="text-normal" style="font-weight: bold;">Green Target Group</text>
+          <text x="10" y="40" class="text-small">Name: library-green-tg</text>
+          <text x="10" y="55" class="text-small">Protocol: HTTP</text>
+          <text x="10" y="70" class="text-small">Port: 8081</text>
+          <text x="150" y="40" class="text-small">Health: /actuator/health</text>
+          <text x="150" y="55" class="text-small">대기중</text>
+        </g>
+      </g>
+    </g>
+    
+    <!-- LAYER 3: Application (Top) -->
+    <g transform="translate(30, 870)">
+      <rect width="1490" height="200" class="layer-app" rx="15"/>
+      <text x="20" y="30" style="font-size: 20px; fill: #E74C3C; font-weight: bold;">
+        Layer 3: Application (Monitoring and Logging)
+      </text>
+      
+      <!-- CloudWatch Logs -->
+      <g transform="translate(50, 60)">
+        <rect width="330" height="110" style="fill: #FFF; stroke: #FF4081; stroke-width: 2;" rx="8"/>
+        <text x="165" y="25" text-anchor="middle" class="text-title" style="fill: #C2185B;">CloudWatch Logs</text>
+        <text x="10" y="50" class="text-small">Log Group: /ecs/library-app</text>
+        <text x="10" y="67" class="text-small">Retention: 7 days</text>
+        <text x="10" y="84" class="text-small">Container Logs Stream</text>
+        <text x="10" y="101" class="text-small">Application Error Logs</text>
+      </g>
+      
+      <!-- CloudWatch Alarms -->
+      <g transform="translate(420, 60)">
+        <rect width="330" height="110" style="fill: #FFF; stroke: #FF4081; stroke-width: 2;" rx="8"/>
+        <text x="165" y="25" text-anchor="middle" class="text-title" style="fill: #C2185B;">CloudWatch Alarms</text>
+        <text x="10" y="50" class="text-small">CPU Utilization &gt; 80%</text>
+        <text x="10" y="67" class="text-small">Memory Utilization &gt; 80%</text>
+        <text x="10" y="84" class="text-small">Target Response Time &gt; 2s</text>
+        <text x="10" y="101" class="text-small">Unhealthy Target Count &gt; 0</text>
+      </g>
+      
+      <!-- Parameter Store -->
+      <g transform="translate(790, 60)">
+        <rect width="330" height="110" style="fill: #FFF; stroke: #7E57C2; stroke-width: 2;" rx="8"/>
+        <text x="165" y="25" text-anchor="middle" class="text-title" style="fill: #5E35B1;">Parameter Store</text>
+        <text x="10" y="50" class="text-small">/library/db/host</text>
+        <text x="10" y="67" class="text-small">/library/db/username</text>
+        <text x="10" y="84" class="text-small">/library/db/password (Secure)</text>
+        <text x="10" y="101" class="text-small">/library/app/config</text>
+      </g>
+      
+      <!-- SNS Topic -->
+      <g transform="translate(1160, 60)">
+        <rect width="290" height="110" style="fill: #FFF; stroke: #FF6F00; stroke-width: 2;" rx="8"/>
+        <text x="145" y="25" text-anchor="middle" class="text-title" style="fill: #E65100;">SNS Topic</text>
+        <text x="10" y="50" class="text-small">Topic: library-deploy-notifications</text>
+        <text x="10" y="67" class="text-small">Subscription: Email</text>
+        <text x="10" y="84" class="text-small">Deployment Success/Failure</text>
+        <text x="10" y="101" class="text-small">Alarm Notifications</text>
+      </g>
+    </g>
+    
+    <!-- LAYER 4: Users (Very Top) -->
+    <g transform="translate(30, 1100)">
+      <rect width="1490" height="150" style="fill: #E8EAF6; stroke: #5C6BC0; stroke-width: 2;" rx="15"/>
+      <text x="745" y="30" text-anchor="middle" style="font-size: 20px; fill: #3F51B5; font-weight: bold;">
+        Users and External Access
+      </text>
+      
+      <!-- Users -->
+      <g transform="translate(450, 60)">
+        <circle cx="80" cy="40" r="35" fill="#5C6BC0"/>
+        <text x="80" y="48" text-anchor="middle" style="font-size: 20px; fill: #fff; font-weight: bold;">USER</text>
+      </g>
+      
+      <!-- Arrow to ALB -->
+      <line x1="560" y1="100" x2="600" y2="100" style="stroke: #5C6BC0; stroke-width: 3;" marker-end="url(#arrow-blue)"/>
+      <text x="570" y="90" class="text-small" style="fill: #3F51B5; font-weight: bold;">HTTP Request</text>
+      
+      <!-- DNS -->
+      <g transform="translate(620, 60)">
+        <rect width="200" height="70" style="fill: #FFF; stroke: #5C6BC0; stroke-width: 2;" rx="8"/>
+        <text x="100" y="25" text-anchor="middle" class="text-title" style="fill: #3F51B5;">DNS / Domain</text>
+        <text x="100" y="45" text-anchor="middle" class="text-small">library.example.com</text>
+        <text x="100" y="62" text-anchor="middle" class="text-small">- ALB DNS</text>
+      </g>
+    </g>
+  </g>
+  
+  <!-- Traffic Flow Arrows -->
+  <!-- ECR to ECS -->
+  <path d="M 700 750 Q 700 850, 950 890" style="fill: none; stroke: #FF9900; stroke-width: 2; stroke-dasharray: 5,3;"/>
+  <text x="800" y="800" class="text-small" style="fill: #FF9900;">Pull Image</text>
+  
+  <!-- ALB to Blue Task -->
+  <path d="M 750 370 L 820 520" class="arrow-traffic" marker-end="url(#arrow-blue)"/>
+  <text x="770" y="440" class="text-small" style="fill: #2196F3; font-weight: bold;">Active Traffic</text>
+  
+  <!-- ALB to Green Task (Standby) -->
+  <path d="M 750 370 L 1030 520" class="arrow-green" marker-end="url(#arrow-green)"/>
+  <text x="880" y="440" class="text-small" style="fill: #4CAF50;">Standby</text>
+  
+  <!-- ECS to RDS -->
+  <path d="M 1080 580 L 1350 550" style="fill: none; stroke: #FF9800; stroke-width: 2;"/>
+  <text x="1180" y="560" class="text-small" style="fill: #FF9800;">MySQL:3306</text>
+  
+  <!-- Deployment Flow Summary Box -->
+  <g transform="translate(50, 1550)">
+    <rect width="1900" height="40" style="fill: #FFFDE7; stroke: #FBC02D; stroke-width: 2;" rx="8"/>
+    <text x="950" y="27" text-anchor="middle" style="font-size: 14px; fill: #F57C00; font-weight: bold;">
+      배포 프로세스: GitHub Push - Build - ECR Push - CodeDeploy Blue-Green - Traffic Switch (Blue to Green) - 완료
+    </text>
+  </g>
+</svg>

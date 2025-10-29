@@ -1,7 +1,24 @@
-# 🎯 CI/CD + AWS ECS Blue-Green 배포 마스터 플랜
+# 🎯 CI/CD + AWS ECS Blue-Green 배포 마스터 플랜 v1.4
 
 > **중요**: 이 문서는 토큰 세션이 끊기더라도 작업을 이어갈 수 있도록 설계된 마스터 플랜입니다.
 > 각 단계는 독립적으로 실행 가능하며, 체크리스트로 진행 상황을 추적할 수 있습니다.
+
+---
+
+## 📊 현재 진행 상황 시각화
+
+### 전체 진행 상황
+![진행 상황 타임라인](diagrams/01-progress-timeline.svg)
+
+### 아키텍처 개요
+![AWS 아키텍처](diagrams/02-architecture-overview.svg)
+
+### CI/CD 파이프라인 플로우
+![CI/CD 플로우](diagrams/03-cicd-pipeline-flow.svg)
+
+### Security Groups 구성 (NEW! ✅)
+![보안 그룹 흐름도](diagrams/04-security-groups-flow.svg)
+![보안 그룹 상세 설명](diagrams/04-security-groups-flow-detailed.svg)
 
 ---
 
@@ -28,17 +45,31 @@ Library Management System을 AWS ECS에 Blue-Green 배포 방식으로 배포하
 - ✅ Git 저장소: https://github.com/seedevk8s/library-management-system
 - ✅ 모든 변경사항 커밋 완료
 - 🔄 **Step 5: CI/CD + ECS 배포 진행 중**
-  - ✅ **Phase 1 완료**: IAM 사용자 생성 및 설정
-  - ✅ **Phase 2 완료**: 로컬 Docker 환경 구축 및 테스트
-    - ✅ Dockerfile 작성 (Multi-stage build, 보안 설정)
+  - ✅ **Phase 1 완료 (100%)**: IAM 사용자 생성 및 설정
+    - ✅ IAM 사용자: `github-actions-deploy2` 생성
+    - ✅ 필수 권한 5개 정책 연결
+    - ✅ Access Key 생성 및 저장
+    - ✅ Git 브랜치: `feature/cicd-ecs-blue-green-deployment` 생성
+  - ✅ **Phase 2 완료 (100%)**: 로컬 Docker 환경 구축 및 테스트
+    - ✅ Dockerfile 작성 (Multi-stage build, 보안 설정, Health check)
     - ✅ .dockerignore 생성
     - ✅ docker-compose.yml 작성 (MySQL 8.0 + App)
     - ✅ application.yml prod 프로파일 설정
-    - ✅ 로컬 빌드 및 테스트 성공
-    - ✅ 완전한 소스 코드 반영
-  - ✅ **Phase 3 부분 완료**: ECR Repository, ECS Cluster 생성
-  - ✅ **GitHub Secrets** 설정 (5/6 완료)
-  - 🔄 **현재 작업**: ECS Task Definition 및 GitHub Actions 워크플로우 작성
+    - ✅ 로컬 빌드 성공 (이미지 크기: 483.26 MB)
+    - ✅ MySQL + App 컨테이너 동시 실행 성공
+    - ✅ 웹 애플리케이션 정상 동작 확인 (http://localhost:8081)
+    - ✅ 완전한 소스 코드 반영 (BoardController, 파일첨부, 좋아요 등)
+  - 🔄 **Phase 3 진행 중 (70%)**: AWS 인프라 구축
+    - ✅ ECR Repository 생성: `library-management-system`
+    - ✅ ECS Cluster 생성: `library-management-cluster` (Fargate)
+    - ✅ Security Groups 3개 완료:
+      - ✅ `library-alb-sg` (ALB용)
+      - ✅ `library-ecs-task-sg` (ECS Task용)
+      - ✅ `library-rds-sg` (RDS용)
+    - ✅ Security Groups 관계도 SVG 생성 완료
+    - ✅ GitHub Secrets 설정 (5/6 완료)
+    - 🔄 **다음**: ALB, Target Groups, IAM Roles 생성
+  - ⏳ **Phase 4 대기**: GitHub Actions 연동 및 배포 테스트
 
 ### 기술 스택
 - **소스 코드**: Spring Boot 3.5.6, Java 17, Gradle
@@ -96,23 +127,29 @@ Library Management System을 AWS ECS에 Blue-Green 배포 방식으로 배포하
 - [ ] ECS Task Definition 작성 - **다음 단계**
 - [ ] CodeDeploy AppSpec 작성 - **다음 단계**
 
-### Phase 3: AWS 인프라 구축 🔄 **진행 중**
-- [x] ECR 리포지토리 생성
+### Phase 3: AWS 인프라 구축 🔄 **진행 중 (70%)**
+- [x] ✅ ECR 리포지토리 생성
   - [x] Repository: `library-management-system`
   - [x] Region: `ap-northeast-2` (서울)
   - [x] GitHub Secret 등록: `ECR_REPOSITORY`
-- [ ] VPC 및 서브넷 구성 (기본 VPC 사용 가능)
-- [ ] Security Groups 생성
-- [ ] Application Load Balancer 생성
-- [ ] Target Groups 생성 (Blue/Green)
-- [x] ECS 클러스터 생성
+- [x] ✅ VPC 및 서브넷 확인 (기본 VPC 사용)
+- [x] ✅ Security Groups 생성 (3개 완료)
+  - [x] `library-alb-sg`: HTTP(80), HTTPS(443) ← Internet (0.0.0.0/0)
+  - [x] `library-ecs-task-sg`: TCP(8081) ← library-alb-sg
+  - [x] `library-rds-sg`: MySQL(3306) ← library-ecs-task-sg
+  - [x] Security Groups 관계도 SVG 다이어그램 생성
+- [ ] 🔄 Application Load Balancer 생성 (다음 단계)
+- [ ] 🔄 Target Groups 생성 (Blue/Green)
+- [x] ✅ ECS 클러스터 생성
   - [x] Cluster: `library-management-cluster`
   - [x] 유형: AWS Fargate (serverless)
   - [x] Region: `ap-northeast-2`
   - [x] GitHub Secret 등록: `ECS_CLUSTER`
-- [ ] ECS Task Definition 등록 (진행 중)
-- [ ] ECS 서비스 생성
-- [ ] CodeDeploy 애플리케이션 및 배포 그룹 생성
+- [ ] 🔄 IAM Roles 생성 (ecsTaskExecutionRole, ecsTaskRole)
+- [ ] 🔄 CloudWatch Logs 그룹 생성
+- [ ] 🔄 ECS Task Definition 작성 및 등록
+- [ ] ⏳ ECS 서비스 생성
+- [ ] ⏳ CodeDeploy 애플리케이션 및 배포 그룹 생성
 
 ### Phase 4: GitHub Actions 연동 🔄 **일부 완료**
 - [x] GitHub Secrets 설정 (5/6 완료)
@@ -1011,6 +1048,8 @@ aws ecr get-login-password --region ap-northeast-2 | \
 
 | 날짜 | 버전 | 변경 내용 | 작성자 |
 |------|------|-----------|--------|
+| 2025-10-27 | 1.5 | ✨ Security Groups 3개 모두 완료, Security Groups SVG 다이어그램 2개 추가, 진행률 62%로 업데이트 | Claude |
+| 2025-10-26 | 1.4 | Security Groups 2/3 완료 반영, SVG 다이어그램 3개 추가, 시각화 섹션 추가 | Claude |
 | 2025-10-26 | 1.3 | Git 브랜치 생성 완료 반영, 문서 파일 목록 업데이트 (AWS_IAM_USER_CREATION_GUIDE.md 등 6개 문서 추가), 스크린샷 디렉토리 추가 | Claude |
 | 2025-10-26 | 1.2 | Phase 2 완료 - Docker 환경 구축 및 로컬 테스트 성공, 완전한 소스 반영 | Claude |
 | 2025-10-26 | 1.1 | Phase 1 완료, Phase 3 부분 완료, GitHub Secrets 설정 내용 반영 | Claude |
@@ -1027,12 +1066,14 @@ aws ecr get-login-password --region ap-northeast-2 | \
 4. ✅ 비용 최적화 전략 제시
 5. ✅ 트러블슈팅 가이드 포함
 
-**📌 현재 진행 상황 (2025-10-26 v1.3):**
-- ✅ **Phase 1 완료**: IAM 사용자 생성 및 Git 브랜치 설정
+**📌 현재 진행 상황 (2025-10-27 v1.5):**
+
+✅ **Phase 1 완료** (100%): IAM 사용자 생성 및 Git 브랜치 설정
   - ✅ IAM 사용자: `github-actions-deploy2`
   - ✅ Git 브랜치: `feature/cicd-ecs-blue-green-deployment` 생성 완료
   - ✅ 관련 문서 6개 작성 완료 (README, QUICK-RECOVERY-GUIDE 등)
-- ✅ **Phase 2 완료**: 로컬 Docker 환경 구축
+
+✅ **Phase 2 완료** (100%): 로컬 Docker 환경 구축
   - ✅ Dockerfile 작성 (Multi-stage build, 보안 설정, Health check)
   - ✅ .dockerignore 생성
   - ✅ docker-compose.yml 작성 (MySQL 8.0 + App)
@@ -1041,17 +1082,38 @@ aws ecr get-login-password --region ap-northeast-2 | \
   - ✅ MySQL + App 컨테이너 동시 실행 성공
   - ✅ 웹 애플리케이션 정상 동작 확인 (http://localhost:8081)
   - ✅ 완전한 소스 코드 반영 (BoardController, 파일첨부, 좋아요 등)
-- ✅ **Phase 3 부분 완료**: 
-  - ✅ ECR Repository 생성 (`library-management-system`)
-  - ✅ ECS Cluster 생성 (`library-management-cluster`, Fargate)
-  - ✅ GitHub Secrets 5/6 완료
-- 🔄 **현재 작업**: Git 커밋 후 ECS Task Definition 및 GitHub Actions 워크플로우 작성
 
-**📌 다음 작업:**
-- Git 커밋 및 푸시
-- ECS Task Definition 생성 (`aws/ecs-task-definition.json`)
-- GitHub Actions 워크플로우 작성 (`.github/workflows/deploy-to-ecs.yml`)
-- CodeDeploy AppSpec 작성 (`aws/appspec.yml`)
+🔄 **Phase 3 진행 중** (70%):
+  - ✅ ECR Repository 생성: `library-management-system`
+  - ✅ ECS Cluster 생성: `library-management-cluster` (Fargate)
+  - ✅ GitHub Secrets 설정: 5/6 완료
+  - ✅ **Security Groups 3개 모두 완료** ✨
+    - ✅ `library-alb-sg`: HTTP(80), HTTPS(443) ← Internet (0.0.0.0/0)
+    - ✅ `library-ecs-task-sg`: TCP(8081) ← library-alb-sg
+    - ✅ `library-rds-sg`: MySQL(3306) ← library-ecs-task-sg
+  - ✅ **Security Groups 관계도 SVG 다이어그램 2개 생성** ✨
+    - ✅ `04-security-groups-flow.svg` (기본 버전)
+    - ✅ `04-security-groups-flow-detailed.svg` (상세 설명 버전)
+  - 🔄 **다음 단계**: ALB, Target Groups, IAM Roles 생성
+
+⏳ **Phase 4 대기**: GitHub Actions 연동 및 배포 테스트
+
+⏳ **Phase 5 대기**: 모니터링 설정
+
+**📊 전체 진행률: 약 62%** (Phase 3의 보안 그룹 완료로 진행률 상승)
+
+**📌 다음 작업 (우선순위):**
+1. ✅ ~~Security Groups 3개 생성~~ **완료!**
+2. 🔄 Application Load Balancer + Target Groups 생성 (Blue/Green)
+3. 🔄 IAM Roles 생성 (ecsTaskExecutionRole, ecsTaskRole, ecsCodeDeployRole)
+4. 🔄 CloudWatch Logs 그룹 생성: `/ecs/library-management-system`
+5. 🔄 Parameter Store 설정 (DB 연결 정보)
+6. 🔄 ECS Task Definition 작성: `aws/ecs-task-definition.json`
+7. ⏳ ECS Service 생성
+8. ⏳ CodeDeploy Application & Deployment Group 생성
+9. ⏳ GitHub Actions 워크플로우 작성: `.github/workflows/deploy-to-ecs.yml`
+10. ⏳ Git 커밋 및 푸시
+11. ⏳ 첫 배포 테스트
 
 ---
 

@@ -1,0 +1,213 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1600">
+  <defs>
+    <style>
+      .title { font: bold 28px sans-serif; fill: #2c3e50; }
+      .subtitle { font: bold 22px sans-serif; fill: #34495e; }
+      .section-title { font: bold 18px sans-serif; fill: #2c3e50; }
+      .label { font: 15px sans-serif; fill: #2c3e50; }
+      .small-text { font: 13px sans-serif; fill: #555; }
+      .code { font: 13px monospace; fill: #e74c3c; }
+      .highlight { font: bold 16px sans-serif; fill: #c62828; }
+      .analogy { font: italic 14px sans-serif; fill: #7b1fa2; }
+      
+      .building-box { fill: #fff3e0; stroke: #e65100; stroke-width: 4; }
+      .public-zone { fill: #e3f2fd; stroke: #1976d2; stroke-width: 3; }
+      .private-zone { fill: #fff3e0; stroke: #f57c00; stroke-width: 3; }
+      .firewall-box { fill: #ffebee; stroke: #c62828; stroke-width: 3; }
+      .role-box { fill: #e8f5e9; stroke: #388e3c; stroke-width: 2; }
+      .example-box { fill: #f3e5f5; stroke: #7b1fa2; stroke-width: 2; }
+      .layer-box { fill: #e1f5fe; stroke: #0277bd; stroke-width: 2; }
+      
+      .arrow { fill: none; stroke: #424242; stroke-width: 2; marker-end: url(#arrowhead); }
+      .arrow-green { fill: none; stroke: #4caf50; stroke-width: 3; marker-end: url(#arrowhead-green); }
+      .arrow-red { fill: none; stroke: #e53935; stroke-width: 3; marker-end: url(#arrowhead-red); }
+      .arrow-block { fill: none; stroke: #e53935; stroke-width: 4; }
+    </style>
+    
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#424242" />
+    </marker>
+    <marker id="arrowhead-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#4caf50" />
+    </marker>
+    <marker id="arrowhead-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#e53935" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="900" y="45" text-anchor="middle" class="title">보안 그룹 vs 서브넷: 역할과 차이점 (현실 비유)</text>
+
+  <!-- Section 1: Building Analogy -->
+  <text x="50" y="90" class="subtitle">1. 현실 비유: 회사 건물의 보안 시스템</text>
+
+  <!-- Building Container -->
+  <rect x="50" y="120" width="1700" height="450" rx="10" class="building-box"/>
+  <text x="900" y="155" text-anchor="middle" class="section-title">VPC = 회사 건물</text>
+
+  <!-- Public Area -->
+  <rect x="100" y="180" width="750" height="360" rx="5" class="public-zone"/>
+  <text x="475" y="215" text-anchor="middle" class="section-title">Public Subnet = 로비 (외부인 출입 가능)</text>
+  <text x="475" y="240" text-anchor="middle" class="analogy">비유: 1층 로비, 방문객 접수 공간</text>
+
+  <!-- Reception Desk -->
+  <rect x="150" y="270" width="300" height="120" rx="5" fill="#bbdefb" stroke="#1976d2" stroke-width="2"/>
+  <text x="300" y="300" text-anchor="middle" class="label">ALB (접수 데스크)</text>
+  <text x="300" y="325" text-anchor="middle" class="small-text">역할: 방문객 요청 받음</text>
+  <text x="300" y="345" text-anchor="middle" class="analogy">비유: 접수 직원</text>
+  <text x="300" y="365" text-anchor="middle" class="code">Public IP 필요</text>
+  <text x="300" y="382" text-anchor="middle" class="code">외부 접근 허용</text>
+
+  <!-- NAT Gateway -->
+  <rect x="500" y="270" width="300" height="120" rx="5" fill="#ffe0b2" stroke="#f57c00" stroke-width="2"/>
+  <text x="650" y="300" text-anchor="middle" class="label">NAT Gateway</text>
+  <text x="650" y="325" text-anchor="middle" class="small-text">역할: 내부에서 외부로 나갈 때</text>
+  <text x="650" y="345" text-anchor="middle" class="analogy">비유: 직원 전용 출입문</text>
+  <text x="650" y="365" text-anchor="middle" class="code">Public IP 필요</text>
+  <text x="650" y="382" text-anchor="middle" class="code">단방향: 내부→외부만</text>
+
+  <!-- Security Guard (Security Group) -->
+  <rect x="150" y="420" width="650" height="100" rx="5" class="firewall-box"/>
+  <text x="475" y="450" text-anchor="middle" class="section-title">보안 그룹 = 경비원 (출입 규칙 검사)</text>
+  <text x="475" y="475" text-anchor="middle" class="analogy">비유: 신분증 확인, 출입증 체크하는 경비원</text>
+  <text x="475" y="500" text-anchor="middle" class="code">규칙: HTTP(80), HTTPS(443) 포트만 허용</text>
+
+  <!-- Private Area -->
+  <rect x="900" y="180" width="850" height="360" rx="5" class="private-zone"/>
+  <text x="1325" y="215" text-anchor="middle" class="section-title">Private Subnet = 사무실 (직원만 출입)</text>
+  <text x="1325" y="240" text-anchor="middle" class="analogy">비유: 2층 이상 사무실, 외부인 출입 금지</text>
+
+  <!-- Office Rooms -->
+  <rect x="950" y="270" width="350" height="120" rx="5" fill="#ffe0b2" stroke="#f57c00" stroke-width="2"/>
+  <text x="1125" y="300" text-anchor="middle" class="label">ECS Task (개발팀 사무실)</text>
+  <text x="1125" y="325" text-anchor="middle" class="small-text">역할: 실제 업무 수행</text>
+  <text x="1125" y="345" text-anchor="middle" class="analogy">비유: 개발자가 일하는 공간</text>
+  <text x="1125" y="365" text-anchor="middle" class="code">Public IP 불필요</text>
+  <text x="1125" y="382" text-anchor="middle" class="code">외부 직접 접근 차단</text>
+
+  <rect x="1350" y="270" width="350" height="120" rx="5" fill="#ffccbc" stroke="#d84315" stroke-width="2"/>
+  <text x="1525" y="300" text-anchor="middle" class="label">RDS (금고/서버실)</text>
+  <text x="1525" y="325" text-anchor="middle" class="small-text">역할: 중요 데이터 보관</text>
+  <text x="1525" y="345" text-anchor="middle" class="analogy">비유: 기밀 서류 보관소</text>
+  <text x="1525" y="365" text-anchor="middle" class="code">Public IP 불필요</text>
+  <text x="1525" y="382" text-anchor="middle" class="code">최고 수준 보안</text>
+
+  <!-- Security Guards (Security Groups) -->
+  <rect x="950" y="420" width="750" height="100" rx="5" class="firewall-box"/>
+  <text x="1325" y="450" text-anchor="middle" class="section-title">보안 그룹 = 각 사무실마다 다른 경비원</text>
+  <text x="1325" y="475" text-anchor="middle" class="analogy">비유: 각 층/부서마다 다른 출입 규칙</text>
+  <text x="1325" y="500" text-anchor="middle" class="code">ECS-SG: 8081 포트만 | RDS-SG: 3306 포트만 (ECS에서만)</text>
+
+  <!-- Traffic Flow Arrows -->
+  <path d="M 450 390 L 750 450" class="arrow-green"/>
+  <text x="550" y="410" class="small-text" fill="#4caf50">방문객→접수</text>
+  
+  <path d="M 850 470 L 950 470" class="arrow-green"/>
+  <text x="880" y="460" class="small-text" fill="#4caf50">접수 확인 후 통과</text>
+
+  <path d="M 1300 330 L 1350 330" class="arrow-green"/>
+  <text x="1310" y="320" class="small-text" fill="#4caf50">내부 연결</text>
+
+  <!-- Section 2: Role Comparison -->
+  <text x="50" y="630" class="subtitle">2. 보안 그룹 vs 서브넷: 역할 비교</text>
+
+  <!-- Security Group Role -->
+  <rect x="50" y="660" width="850" height="340" rx="5" class="firewall-box" opacity="0.1"/>
+  <text x="475" y="695" text-anchor="middle" class="section-title">보안 그룹 (Security Group) = 방화벽 규칙</text>
+
+  <rect x="80" y="720" width="790" height="260" rx="3" fill="#fff" stroke="#c62828" stroke-width="2"/>
+  
+  <text x="100" y="750" class="label">역할: WHO (누가) + WHAT (무엇을) 제어</text>
+  <text x="120" y="780" class="code">1. 인바운드 규칙: 누가 들어올 수 있나?</text>
+  <text x="140" y="805" class="small-text">예: "0.0.0.0/0에서 80 포트로 접근 허용"</text>
+  <text x="140" y="825" class="small-text">= 모든 사람이 HTTP로 접근 가능</text>
+  
+  <text x="120" y="855" class="code">2. 아웃바운드 규칙: 어디로 나갈 수 있나?</text>
+  <text x="140" y="880" class="small-text">예: "모든 대상으로 모든 포트 허용"</text>
+  <text x="140" y="900" class="small-text">= 내부에서 외부로 자유롭게 통신</text>
+
+  <text x="120" y="930" class="highlight">핵심: 트래픽 허용/차단 (포트, IP, 프로토콜)</text>
+  <text x="120" y="955" class="analogy">비유: 경비원이 신분증 보고 "출입 가능/불가" 판단</text>
+
+  <!-- Subnet Role -->
+  <rect x="950" y="660" width="800" height="340" rx="5" class="private-zone" opacity="0.1"/>
+  <text x="1350" y="695" text-anchor="middle" class="section-title">서브넷 (Subnet) = 네트워크 구역</text>
+
+  <rect x="980" y="720" width="740" height="260" rx="3" fill="#fff" stroke="#f57c00" stroke-width="2"/>
+  
+  <text x="1000" y="750" class="label">역할: WHERE (어디에) 배치되는가</text>
+  <text x="1020" y="780" class="code">1. Public Subnet: 인터넷 직접 연결 가능한 구역</text>
+  <text x="1040" y="805" class="small-text">라우트 테이블: 0.0.0.0/0 → IGW</text>
+  <text x="1040" y="825" class="small-text">용도: 외부 노출이 필요한 리소스 (ALB, NAT)</text>
+  
+  <text x="1020" y="855" class="code">2. Private Subnet: 인터넷 직접 차단된 구역</text>
+  <text x="1040" y="880" class="small-text">라우트 테이블: 0.0.0.0/0 → NAT Gateway</text>
+  <text x="1040" y="900" class="small-text">용도: 보호가 필요한 리소스 (ECS, RDS)</text>
+
+  <text x="1020" y="930" class="highlight">핵심: 네트워크 위치 + 인터넷 연결 방식</text>
+  <text x="1020" y="955" class="analogy">비유: 1층(Public) vs 2층 이상(Private) 위치 구분</text>
+
+  <!-- Section 3: Working Together -->
+  <text x="50" y="1050" class="subtitle">3. 보안 그룹 + 서브넷: 협력하는 2단계 보안</text>
+
+  <rect x="50" y="1080" width="1700" height="480" rx="5" class="layer-box" opacity="0.05"/>
+
+  <!-- Layer 1: Subnet -->
+  <rect x="100" y="1120" width="1600" height="180" rx="5" class="private-zone" opacity="0.2"/>
+  <text x="900" y="1155" text-anchor="middle" class="section-title">1단계: 서브넷 (네트워크 계층 제어)</text>
+
+  <rect x="150" y="1180" width="450" height="100" rx="3" fill="#fff" stroke="#f57c00" stroke-width="2"/>
+  <text x="375" y="1210" text-anchor="middle" class="label">Public Subnet</text>
+  <text x="375" y="1235" text-anchor="middle" class="code">라우트: 0.0.0.0/0 → IGW</text>
+  <text x="375" y="1260" text-anchor="middle" class="small-text">인터넷 직접 연결 허용</text>
+
+  <path d="M 600 1230 L 700 1230" class="arrow-green"/>
+  <text x="630" y="1220" class="small-text" fill="#4caf50">통과</text>
+
+  <rect x="700" y="1180" width="450" height="100" rx="3" fill="#fff" stroke="#f57c00" stroke-width="2"/>
+  <text x="925" y="1210" text-anchor="middle" class="label">Private Subnet</text>
+  <text x="925" y="1235" text-anchor="middle" class="code">라우트: 0.0.0.0/0 → NAT</text>
+  <text x="925" y="1260" text-anchor="middle" class="small-text">인터넷 직접 연결 차단</text>
+
+  <line x1="1150" y1="1230" x2="1200" y2="1230" class="arrow-block"/>
+  <line x1="1200" y1="1220" x2="1200" y2="1240" class="arrow-block"/>
+  <text x="1220" y="1235" text-anchor="middle" class="small-text" fill="#e53935">외부 직접 접근 차단</text>
+
+  <!-- Layer 2: Security Group -->
+  <rect x="100" y="1330" width="1600" height="210" rx="5" class="firewall-box" opacity="0.2"/>
+  <text x="900" y="1365" text-anchor="middle" class="section-title">2단계: 보안 그룹 (트래픽 세부 제어)</text>
+
+  <rect x="150" y="1390" width="350" height="130" rx="3" fill="#fff" stroke="#c62828" stroke-width="2"/>
+  <text x="325" y="1420" text-anchor="middle" class="label">library-alb-sg</text>
+  <text x="325" y="1445" text-anchor="middle" class="code">인바운드: 80, 443</text>
+  <text x="325" y="1470" text-anchor="middle" class="small-text">출처: 0.0.0.0/0 (모든 곳)</text>
+  <text x="325" y="1495" text-anchor="middle" class="analogy">= HTTP/HTTPS만 허용</text>
+
+  <path d="M 500 1455 L 570 1455" class="arrow-green"/>
+
+  <rect x="570" y="1390" width="350" height="130" rx="3" fill="#fff" stroke="#c62828" stroke-width="2"/>
+  <text x="745" y="1420" text-anchor="middle" class="label">library-ecs-task-sg</text>
+  <text x="745" y="1445" text-anchor="middle" class="code">인바운드: 8081</text>
+  <text x="745" y="1470" text-anchor="middle" class="small-text">출처: library-alb-sg만</text>
+  <text x="745" y="1495" text-anchor="middle" class="analogy">= ALB에서만 접근 허용</text>
+
+  <path d="M 920 1455 L 990 1455" class="arrow-green"/>
+
+  <rect x="990" y="1390" width="350" height="130" rx="3" fill="#fff" stroke="#c62828" stroke-width="2"/>
+  <text x="1165" y="1420" text-anchor="middle" class="label">library-rds-sg</text>
+  <text x="1165" y="1445" text-anchor="middle" class="code">인바운드: 3306</text>
+  <text x="1165" y="1470" text-anchor="middle" class="small-text">출처: library-ecs-task-sg만</text>
+  <text x="1165" y="1495" text-anchor="middle" class="analogy">= ECS에서만 DB 접근</text>
+
+  <rect x="1400" y="1390" width="250" height="130" rx="3" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="1525" y="1420" text-anchor="middle" class="label">외부 해커</text>
+  <line x1="1350" y1="1455" x2="1400" y2="1455" class="arrow-block"/>
+  <line x1="1400" y1="1445" x2="1400" y2="1465" class="arrow-block"/>
+  <text x="1525" y="1455" text-anchor="middle" class="small-text" fill="#e53935">모든 단계에서</text>
+  <text x="1525" y="1475" text-anchor="middle" class="small-text" fill="#e53935">차단됨</text>
+  <text x="1525" y="1500" text-anchor="middle" class="analogy">= 침입 불가</text>
+
+  <!-- Summary Box -->
+  <rect x="50" y="1570" width="1700" height="25" rx="3" fill="#7b1fa2"/>
+  <text x="900" y="1590" text-anchor="middle" class="label" fill="#fff">핵심: 서브넷(위치)은 1층/2층 구분, 보안그룹(규칙)은 출입증 검사 | 둘이 협력해서 2단계 보안 제공</text>
+</svg>

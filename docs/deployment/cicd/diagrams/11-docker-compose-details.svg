@@ -1,0 +1,190 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1000">
+  <!-- Title -->
+  <text x="700" y="30" font-size="24" font-weight="bold" text-anchor="middle" fill="#232F3E">
+    docker-compose.yml 작동 원리
+  </text>
+  <text x="700" y="55" font-size="14" text-anchor="middle" fill="#666">
+    Multi-Container Architecture with Networks and Volumes
+  </text>
+
+  <!-- Section 1: File Structure -->
+  <g id="file-structure">
+    <rect x="50" y="80" width="450" height="550" fill="#f8f9fa" stroke="#198754" stroke-width="3" rx="10"/>
+    <text x="275" y="110" font-size="18" font-weight="bold" text-anchor="middle" fill="#0a3622">docker-compose.yml 구조</text>
+    
+    <!-- YAML Structure -->
+    <rect x="70" y="130" width="410" height="485" fill="#fff" stroke="#dee2e6" stroke-width="2" rx="5"/>
+    
+    <!-- Version -->
+    <text x="80" y="155" font-size="11" font-family="monospace" fill="#6c757d">version: '3.8'</text>
+    
+    <!-- Services Header -->
+    <rect x="80" y="170" width="390" height="25" fill="#dc3545" rx="3"/>
+    <text x="90" y="188" font-size="12" font-weight="bold" fill="#fff">services:</text>
+    
+    <!-- MySQL Service -->
+    <rect x="90" y="205" width="370" height="140" fill="#e3f2fd" stroke="#0dcaf0" stroke-width="2" rx="3"/>
+    <text x="100" y="225" font-size="11" font-weight="bold" fill="#055160">mysql:</text>
+    <text x="110" y="245" font-size="10" font-family="monospace" fill="#212529">image: mysql:8.0</text>
+    <text x="110" y="262" font-size="10" font-family="monospace" fill="#212529">container_name: library-mysql</text>
+    <text x="110" y="279" font-size="10" font-family="monospace" fill="#6c757d">environment: [MYSQL_ROOT_PASSWORD, ...]</text>
+    <text x="110" y="296" font-size="10" font-family="monospace" fill="#6c757d">ports: ["3307:3306"]</text>
+    <text x="110" y="313" font-size="10" font-family="monospace" fill="#198754">volumes: [mysql-data:/var/lib/mysql]</text>
+    <text x="110" y="330" font-size="10" font-family="monospace" fill="#ffc107">networks: [library-network]</text>
+    
+    <!-- App Service -->
+    <rect x="90" y="355" width="370" height="140" fill="#fff3cd" stroke="#0d6efd" stroke-width="2" rx="3"/>
+    <text x="100" y="375" font-size="11" font-weight="bold" fill="#0d47a1">app:</text>
+    <text x="110" y="395" font-size="10" font-family="monospace" fill="#198754">build: {context: ., dockerfile: Dockerfile}</text>
+    <text x="110" y="412" font-size="10" font-family="monospace" fill="#212529">container_name: library-app</text>
+    <text x="110" y="429" font-size="10" font-family="monospace" fill="#6c757d">environment: [DB_URL, DB_USERNAME, ...]</text>
+    <text x="110" y="446" font-size="10" font-family="monospace" fill="#6c757d">ports: ["8081:8081"]</text>
+    <text x="110" y="463" font-size="10" font-family="monospace" fill="#198754">volumes: [./uploads:/app/uploads, ...]</text>
+    <text x="110" y="480" font-size="10" font-family="monospace" fill="#ffc107">networks: [library-network]</text>
+    
+    <!-- Networks Section -->
+    <rect x="80" y="510" width="390" height="45" fill="#ffc107" rx="3"/>
+    <text x="90" y="528" font-size="12" font-weight="bold" fill="#000">networks:</text>
+    <rect x="90" y="535" width="370" height="15" fill="#fff9c4"/>
+    <text x="100" y="546" font-size="10" font-family="monospace" fill="#212529">library-network: {driver: bridge}</text>
+    
+    <!-- Volumes Section -->
+    <rect x="80" y="565" width="390" height="45" fill="#198754" rx="3"/>
+    <text x="90" y="583" font-size="12" font-weight="bold" fill="#fff">volumes:</text>
+    <rect x="90" y="590" width="370" height="15" fill="#d1e7dd"/>
+    <text x="100" y="601" font-size="10" font-family="monospace" fill="#212529">mysql-data: {driver: local}</text>
+  </g>
+
+  <!-- Section 2: Runtime Architecture -->
+  <g id="runtime-architecture">
+    <rect x="530" y="80" width="820" height="550" fill="#fff" stroke="#0d6efd" stroke-width="3" rx="10"/>
+    <text x="940" y="110" font-size="18" font-weight="bold" text-anchor="middle" fill="#0d47a1">실행 시 생성되는 구조</text>
+    
+    <!-- Docker Host -->
+    <rect x="550" y="130" width="780" height="485" fill="#e7f1ff" stroke="#495057" stroke-width="2" rx="8"/>
+    <text x="560" y="155" font-size="14" font-weight="bold" fill="#212529">Docker Host (로컬 PC)</text>
+    
+    <!-- Network Layer -->
+    <rect x="570" y="175" width="740" height="420" fill="#fff9c4" stroke="#ffc107" stroke-width="3" rx="8"/>
+    <text x="580" y="200" font-size="15" font-weight="bold" fill="#856404">library-network (Bridge Network)</text>
+    <text x="580" y="218" font-size="11" fill="#6c757d">모든 컨테이너가 이 네트워크로 연결되어 서로 통신 가능</text>
+    
+    <!-- MySQL Container -->
+    <rect x="600" y="245" width="320" height="330" fill="#e3f2fd" stroke="#0dcaf0" stroke-width="3" rx="8"/>
+    <text x="760" y="270" font-size="14" font-weight="bold" text-anchor="middle" fill="#055160">MySQL Container</text>
+    <text x="760" y="290" font-size="11" text-anchor="middle" fill="#6c757d">library-mysql</text>
+    
+    <!-- MySQL Details -->
+    <rect x="620" y="305" width="280" height="120" fill="#fff" stroke="#0dcaf0" stroke-width="2" rx="5"/>
+    <text x="630" y="325" font-size="11" font-weight="bold" fill="#055160">컨테이너 내부:</text>
+    <text x="630" y="345" font-size="10" fill="#212529">- Port: 3306 (내부)</text>
+    <text x="630" y="362" font-size="10" fill="#212529">- Data: /var/lib/mysql</text>
+    <text x="630" y="379" font-size="10" fill="#212529">- Database: librarydb</text>
+    <text x="630" y="396" font-size="10" fill="#212529">- User: root</text>
+    <text x="630" y="413" font-size="10" fill="#6c757d">- Network IP: 172.20.0.2</text>
+    
+    <!-- Port Mapping -->
+    <rect x="620" y="435" width="280" height="55" fill="#fff3cd" stroke="#ffc107" stroke-width="2" rx="5"/>
+    <text x="630" y="455" font-size="11" font-weight="bold" fill="#856404">Port Mapping:</text>
+    <text x="630" y="475" font-size="10" fill="#212529">Host:3307 → Container:3306</text>
+    
+    <!-- Volume Connection -->
+    <rect x="620" y="500" width="280" height="60" fill="#d1e7dd" stroke="#198754" stroke-width="2" rx="5"/>
+    <text x="630" y="520" font-size="11" font-weight="bold" fill="#0a3622">Volume Mount:</text>
+    <text x="630" y="540" font-size="10" fill="#212529">mysql-data (Named Volume)</text>
+    <text x="630" y="555" font-size="9" fill="#6c757d">→ /var/lib/mysql</text>
+    
+    <!-- App Container -->
+    <rect x="960" y="245" width="320" height="330" fill="#fff3cd" stroke="#0d6efd" stroke-width="3" rx="8"/>
+    <text x="1120" y="270" font-size="14" font-weight="bold" text-anchor="middle" fill="#0d47a1">App Container</text>
+    <text x="1120" y="290" font-size="11" text-anchor="middle" fill="#6c757d">library-app</text>
+    
+    <!-- App Details -->
+    <rect x="980" y="305" width="280" height="120" fill="#fff" stroke="#0d6efd" stroke-width="2" rx="5"/>
+    <text x="990" y="325" font-size="11" font-weight="bold" fill="#0d47a1">컨테이너 내부:</text>
+    <text x="990" y="345" font-size="10" fill="#212529">- Port: 8081 (내부/외부)</text>
+    <text x="990" y="362" font-size="10" fill="#212529">- Spring Boot App</text>
+    <text x="990" y="379" font-size="10" fill="#198754">- DB Host: mysql (서비스명)</text>
+    <text x="990" y="396" font-size="10" fill="#212529">- DB Port: 3306</text>
+    <text x="990" y="413" font-size="10" fill="#6c757d">- Network IP: 172.20.0.3</text>
+    
+    <!-- Port Mapping -->
+    <rect x="980" y="435" width="280" height="55" fill="#fff3cd" stroke="#ffc107" stroke-width="2" rx="5"/>
+    <text x="990" y="455" font-size="11" font-weight="bold" fill="#856404">Port Mapping:</text>
+    <text x="990" y="475" font-size="10" fill="#212529">Host:8081 → Container:8081</text>
+    
+    <!-- Volume Connection -->
+    <rect x="980" y="500" width="280" height="60" fill="#d1e7dd" stroke="#198754" stroke-width="2" rx="5"/>
+    <text x="990" y="520" font-size="11" font-weight="bold" fill="#0a3622">Volume Mount:</text>
+    <text x="990" y="540" font-size="10" fill="#212529">./uploads (Bind Mount)</text>
+    <text x="990" y="555" font-size="9" fill="#6c757d">→ /app/uploads</text>
+    
+    <!-- Network Connection Arrow -->
+    <path d="M 920 410 L 960 410" stroke="#ffc107" stroke-width="3" marker-end="url(#arrow-network)"/>
+    <defs>
+      <marker id="arrow-network" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L9,3 z" fill="#ffc107" />
+      </marker>
+    </defs>
+    <text x="935" y="400" font-size="10" font-weight="bold" text-anchor="middle" fill="#856404">mysql:3306</text>
+  </g>
+
+  <!-- Section 3: Key Concepts -->
+  <g id="key-concepts">
+    <rect x="50" y="650" width="1300" height="330" fill="#f8f9fa" stroke="#6c757d" stroke-width="2" rx="10"/>
+    <text x="700" y="680" font-size="18" font-weight="bold" text-anchor="middle" fill="#212529">핵심 개념 정리</text>
+    
+    <!-- Concept 1: Networks -->
+    <rect x="70" y="700" width="400" height="260" fill="#fff9c4" stroke="#ffc107" stroke-width="2" rx="8"/>
+    <text x="270" y="730" font-size="15" font-weight="bold" text-anchor="middle" fill="#856404">1. Networks (네트워크)</text>
+    
+    <rect x="90" y="745" width="360" height="200" fill="#fff" stroke="#dee2e6" rx="5"/>
+    <text x="100" y="765" font-size="12" font-weight="bold" fill="#212529">역할:</text>
+    <text x="100" y="785" font-size="11" fill="#212529">- 컨테이너 간 통신 가능하게 함</text>
+    <text x="100" y="805" font-size="11" fill="#212529">- 각 컨테이너에 IP 자동 할당</text>
+    
+    <text x="100" y="830" font-size="12" font-weight="bold" fill="#212529">서비스 이름으로 통신:</text>
+    <rect x="100" y="840" width="330" height="95" fill="#f8f9fa" rx="3"/>
+    <text x="110" y="860" font-size="10" font-family="monospace" fill="#6c757d"># App 컨테이너 안에서</text>
+    <text x="110" y="877" font-size="10" font-family="monospace" fill="#198754">DB_URL=jdbc:mysql://mysql:3306/...</text>
+    <text x="110" y="894" font-size="10" font-family="monospace" fill="#6c757d"># mysql = 서비스 이름</text>
+    <text x="110" y="911" font-size="10" font-family="monospace" fill="#6c757d"># Docker가 자동으로 IP 변환</text>
+    <text x="110" y="928" font-size="10" font-family="monospace" fill="#6c757d"># mysql → 172.20.0.2</text>
+    
+    <!-- Concept 2: Volumes -->
+    <rect x="490" y="700" width="400" height="260" fill="#d1e7dd" stroke="#198754" stroke-width="2" rx="8"/>
+    <text x="690" y="730" font-size="15" font-weight="bold" text-anchor="middle" fill="#0a3622">2. Volumes (볼륨)</text>
+    
+    <rect x="510" y="745" width="360" height="200" fill="#fff" stroke="#dee2e6" rx="5"/>
+    <text x="520" y="765" font-size="12" font-weight="bold" fill="#212529">역할:</text>
+    <text x="520" y="785" font-size="11" fill="#212529">- 데이터 영속성 보장</text>
+    <text x="520" y="805" font-size="11" fill="#212529">- 컨테이너 삭제해도 데이터 유지</text>
+    
+    <text x="520" y="830" font-size="12" font-weight="bold" fill="#212529">2가지 방식:</text>
+    <rect x="520" y="840" width="330" height="95" fill="#f8f9fa" rx="3"/>
+    <text x="530" y="860" font-size="10" font-weight="bold" fill="#0dcaf0">1. Named Volume (추천)</text>
+    <text x="530" y="877" font-size="9" font-family="monospace" fill="#6c757d">mysql-data:/var/lib/mysql</text>
+    <text x="530" y="891" font-size="9" fill="#6c757d">Docker가 관리, 위치 자동</text>
+    
+    <text x="530" y="911" font-size="10" font-weight="bold" fill="#0d6efd">2. Bind Mount</text>
+    <text x="530" y="926" font-size="9" font-family="monospace" fill="#6c757d">./uploads:/app/uploads</text>
+    <text x="530" y="940" font-size="9" fill="#6c757d">로컬 PC 폴더 직접 연결</text>
+    
+    <!-- Concept 3: depends_on -->
+    <rect x="910" y="700" width="420" height="260" fill="#e7f1ff" stroke="#0d6efd" stroke-width="2" rx="8"/>
+    <text x="1120" y="730" font-size="15" font-weight="bold" text-anchor="middle" fill="#0d47a1">3. depends_on (의존성)</text>
+    
+    <rect x="930" y="745" width="380" height="200" fill="#fff" stroke="#dee2e6" rx="5"/>
+    <text x="940" y="765" font-size="12" font-weight="bold" fill="#212529">역할:</text>
+    <text x="940" y="785" font-size="11" fill="#212529">- 컨테이너 시작 순서 제어</text>
+    <text x="940" y="805" font-size="11" fill="#212529">- DB 준비되면 App 시작</text>
+    
+    <text x="940" y="830" font-size="12" font-weight="bold" fill="#212529">설정 예시:</text>
+    <rect x="940" y="840" width="350" height="95" fill="#f8f9fa" rx="3"/>
+    <text x="950" y="860" font-size="10" font-family="monospace" fill="#6c757d">app:</text>
+    <text x="960" y="877" font-size="10" font-family="monospace" fill="#212529">depends_on:</text>
+    <text x="970" y="894" font-size="10" font-family="monospace" fill="#212529">mysql:</text>
+    <text x="980" y="911" font-size="10" font-family="monospace" fill="#198754">condition: service_healthy</text>
+    <text x="950" y="928" font-size="9" fill="#6c757d"># MySQL Health Check 통과 후 시작</text>
+  </g>
+</svg>

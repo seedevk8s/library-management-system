@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900">
+  <defs>
+    <style>
+      .box { stroke-width: 3; fill: #fff; }
+      .ideal { stroke: #4CAF50; fill: #E8F5E9; }
+      .actual { stroke: #2196F3; fill: #E3F2FD; }
+      .text-title { fill: #333; font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; }
+      .text-desc { fill: #666; font-family: Arial, sans-serif; font-size: 14px; }
+      .text-small { fill: #999; font-family: Arial, sans-serif; font-size: 12px; }
+      .step-num { fill: #fff; font-family: Arial, sans-serif; font-size: 24px; font-weight: bold; }
+      .arrow { fill: none; stroke-width: 3; stroke: #999; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#999" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="700" y="40" text-anchor="middle" style="font-size: 32px; fill: #333; font-weight: bold;">
+    ⚖️ 이상적 순서 vs 실제 순서 비교
+  </text>
+  <text x="700" y="70" text-anchor="middle" style="font-size: 16px; fill: #666;">
+    두 방법 모두 정답이지만, 논리적 흐름이 다릅니다
+  </text>
+  
+  <!-- Left Side: Ideal Order -->
+  <g transform="translate(50, 120)">
+    <rect x="0" y="0" width="600" height="700" style="fill: #F1F8F4; stroke: #4CAF50; stroke-width: 3;" rx="15"/>
+    
+    <text x="300" y="40" text-anchor="middle" style="font-size: 24px; fill: #4CAF50; font-weight: bold;">
+      ✅ 이상적 순서 (논리적)
+    </text>
+    <text x="300" y="65" text-anchor="middle" class="text-desc">
+      네트워크 → 컴퓨팅 → 애플리케이션
+    </text>
+    
+    <!-- Step 1: VPC -->
+    <g transform="translate(50, 100)">
+      <circle cx="30" cy="30" r="25" style="fill: #4CAF50;"/>
+      <text x="30" y="38" text-anchor="middle" class="step-num">1</text>
+      <rect x="70" y="5" width="450" height="50" class="box ideal" rx="8"/>
+      <text x="295" y="37" text-anchor="middle" class="text-title">VPC / Subnets 확인</text>
+    </g>
+    
+    <!-- Arrow -->
+    <path d="M 330 160 L 330 180" class="arrow" marker-end="url(#arrow)"/>
+    
+    <!-- Step 2: Security Groups -->
+    <g transform="translate(50, 180)">
+      <circle cx="30" cy="30" r="25" style="fill: #4CAF50;"/>
+      <text x="30" y="38" text-anchor="middle" class="step-num">2</text>
+      <rect x="70" y="5" width="450" height="50" class="box ideal" rx="8"/>
+      <text x="295" y="37" text-anchor="middle" class="text-title">Security Groups 생성 (3개)</text>
+    </g>
+    
+    <!-- Arrow -->
+    <path d="M 330 240 L 330 260" class="arrow" marker-end="url(#arrow)"/>
+    
+    <!-- Step 3: ALB -->
+    <g transform="translate(50, 260)">
+      <circle cx="30" cy="30" r="25" style="fill: #4CAF50;"/>
+      <text x="30" y="38" text-anchor="middle" class="step-num">3</text>
+      <rect x="70" y="5" width="450" height="50" class="box ideal" rx="8"/>
+      <text x="295" y="37" text-anchor="middle" class="text-title">ALB + Target Groups</text>
+    </g>
+    
+    <!-- Arrow -->
+    <path d="M 330 320 L 330 340" class="arrow" marker-end="url(#arrow)"/>
+    
+    <!-- Step 4: ECR -->
+    <g transform="translate(50, 340)">
+      <circle cx="30" cy="30" r="25" style="fill: #4CAF50;"/>
+      <text x="30" y="38" text-anchor="middle" class="step-num">4</text>
+      <rect x="70" y="5" width="450" height="50" class="box ideal" rx="8"/>
+      <text x="295" y="37" text-anchor="middle" class="text-title">ECR + ECS Cluster + IAM Roles</text>
+    </g>
+    
+    <!-- Arrow -->
+    <path d="M 330 400 L 330 420" class="arrow" marker-end="url(#arrow)"/>
+    
+    <!-- Step 5: Task Def -->
+    <g transform="translate(50, 420)">
+      <circle cx="30" cy="30" r="25" style="fill: #4CAF50;"/>
+      <text x="30" y="38" text-anchor="middle" class="step-num">5</text>
+      <rect x="70" y="5" width="450" height="50" class="box ideal" rx="8"/>
+      <text x="295" y="37" text-anchor="middle" class="text-title">Task Definition 생성</text>
+    </g>
+    
+    <!-- Arrow -->
+    <path d="M 330 480 L 330 500" class="arrow" marker-end="url(#arrow)"/>
+    
+    <!-- Step 6: ECS Service -->
+    <g transform="translate(50, 500)">
+      <circle cx="30" cy="30" r="25" style="fill: #4CAF50;"/>
+      <text x="30" y="38" text-anchor="middle" class="step-num">6</text>
+      <rect x="70" y="5" width="450" height="50" class="box ideal" rx="8"/>
+      <text x="295" y="37" text-anchor="middle" class="text-title">ECS Service 생성</text>
+    </g>
+    
+    <!-- Arrow -->
+    <path d="M 330 560 L 330 580" class="arrow" marker-end="url(#arrow)"/>
+    
+    <!-- Step 7: CodeDeploy -->
+    <g transform="translate(50, 580)">
+      <circle cx="30" cy="30" r="25" style="fill: #4CAF50;"/>
+      <text x="30" y="38" text-anchor="middle" class="step-num">7</text>
+      <rect x="70" y="5" width="450" height="50" class="box ideal" rx="8"/>
+      <text x="295" y="37" text-anchor="middle" class="text-title">CodeDeploy 설정</text>
+    </g>
+    
+    <!-- Advantage -->
+    <g transform="translate(50, 650)">
+      <text x="0" y="0" style="font-size: 14px; fill: #4CAF50; font-weight: bold;">
+        ✅ 장점: 논리적으로 명확함
+      </text>
+      <text x="0" y="20" class="text-small">
+        각 단계가 다음 단계의 기반이 됨
+      </text>
+    </g>
+  </g>
+  
+  <!-- Right Side: Actual Order -->
+  <g transform="translate(750, 120)">
+    <rect x="0" y="0" width="600" height="700" style="fill: #F1F7FC; stroke: #2196F3; stroke-width: 3;" rx="15"/>
+    
+    <text x="300" y="40" text-anchor="middle" style="font-size: 24px; fill: #2196F3; font-weight: bold;">
+      🔵 실제 순서 (우리가 한 것)
+    </text>
+    <text x="300" y="65" text-anchor="middle" class="text-desc">
+      독립적인 것 먼저 → 의존적인 것 나중에
+    </text>
+    
+    <!-- Step 1: ECR -->
+    <g transform="translate(50, 100)">
+      <circle cx="30" cy="30" r="25" style="fill: #2196F3;"/>
+      <text x="30" y="38" text-anchor="middle" class="step-num">1</text>
+      <rect x="70" y="5" width="450" height="50" class="box actual" rx="8"/>
+      <text x="295" y="37" text-anchor="middle" class="text-title">ECR Repository 생성</text>
+    </g>
+    
+    <!-- Arrow -->
+    <path d="M 330 160 L 330 180" class="arrow" marker-end="url(#arrow)"/>
+    
+    <!-- Step 2: Security Groups -->
+    <g transform="translate(50, 180)">
+      <circle cx="30" cy="30" r="25" style="fill: #2196F3;"/>
+      <text x="30" y="38" text-anchor="middle" class="step-num">2</text>
+      <rect x="70" y="5" width="450" height="50" class="box actual" rx="8"/>
+      <text x="295" y="37" text-anchor="middle" class="text-title">Security Groups 생성 (3개)</text>
+    </g>
+    
+    <!-- Arrow -->
+    <path d="M 330 240 L 330 260" class="arrow" marker-end="url(#arrow)"/>
+    
+    <!-- Step 3: ECS Cluster -->
+    <g transform="translate(50, 260)">
+      <circle cx="30" cy="30" r="25" style="fill: #2196F3;"/>
+      <text x="30" y="38" text-anchor="middle" class="step-num">3</text>
+      <rect x="70" y="5" width="450" height="50" class="box actual" rx="8"/>
+      <text x="295" y="37" text-anchor="middle" class="text-title">ECS Cluster 생성</text>
+    </g>
+    
+    <!-- Arrow -->
+    <path d="M 330 320 L 330 340" class="arrow" marker-end="url(#arrow)"/>
+    
+    <!-- Step 4: ALB (다음) -->
+    <g transform="translate(50, 340)">
+      <circle cx="30" cy="30" r="25" style="fill: #FF9800;"/>
+      <text x="30" y="38" text-anchor="middle" class="step-num">4</text>
+      <rect x="70" y="5" width="450" height="50" style="fill: #FFF3E0; stroke: #FF9800; stroke-width: 3;" rx="8"/>
+      <text x="295" y="37" text-anchor="middle" class="text-title">ALB + Target Groups (다음)</text>
+    </g>
+    
+    <!-- Arrow -->
+    <path d="M 330 400 L 330 420" class="arrow" marker-end="url(#arrow)" stroke-dasharray="5,5"/>
+    
+    <!-- Step 5: IAM + CloudWatch -->
+    <g transform="translate(50, 420)">
+      <circle cx="30" cy="30" r="25" style="fill: #9E9E9E;"/>
+      <text x="30" y="38" text-anchor="middle" class="step-num">5</text>
+      <rect x="70" y="5" width="450" height="50" style="fill: #F5F5F5; stroke: #9E9E9E; stroke-width: 3;" rx="8"/>
+      <text x="295" y="37" text-anchor="middle" class="text-title">IAM Roles + CloudWatch (예정)</text>
+    </g>
+    
+    <!-- Arrow -->
+    <path d="M 330 480 L 330 500" class="arrow" marker-end="url(#arrow)" stroke-dasharray="5,5"/>
+    
+    <!-- Step 6: Task Def -->
+    <g transform="translate(50, 500)">
+      <circle cx="30" cy="30" r="25" style="fill: #9E9E9E;"/>
+      <text x="30" y="38" text-anchor="middle" class="step-num">6</text>
+      <rect x="70" y="5" width="450" height="50" style="fill: #F5F5F5; stroke: #9E9E9E; stroke-width: 3;" rx="8"/>
+      <text x="295" y="37" text-anchor="middle" class="text-title">Task Definition (예정)</text>
+    </g>
+    
+    <!-- Arrow -->
+    <path d="M 330 560 L 330 580" class="arrow" marker-end="url(#arrow)" stroke-dasharray="5,5"/>
+    
+    <!-- Step 7: ECS Service -->
+    <g transform="translate(50, 580)">
+      <circle cx="30" cy="30" r="25" style="fill: #9E9E9E;"/>
+      <text x="30" y="38" text-anchor="middle" class="step-num">7</text>
+      <rect x="70" y="5" width="450" height="50" style="fill: #F5F5F5; stroke: #9E9E9E; stroke-width: 3;" rx="8"/>
+      <text x="295" y="37" text-anchor="middle" class="text-title">ECS Service + CodeDeploy (예정)</text>
+    </g>
+    
+    <!-- Advantage -->
+    <g transform="translate(50, 650)">
+      <text x="0" y="0" style="font-size: 14px; fill: #2196F3; font-weight: bold;">
+        ✅ 장점: 유연하고 효율적
+      </text>
+      <text x="0" y="20" class="text-small">
+        독립적인 리소스는 병렬 작업 가능
+      </text>
+    </g>
+  </g>
+  
+  <!-- Conclusion Box -->
+  <rect x="50" y="850" width="1300" height="35" style="fill: #FFEB3B; stroke: #FBC02D; stroke-width: 2;" rx="8"/>
+  <text x="700" y="875" text-anchor="middle" style="font-size: 18px; fill: #333; font-weight: bold;">
+    💡 결론: 두 방법 모두 정답! 단, ECS Service는 반드시 ALB/TG가 준비된 후에 생성해야 합니다.
+  </text>
+</svg>

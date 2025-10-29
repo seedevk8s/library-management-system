@@ -1,0 +1,260 @@
+<svg viewBox="0 0 1600 1100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Title -->
+  <text x="800" y="40" font-size="28" font-weight="bold" text-anchor="middle" fill="#1a1a1a">
+    Library Management System - AWS 인프라 구조
+  </text>
+  <text x="800" y="70" font-size="16" text-anchor="middle" fill="#666">
+    Region: ap-northeast-2 (Seoul) | VPC: vpc-07dd414387be45a0f
+  </text>
+  
+  <!-- Legend -->
+  <g id="legend">
+    <rect x="50" y="90" width="700" height="50" fill="#F8F9FA" stroke="#DEE2E6" stroke-width="2" rx="5"/>
+    <rect x="70" y="105" width="30" height="20" fill="#D4EDDA" stroke="#28A745" stroke-width="2"/>
+    <text x="110" y="120" font-size="13" fill="#155724" font-weight="bold">✅ 생성 완료</text>
+    
+    <rect x="230" y="105" width="30" height="20" fill="#FFF3CD" stroke="#FFC107" stroke-width="2"/>
+    <text x="270" y="120" font-size="13" fill="#856404" font-weight="bold">🔄 진행 중</text>
+    
+    <rect x="390" y="105" width="30" height="20" fill="#E9ECEF" stroke="#6C757D" stroke-width="2"/>
+    <text x="430" y="120" font-size="13" fill="#495057" font-weight="bold">⏳ 예정</text>
+    
+    <text x="570" y="120" font-size="13" fill="#666">→ 의존 관계</text>
+  </g>
+  
+  <!-- VPC Container -->
+  <rect x="50" y="170" width="1500" height="880" fill="#F0F8FF" stroke="#4A90E2" stroke-width="3" rx="15"/>
+  <text x="800" y="205" font-size="22" font-weight="bold" text-anchor="middle" fill="#004085">
+    VPC: vpc-07dd414387be45a0f (172.31.0.0/16)
+  </text>
+  
+  <!-- ========================================= -->
+  <!-- Layer 1: 인증 및 권한 (최상단) -->
+  <!-- ========================================= -->
+  <g id="layer1-auth">
+    <rect x="80" y="230" width="700" height="140" fill="#D4EDDA" stroke="#28A745" stroke-width="3" rx="10"/>
+    <text x="430" y="260" font-size="18" font-weight="bold" text-anchor="middle" fill="#155724">
+      Layer 1: 인증 및 권한 ✅
+    </text>
+    
+    <!-- IAM User -->
+    <g id="iam-user">
+      <rect x="100" y="280" width="300" height="70" fill="#FFFFFF" stroke="#28A745" stroke-width="2" rx="8"/>
+      <text x="250" y="305" font-size="15" font-weight="bold" text-anchor="middle" fill="#155724">IAM User</text>
+      <text x="250" y="325" font-size="13" text-anchor="middle" fill="#155724">github-actions-deploy2</text>
+      <text x="110" y="345" font-size="11" fill="#155724">✓ AmazonEC2ContainerRegistryFullAccess</text>
+      <text x="110" y="360" font-size="11" fill="#155724">✓ AmazonECS_FullAccess (+ 3개 정책)</text>
+    </g>
+    
+    <!-- GitHub Secrets -->
+    <g id="github-secrets">
+      <rect x="440" y="280" width="300" height="70" fill="#FFFFFF" stroke="#28A745" stroke-width="2" rx="8"/>
+      <text x="590" y="305" font-size="15" font-weight="bold" text-anchor="middle" fill="#155724">GitHub Secrets</text>
+      <text x="450" y="325" font-size="11" fill="#155724">✓ AWS_ACCESS_KEY_ID</text>
+      <text x="450" y="340" font-size="11" fill="#155724">✓ AWS_SECRET_ACCESS_KEY</text>
+      <text x="450" y="355" font-size="11" fill="#155724">✓ AWS_REGION, ECR_REPOSITORY, ECS_CLUSTER</text>
+    </g>
+  </g>
+  
+  <!-- ========================================= -->
+  <!-- Layer 2: 네트워크 계층 -->
+  <!-- ========================================= -->
+  <g id="layer2-network">
+    <rect x="80" y="400" width="1440" height="290" fill="#E8F4FF" stroke="#4A90E2" stroke-width="3" rx="10"/>
+    <text x="800" y="430" font-size="18" font-weight="bold" text-anchor="middle" fill="#004085">
+      Layer 2: 네트워크 계층
+    </text>
+    
+    <!-- Security Groups (왼쪽) -->
+    <g id="security-groups">
+      <rect x="100" y="450" width="400" height="220" fill="#D4EDDA" stroke="#28A745" stroke-width="3" rx="8"/>
+      <text x="300" y="480" font-size="16" font-weight="bold" text-anchor="middle" fill="#155724">Security Groups ✅</text>
+      
+      <!-- ALB SG -->
+      <rect x="120" y="495" width="360" height="55" fill="#FFFFFF" stroke="#28A745" stroke-width="2" rx="5"/>
+      <text x="140" y="515" font-size="13" font-weight="bold" fill="#155724">library-alb-sg</text>
+      <text x="140" y="533" font-size="11" fill="#155724">Inbound: HTTP(80), HTTPS(443) from 0.0.0.0/0</text>
+      <text x="140" y="548" font-size="11" fill="#155724">용도: ALB 트래픽 허용</text>
+      
+      <!-- ECS Task SG -->
+      <rect x="120" y="560" width="360" height="50" fill="#FFFFFF" stroke="#28A745" stroke-width="2" rx="5"/>
+      <text x="140" y="580" font-size="13" font-weight="bold" fill="#155724">library-ecs-task-sg</text>
+      <text x="140" y="598" font-size="11" fill="#155724">Inbound: TCP(8081) from library-alb-sg</text>
+      
+      <!-- RDS SG -->
+      <rect x="120" y="620" width="360" height="40" fill="#FFFFFF" stroke="#28A745" stroke-width="2" rx="5"/>
+      <text x="140" y="640" font-size="13" font-weight="bold" fill="#155724">library-rds-sg</text>
+      <text x="140" y="655" font-size="11" fill="#155724">Inbound: MySQL(3306) from library-ecs-task-sg</text>
+    </g>
+    
+    <!-- ALB + Target Groups (중앙) -->
+    <g id="alb-section">
+      <!-- ALB (예정) -->
+      <rect x="540" y="450" width="380" height="100" fill="#E9ECEF" stroke="#6C757D" stroke-width="3" rx="8" stroke-dasharray="5,5"/>
+      <text x="730" y="480" font-size="16" font-weight="bold" text-anchor="middle" fill="#495057">ALB (예정) ⏳</text>
+      <text x="730" y="505" font-size="13" text-anchor="middle" fill="#495057">library-alb</text>
+      <text x="560" y="525" font-size="11" fill="#495057">Listener: HTTP:80</text>
+      <text x="560" y="542" font-size="11" fill="#495057">Scheme: Internet-facing</text>
+      
+      <!-- Target Groups -->
+      <rect x="540" y="570" width="380" height="100" fill="#D4EDDA" stroke="#28A745" stroke-width="3" rx="8"/>
+      <text x="730" y="595" font-size="16" font-weight="bold" text-anchor="middle" fill="#155724">Target Groups ✅</text>
+      
+      <!-- Blue TG -->
+      <rect x="560" y="605" width="160" height="55" fill="#D6EAF8" stroke="#3498DB" stroke-width="2" rx="5"/>
+      <text x="640" y="625" font-size="13" font-weight="bold" text-anchor="middle" fill="#1F618D">library-blue-tg</text>
+      <text x="570" y="642" font-size="10" fill="#1F618D">Port: 8081</text>
+      <text x="570" y="655" font-size="10" fill="#1F618D">Health: /actuator/health</text>
+      
+      <!-- Green TG -->
+      <rect x="740" y="605" width="160" height="55" fill="#D4EDDA" stroke="#28A745" stroke-width="2" rx="5"/>
+      <text x="820" y="625" font-size="13" font-weight="bold" text-anchor="middle" fill="#155724">library-green-tg</text>
+      <text x="750" y="642" font-size="10" fill="#155724">Port: 8081</text>
+      <text x="750" y="655" font-size="10" fill="#155724">Health: /actuator/health</text>
+    </g>
+    
+    <!-- Subnets (오른쪽) -->
+    <g id="subnets">
+      <rect x="960" y="450" width="520" height="220" fill="#FFFFFF" stroke="#4A90E2" stroke-width="2" rx="8"/>
+      <text x="1220" y="480" font-size="16" font-weight="bold" text-anchor="middle" fill="#004085">Availability Zones</text>
+      
+      <!-- AZ 1 -->
+      <rect x="980" y="495" width="230" height="80" fill="#E8F4FF" stroke="#4A90E2" stroke-width="2" rx="5"/>
+      <text x="1095" y="515" font-size="13" font-weight="bold" text-anchor="middle" fill="#004085">ap-northeast-2a</text>
+      <text x="990" y="535" font-size="11" fill="#004085">Public Subnet</text>
+      <text x="990" y="552" font-size="10" fill="#666">• ALB 배치 가능</text>
+      <text x="990" y="567" font-size="10" fill="#666">• ECS Task 실행</text>
+      
+      <!-- AZ 2 -->
+      <rect x="1230" y="495" width="230" height="80" fill="#E8F4FF" stroke="#4A90E2" stroke-width="2" rx="5"/>
+      <text x="1345" y="515" font-size="13" font-weight="bold" text-anchor="middle" fill="#004085">ap-northeast-2c</text>
+      <text x="1240" y="535" font-size="11" fill="#004085">Public Subnet</text>
+      <text x="1240" y="552" font-size="10" fill="#666">• 고가용성 보장</text>
+      <text x="1240" y="567" font-size="10" fill="#666">• 장애 대비</text>
+      
+      <!-- Private Subnets (예정) -->
+      <rect x="980" y="590" width="480" height="70" fill="#F8F9FA" stroke="#6C757D" stroke-width="2" rx="5" stroke-dasharray="5,5"/>
+      <text x="1220" y="615" font-size="13" font-weight="bold" text-anchor="middle" fill="#495057">Private Subnets (예정)</text>
+      <text x="990" y="635" font-size="11" fill="#495057">• RDS 배치용</text>
+      <text x="990" y="650" font-size="11" fill="#495057">• 보안 강화</text>
+    </g>
+  </g>
+  
+  <!-- Arrow: Security Groups → ALB -->
+  <path d="M 500 560 L 540 500" stroke="#28A745" stroke-width="3" fill="none" marker-end="url(#arrowgreen3)"/>
+  
+  <!-- Arrow: ALB → Target Groups -->
+  <path d="M 730 550 L 730 570" stroke="#6C757D" stroke-width="3" fill="none" marker-end="url(#arrowgray3)" stroke-dasharray="5,5"/>
+  
+  <!-- ========================================= -->
+  <!-- Layer 3: 컴퓨팅 및 스토리지 계층 -->
+  <!-- ========================================= -->
+  <g id="layer3-compute">
+    <rect x="80" y="720" width="1440" height="180" fill="#FFF9E6" stroke="#FFB74D" stroke-width="3" rx="10"/>
+    <text x="800" y="750" font-size="18" font-weight="bold" text-anchor="middle" fill="#E65100">
+      Layer 3: 컴퓨팅 및 스토리지 계층
+    </text>
+    
+    <!-- ECR -->
+    <g id="ecr">
+      <rect x="100" y="770" width="320" height="110" fill="#D4EDDA" stroke="#28A745" stroke-width="3" rx="8"/>
+      <text x="260" y="800" font-size="15" font-weight="bold" text-anchor="middle" fill="#155724">ECR Repository ✅</text>
+      <text x="260" y="820" font-size="13" text-anchor="middle" fill="#155724">library-management-system</text>
+      <text x="110" y="840" font-size="11" fill="#155724">• Docker 이미지 저장소</text>
+      <text x="110" y="857" font-size="11" fill="#155724">• Private Repository</text>
+      <text x="110" y="874" font-size="11" fill="#155724">• 이미지: library-app:latest</text>
+    </g>
+    
+    <!-- ECS Cluster -->
+    <g id="ecs-cluster">
+      <rect x="460" y="770" width="320" height="110" fill="#D4EDDA" stroke="#28A745" stroke-width="3" rx="8"/>
+      <text x="620" y="800" font-size="15" font-weight="bold" text-anchor="middle" fill="#155724">ECS Cluster ✅</text>
+      <text x="620" y="820" font-size="13" text-anchor="middle" fill="#155724">library-management-cluster</text>
+      <text x="470" y="840" font-size="11" fill="#155724">• 컴퓨팅 플랫폼</text>
+      <text x="470" y="857" font-size="11" fill="#155724">• Launch Type: Fargate (서버리스)</text>
+      <text x="470" y="874" font-size="11" fill="#155724">• Region: ap-northeast-2</text>
+    </g>
+    
+    <!-- CloudWatch Logs -->
+    <g id="cloudwatch">
+      <rect x="820" y="770" width="320" height="110" fill="#E9ECEF" stroke="#6C757D" stroke-width="3" rx="8" stroke-dasharray="5,5"/>
+      <text x="980" y="800" font-size="15" font-weight="bold" text-anchor="middle" fill="#495057">CloudWatch Logs ⏳</text>
+      <text x="980" y="820" font-size="13" text-anchor="middle" fill="#495057">/ecs/library-management-task</text>
+      <text x="830" y="840" font-size="11" fill="#495057">• 로그 수집 및 모니터링</text>
+      <text x="830" y="857" font-size="11" fill="#495057">• Retention: 7일</text>
+      <text x="830" y="874" font-size="11" fill="#495057">• 상태: 생성 예정</text>
+    </g>
+    
+    <!-- Parameter Store -->
+    <g id="parameter-store">
+      <rect x="1180" y="770" width="320" height="110" fill="#E9ECEF" stroke="#6C757D" stroke-width="3" rx="8" stroke-dasharray="5,5"/>
+      <text x="1340" y="800" font-size="15" font-weight="bold" text-anchor="middle" fill="#495057">Parameter Store ⏳</text>
+      <text x="1190" y="825" font-size="11" fill="#495057">• /library/db/url</text>
+      <text x="1190" y="842" font-size="11" fill="#495057">• /library/db/username</text>
+      <text x="1190" y="859" font-size="11" fill="#495057">• /library/db/password</text>
+      <text x="1190" y="876" font-size="11" fill="#495057">상태: 생성 예정</text>
+    </g>
+  </g>
+  
+  <!-- Arrow: ECR → ECS -->
+  <path d="M 420 825 L 460 825" stroke="#28A745" stroke-width="3" fill="none" marker-end="url(#arrowgreen3)"/>
+  
+  <!-- Arrow: Target Groups → ECS -->
+  <path d="M 730 670 L 620 770" stroke="#28A745" stroke-width="3" fill="none" marker-end="url(#arrowgreen3)" stroke-dasharray="5,5"/>
+  
+  <!-- ========================================= -->
+  <!-- Layer 4: 애플리케이션 계층 (예정) -->
+  <!-- ========================================= -->
+  <g id="layer4-app">
+    <rect x="80" y="930" width="1440" height="100" fill="#F8F9FA" stroke="#6C757D" stroke-width="3" rx="10" stroke-dasharray="5,5"/>
+    <text x="800" y="960" font-size="18" font-weight="bold" text-anchor="middle" fill="#495057">
+      Layer 4: 애플리케이션 계층 (예정) ⏳
+    </text>
+    
+    <!-- Task Definition -->
+    <rect x="100" y="980" width="320" height="35" fill="#E9ECEF" stroke="#6C757D" stroke-width="2" rx="5"/>
+    <text x="260" y="1003" font-size="13" text-anchor="middle" fill="#495057">Task Definition</text>
+    
+    <!-- ECS Service -->
+    <rect x="460" y="980" width="320" height="35" fill="#E9ECEF" stroke="#6C757D" stroke-width="2" rx="5"/>
+    <text x="620" y="1003" font-size="13" text-anchor="middle" fill="#495057">ECS Service (library-service)</text>
+    
+    <!-- CodeDeploy -->
+    <rect x="820" y="980" width="320" height="35" fill="#E9ECEF" stroke="#6C757D" stroke-width="2" rx="5"/>
+    <text x="980" y="1003" font-size="13" text-anchor="middle" fill="#495057">CodeDeploy (Blue-Green)</text>
+    
+    <!-- RDS -->
+    <rect x="1180" y="980" width="320" height="35" fill="#E9ECEF" stroke="#6C757D" stroke-width="2" rx="5"/>
+    <text x="1340" y="1003" font-size="13" text-anchor="middle" fill="#495057">RDS MySQL 8.0</text>
+  </g>
+  
+  <!-- Arrow: ECS → Layer 4 -->
+  <path d="M 620 880 L 620 930" stroke="#6C757D" stroke-width="3" fill="none" marker-end="url(#arrowgray3)" stroke-dasharray="5,5"/>
+  
+  <!-- Summary Box -->
+  <g id="summary">
+    <rect x="820" y="90" width="730" height="50" fill="#D4EDDA" stroke="#28A745" stroke-width="2" rx="5"/>
+    <text x="1185" y="115" font-size="14" text-anchor="middle" fill="#155724">
+      <tspan font-weight="bold">생성 완료: 8개</tspan>
+      <tspan x="1185" dy="18">IAM, VPC, SG(3), ECR, ECS Cluster, TG(2)</tspan>
+    </text>
+  </g>
+  
+  <!-- Current Status -->
+  <g id="current-status">
+    <rect x="50" y="1050" width="1500" height="35" fill="#FF6B6B" stroke="#DC3545" stroke-width="2" rx="5"/>
+    <text x="800" y="1075" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+      📍 현재 위치: Layer 2 완료 (60%) → 다음: ALB 생성 + Layer 3 Parameter Store + CloudWatch Logs
+    </text>
+  </g>
+  
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowgreen3" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L0,12 L12,6 z" fill="#28A745"/>
+    </marker>
+    <marker id="arrowgray3" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L0,12 L12,6 z" fill="#6C757D"/>
+    </marker>
+  </defs>
+</svg>

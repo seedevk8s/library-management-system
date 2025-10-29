@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200">
+  <defs>
+    <style>
+      .box { stroke-width: 3; fill: #fff; }
+      .completed { stroke: #4CAF50; fill: #E8F5E9; }
+      .in-progress { stroke: #FF9800; fill: #FFF3E0; }
+      .pending { stroke: #9E9E9E; fill: #F5F5F5; }
+      .independent { stroke: #2196F3; fill: #E3F2FD; }
+      .dependent { stroke: #F44336; fill: #FFEBEE; }
+      .text-title { fill: #333; font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; }
+      .text-desc { fill: #666; font-family: Arial, sans-serif; font-size: 14px; }
+      .text-small { fill: #999; font-family: Arial, sans-serif; font-size: 12px; }
+      .arrow { fill: none; stroke-width: 3; }
+      .arrow-green { stroke: #4CAF50; }
+      .arrow-red { stroke: #F44336; }
+      .arrow-blue { stroke: #2196F3; }
+      .layer-box { fill: none; stroke: #9E9E9E; stroke-width: 2; stroke-dasharray: 5,5; }
+    </style>
+    <marker id="arrowhead-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#4CAF50" />
+    </marker>
+    <marker id="arrowhead-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#F44336" />
+    </marker>
+    <marker id="arrowhead-blue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#2196F3" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="800" y="40" text-anchor="middle" style="font-size: 32px; fill: #333; font-weight: bold;">
+    🏗️ AWS 리소스 계층 구조 (정방향)
+  </text>
+  <text x="800" y="70" text-anchor="middle" style="font-size: 16px; fill: #666;">
+    하위 레이어(인프라)가 아래, 상위 레이어(애플리케이션)가 위
+  </text>
+  
+  <!-- Legend -->
+  <g transform="translate(50, 100)">
+    <text x="0" y="0" style="font-size: 16px; fill: #333; font-weight: bold;">범례 (Legend)</text>
+    
+    <rect x="0" y="10" width="120" height="40" class="box completed" rx="5"/>
+    <text x="60" y="35" text-anchor="middle" class="text-desc">✅ 완료</text>
+    
+    <rect x="140" y="10" width="120" height="40" class="box in-progress" rx="5"/>
+    <text x="200" y="35" text-anchor="middle" class="text-desc">🔄 다음 단계</text>
+    
+    <rect x="280" y="10" width="120" height="40" class="box pending" rx="5"/>
+    <text x="340" y="35" text-anchor="middle" class="text-desc">⏳ 대기</text>
+    
+    <rect x="420" y="10" width="180" height="40" class="box independent" rx="5"/>
+    <text x="510" y="35" text-anchor="middle" class="text-desc">독립적 (순서 무관)</text>
+    
+    <rect x="620" y="10" width="180" height="40" class="box dependent" rx="5"/>
+    <text x="710" y="35" text-anchor="middle" class="text-desc">의존적 (순서 중요)</text>
+  </g>
+  
+  <!-- Layer 3: Application Layer (TOP) -->
+  <g transform="translate(50, 200)">
+    <rect class="layer-box" x="0" y="0" width="1500" height="200" rx="10"/>
+    <text x="20" y="25" style="font-size: 20px; fill: #F44336; font-weight: bold;">
+      🚀 Layer 3 (최상위): 애플리케이션 레이어 (의존적 - 순서 중요!)
+    </text>
+    
+    <!-- Task Definition -->
+    <g transform="translate(50, 50)">
+      <rect width="200" height="120" class="box pending dependent" rx="8"/>
+      <text x="100" y="30" text-anchor="middle" style="font-size: 16px; fill: #333; font-weight: bold;">Task Definition</text>
+      <text x="100" y="55" text-anchor="middle" class="text-desc">⏳ 대기</text>
+      <text x="100" y="75" text-anchor="middle" class="text-small">순서: 5번</text>
+      <text x="100" y="95" text-anchor="middle" class="text-small" style="fill: #F44336;">의존: ECR, IAM</text>
+      <text x="100" y="112" text-anchor="middle" style="font-size: 11px; fill: #F44336;">ECR, IAM 후!</text>
+    </g>
+    
+    <!-- ECS Service -->
+    <g transform="translate(300, 50)">
+      <rect width="200" height="120" class="box pending dependent" rx="8"/>
+      <text x="100" y="30" text-anchor="middle" style="font-size: 16px; fill: #333; font-weight: bold;">ECS Service</text>
+      <text x="100" y="55" text-anchor="middle" class="text-desc">⏳ 대기</text>
+      <text x="100" y="75" text-anchor="middle" class="text-small">순서: 6번</text>
+      <text x="100" y="95" text-anchor="middle" class="text-small" style="fill: #F44336;">의존: 모든 것!</text>
+      <text x="100" y="112" text-anchor="middle" style="font-size: 11px; fill: #F44336;">반드시 마지막!</text>
+    </g>
+    
+    <!-- CodeDeploy -->
+    <g transform="translate(550, 50)">
+      <rect width="200" height="120" class="box pending dependent" rx="8"/>
+      <text x="100" y="30" text-anchor="middle" style="font-size: 16px; fill: #333; font-weight: bold;">CodeDeploy</text>
+      <text x="100" y="55" text-anchor="middle" class="text-desc">⏳ 대기</text>
+      <text x="100" y="75" text-anchor="middle" class="text-small">순서: 7번</text>
+      <text x="100" y="95" text-anchor="middle" class="text-small" style="fill: #F44336;">의존: ECS 서비스</text>
+      <text x="100" y="112" text-anchor="middle" style="font-size: 11px; fill: #F44336;">Service 후!</text>
+    </g>
+  </g>
+  
+  <!-- Arrow pointing down -->
+  <path d="M 800 400 L 800 440" class="arrow arrow-red" marker-end="url(#arrowhead-red)"/>
+  <text x="820" y="425" style="font-size: 12px; fill: #F44336; font-weight: bold;">의존</text>
+  
+  <!-- Layer 2: Platform Layer (MIDDLE) -->
+  <g transform="translate(50, 440)">
+    <rect class="layer-box" x="0" y="0" width="1500" height="200" rx="10"/>
+    <text x="20" y="25" style="font-size: 20px; fill: #2196F3; font-weight: bold;">
+      💻 Layer 2 (중간): 플랫폼 레이어 (독립적 - 순서 무관)
+    </text>
+    
+    <!-- ECR -->
+    <g transform="translate(50, 50)">
+      <rect width="200" height="120" class="box completed independent" rx="8"/>
+      <text x="100" y="30" text-anchor="middle" style="font-size: 16px; fill: #333; font-weight: bold;">ECR Repository</text>
+      <text x="100" y="55" text-anchor="middle" class="text-desc">✅ 완료</text>
+      <text x="100" y="75" text-anchor="middle" class="text-small">순서: 자유</text>
+      <text x="100" y="95" text-anchor="middle" class="text-small" style="fill: #2196F3;">의존성: 없음</text>
+      <text x="100" y="112" text-anchor="middle" style="font-size: 11px; fill: #4CAF50;">언제든 OK</text>
+    </g>
+    
+    <!-- ECS Cluster -->
+    <g transform="translate(300, 50)">
+      <rect width="200" height="120" class="box completed independent" rx="8"/>
+      <text x="100" y="30" text-anchor="middle" style="font-size: 16px; fill: #333; font-weight: bold;">ECS Cluster</text>
+      <text x="100" y="55" text-anchor="middle" class="text-desc">✅ 완료</text>
+      <text x="100" y="75" text-anchor="middle" class="text-small">순서: 자유</text>
+      <text x="100" y="95" text-anchor="middle" class="text-small" style="fill: #2196F3;">의존성: 없음</text>
+      <text x="100" y="112" text-anchor="middle" style="font-size: 11px; fill: #4CAF50;">언제든 OK</text>
+    </g>
+    
+    <!-- IAM Roles -->
+    <g transform="translate(550, 50)">
+      <rect width="200" height="120" class="box in-progress independent" rx="8"/>
+      <text x="100" y="30" text-anchor="middle" style="font-size: 16px; fill: #333; font-weight: bold;">IAM Roles</text>
+      <text x="100" y="55" text-anchor="middle" class="text-desc">🔄 다음 단계</text>
+      <text x="100" y="75" text-anchor="middle" class="text-small">순서: 자유</text>
+      <text x="100" y="95" text-anchor="middle" class="text-small" style="fill: #2196F3;">의존성: 없음</text>
+      <text x="100" y="112" text-anchor="middle" style="font-size: 11px; fill: #4CAF50;">언제든 OK</text>
+    </g>
+    
+    <!-- CloudWatch Logs -->
+    <g transform="translate(800, 50)">
+      <rect width="200" height="120" class="box in-progress independent" rx="8"/>
+      <text x="100" y="30" text-anchor="middle" style="font-size: 16px; fill: #333; font-weight: bold;">CloudWatch Logs</text>
+      <text x="100" y="55" text-anchor="middle" class="text-desc">🔄 다음 단계</text>
+      <text x="100" y="75" text-anchor="middle" class="text-small">순서: 자유</text>
+      <text x="100" y="95" text-anchor="middle" class="text-small" style="fill: #2196F3;">의존성: 없음</text>
+      <text x="100" y="112" text-anchor="middle" style="font-size: 11px; fill: #4CAF50;">언제든 OK</text>
+    </g>
+  </g>
+  
+  <!-- Arrow pointing down -->
+  <path d="M 800 640 L 800 680" class="arrow arrow-blue" marker-end="url(#arrowhead-blue)"/>
+  <text x="820" y="665" style="font-size: 12px; fill: #2196F3; font-weight: bold;">기반</text>
+  
+  <!-- Layer 1: Infrastructure Layer (BOTTOM) -->
+  <g transform="translate(50, 680)">
+    <rect class="layer-box" x="0" y="0" width="1500" height="200" rx="10"/>
+    <text x="20" y="25" style="font-size: 20px; fill: #4CAF50; font-weight: bold;">
+      📶 Layer 1 (최하위): 인프라 레이어 (독립적 - 순서 무관)
+    </text>
+    
+    <!-- VPC/Subnets -->
+    <g transform="translate(50, 50)">
+      <rect width="200" height="120" class="box completed independent" rx="8"/>
+      <text x="100" y="30" text-anchor="middle" style="font-size: 16px; fill: #333; font-weight: bold;">VPC / Subnets</text>
+      <text x="100" y="55" text-anchor="middle" class="text-desc">✅ 기본 VPC 사용</text>
+      <text x="100" y="75" text-anchor="middle" class="text-small">순서: 1번</text>
+      <text x="100" y="95" text-anchor="middle" class="text-small" style="fill: #2196F3;">의존성: 없음</text>
+      <text x="100" y="112" text-anchor="middle" style="font-size: 11px; fill: #4CAF50;">먼저 해도 OK</text>
+    </g>
+    
+    <!-- Security Groups -->
+    <g transform="translate(300, 50)">
+      <rect width="200" height="120" class="box completed independent" rx="8"/>
+      <text x="100" y="30" text-anchor="middle" style="font-size: 16px; fill: #333; font-weight: bold;">Security Groups</text>
+      <text x="100" y="55" text-anchor="middle" class="text-desc">✅ 3개 완료</text>
+      <text x="100" y="75" text-anchor="middle" class="text-small">순서: 2번</text>
+      <text x="100" y="95" text-anchor="middle" class="text-small" style="fill: #2196F3;">의존성: VPC만</text>
+      <text x="100" y="112" text-anchor="middle" style="font-size: 11px; fill: #4CAF50;">먼저 해도 OK</text>
+    </g>
+    
+    <!-- ALB -->
+    <g transform="translate(550, 50)">
+      <rect width="200" height="120" class="box in-progress dependent" rx="8"/>
+      <text x="100" y="30" text-anchor="middle" style="font-size: 16px; fill: #333; font-weight: bold;">ALB</text>
+      <text x="100" y="55" text-anchor="middle" class="text-desc">🔄 다음 단계</text>
+      <text x="100" y="75" text-anchor="middle" class="text-small">순서: 3번</text>
+      <text x="100" y="95" text-anchor="middle" class="text-small" style="fill: #F44336;">의존성: SG 필요</text>
+      <text x="100" y="112" text-anchor="middle" style="font-size: 11px; fill: #FF9800;">SG 후 생성</text>
+    </g>
+    
+    <!-- Target Groups -->
+    <g transform="translate(800, 50)">
+      <rect width="200" height="120" class="box in-progress dependent" rx="8"/>
+      <text x="100" y="30" text-anchor="middle" style="font-size: 16px; fill: #333; font-weight: bold;">Target Groups</text>
+      <text x="100" y="55" text-anchor="middle" class="text-desc">🔄 다음 단계</text>
+      <text x="100" y="75" text-anchor="middle" class="text-small">순서: 4번</text>
+      <text x="100" y="95" text-anchor="middle" class="text-small" style="fill: #F44336;">의존성: VPC 필요</text>
+      <text x="100" y="112" text-anchor="middle" style="font-size: 11px; fill: #FF9800;">VPC 후 생성</text>
+    </g>
+  </g>
+  
+  <!-- Dependency Arrows from Layer 2 to Layer 3 -->
+  <path d="M 150 440 L 150 350" class="arrow arrow-red" marker-end="url(#arrowhead-red)"/>
+  <text x="165" y="395" style="font-size: 11px; fill: #F44336; font-weight: bold;">ECR 이미지</text>
+  
+  <path d="M 650 440 L 550 350" class="arrow arrow-red" marker-end="url(#arrowhead-red)"/>
+  <text x="580" y="395" style="font-size: 11px; fill: #F44336; font-weight: bold;">IAM 권한</text>
+  
+  <!-- Dependency Arrows within Layer 3 -->
+  <path d="M 250 310 L 300 310" class="arrow arrow-red" marker-end="url(#arrowhead-red)"/>
+  <text x="275" y="300" text-anchor="middle" style="font-size: 11px; fill: #F44336; font-weight: bold;">필수</text>
+  
+  <path d="M 500 310 L 550 310" class="arrow arrow-red" marker-end="url(#arrowhead-red)"/>
+  <text x="525" y="300" text-anchor="middle" style="font-size: 11px; fill: #F44336; font-weight: bold;">필수</text>
+  
+  <!-- Dependency Arrows from Layer 1 to Layer 3 -->
+  <path d="M 650 680 L 400 350" class="arrow arrow-red" marker-end="url(#arrowhead-red)" stroke-dasharray="5,5"/>
+  <text x="500" y="510" style="font-size: 11px; fill: #F44336; font-weight: bold;">ALB/TG</text>
+  
+  <!-- Arrow: SG to ALB -->
+  <path d="M 500 790 L 550 790" class="arrow arrow-red" marker-end="url(#arrowhead-red)"/>
+  <text x="525" y="780" text-anchor="middle" style="font-size: 11px; fill: #F44336; font-weight: bold;">필요</text>
+  
+  <!-- Summary Box -->
+  <g transform="translate(50, 920)">
+    <rect width="1500" height="240" style="fill: #FFF9C4; stroke: #FBC02D; stroke-width: 3;" rx="15"/>
+    
+    <text x="750" y="35" text-anchor="middle" style="font-size: 24px; fill: #333; font-weight: bold;">
+      💡 계층 구조 설명
+    </text>
+    
+    <g transform="translate(40, 60)">
+      <text x="0" y="0" style="font-size: 18px; fill: #333; font-weight: bold;">
+        🏗️ 건물 짓기에 비유하면:
+      </text>
+      <text x="20" y="25" class="text-desc">
+        • <tspan style="font-weight: bold; fill: #4CAF50;">Layer 1 (최하위):</tspan> 기초 공사 - VPC, Security Groups, ALB (네트워크 인프라)
+      </text>
+      <text x="20" y="45" class="text-desc">
+        • <tspan style="font-weight: bold; fill: #2196F3;">Layer 2 (중간):</tspan> 골조 공사 - ECR, ECS Cluster, IAM (플랫폼)
+      </text>
+      <text x="20" y="65" class="text-desc">
+        • <tspan style="font-weight: bold; fill: #F44336;">Layer 3 (최상위):</tspan> 내부 인테리어 - Task Definition, ECS Service (애플리케이션)
+      </text>
+    </g>
+    
+    <g transform="translate(40, 120)">
+      <text x="0" y="0" style="font-size: 18px; fill: #333; font-weight: bold;">
+        📌 핵심 포인트:
+      </text>
+      <text x="20" y="25" class="text-desc">
+        • <tspan style="font-weight: bold; fill: #4CAF50;">하위 레이어(Layer 1-2):</tspan> 독립적 → 순서 무관 (병렬 작업 가능)
+      </text>
+      <text x="20" y="45" class="text-desc">
+        • <tspan style="font-weight: bold; fill: #F44336;">상위 레이어(Layer 3):</tspan> 의존적 → 순서 중요 (반드시 순차 작업)
+      </text>
+      <text x="20" y="65" class="text-desc">
+        • <tspan style="font-weight: bold; fill: #FF9800;">화살표 방향:</tspan> 위로 올라갈수록 의존성 증가 (아래 레이어가 기반)
+      </text>
+      <text x="20" y="85" class="text-desc">
+        • <tspan style="font-weight: bold; fill: #2196F3;">실제 작업:</tspan> Layer 1-2는 동시에 해도 OK, Layer 3는 마지막에 순차적으로!
+      </text>
+    </g>
+  </g>
+  
+  <!-- Footer -->
+  <text x="1550" y="1190" text-anchor="end" style="font-size: 11px; fill: #999;">
+    AWS Resource Layer Structure (Bottom-Up) - 2025-10-27
+  </text>
+</svg>
