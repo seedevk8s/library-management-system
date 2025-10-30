@@ -1,103 +1,98 @@
-name: Deploy to Amazon ECS  # 워크플로우 이름 (GitHub Actions UI에 표시됨)
+name: Deploy to Amazon ECS
 
-# 워크플로우 트리거 조건
 on:
-  push:  # Git push 이벤트 발생 시
-    branches:  # 특정 브랜치에 push될 때만 실행
-      - main  # main 브랜치
-      - feature/cicd-ecs-blue-green-deployment  # feature 브랜치
-      - feature/phase4-github-actions-workflow  # Phase 4 작업 브랜치
-  workflow_dispatch:  # GitHub UI에서 수동 실행 가능
+  push:
+    branches:
+      - main
+      - feature/cicd-ecs-blue-green-deployment
+      - feature/phase4-github-actions-workflow
+  workflow_dispatch:
 
-# 워크플로우 전체에서 사용할 환경 변수 정의
 env:
-  AWS_REGION: ap-northeast-2  # AWS 리전 (서울)
-  ECR_REPOSITORY: library-management-system  # ECR 저장소 이름
-  ECS_CLUSTER: library-management-cluster  # ECS 클러스터 이름
-  ECS_SERVICE: library-service  # ECS 서비스 이름
-  ECS_TASK_DEFINITION: task-definition.json  # Task Definition 파일 경로 (프로젝트 루트)
-  CONTAINER_NAME: app  # Task Definition 내 컨테이너 이름 (task-definition.json과 일치) - 2025-10-30 수정 확인
+  AWS_REGION: ap-northeast-2
+  ECR_REPOSITORY: library-management-system
+  ECS_CLUSTER: library-management-cluster
+  ECS_SERVICE: library-service
+  ECS_TASK_DEFINITION: task-definition.json
+  CONTAINER_NAME: app
 
-# 실행할 작업들 정의
 jobs:
-  deploy:  # Job ID
-    name: Deploy to ECS  # Job 이름 (GitHub Actions UI에 표시됨)
-    runs-on: ubuntu-latest  # 실행 환경 (GitHub 제공 Ubuntu 최신 버전)
-    environment: production  # 배포 환경 이름 (GitHub Environments 기능 사용)
+  deploy:
+    name: Deploy to ECS
+    runs-on: ubuntu-latest
+    environment: production
 
-    steps:  # 순차적으로 실행될 단계들
-      # Step 1: 소스 코드 체크아웃
-      - name: Checkout code  # 단계 이름
-        uses: actions/checkout@v4  # GitHub Actions 공식 체크아웃 액션 v4 사용
-        # 현재 브랜치의 소스 코드를 워크플로우 실행 환경으로 가져옴
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      # Step 2: AWS 인증 설정
-      - name: Configure AWS credentials  # AWS 자격 증명 구성
-        uses: aws-actions/configure-aws-credentials@v4  # AWS 공식 인증 액션 v4
-        with:  # 액션에 전달할 파라미터
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}  # GitHub Secret에서 Access Key 가져옴
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # GitHub Secret에서 Secret Key 가져옴
-          aws-region: ${{ env.AWS_REGION }}  # 위에서 정의한 환경 변수 사용 (ap-northeast-2)
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
 
-      # Step 3: ECR 로그인
-      - name: Login to Amazon ECR  # ECR에 Docker 로그인
-        id: login-ecr  # 이 단계의 출력을 다음 단계에서 참조하기 위한 ID
-        uses: aws-actions/amazon-ecr-login@v2  # AWS ECR 로그인 액션 v2
-        # Docker가 ECR에 이미지를 push할 수 있도록 인증 토큰 발급
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
 
-      # Step 4: Docker 이미지 빌드, 태그, ECR 푸시
       - name: Build, tag, and push image to Amazon ECR
-        id: build-image  # 이 단계의 출력을 다음 단계에서 참조하기 위한 ID
-        env:  # 이 단계에서만 사용할 환경 변수
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}  # 이전 단계(login-ecr)의 출력값 사용 (ECR 레지스트리 URL)
-          IMAGE_TAG: ${{ github.sha }}  # Git 커밋 해시를 이미지 태그로 사용 (고유성 보장)
-        run: |  # 실행할 쉘 스크립트 (멀티라인)
-          # Docker 이미지 빌드 (현재 디렉토리의 Dockerfile 사용)
-          # 형식: 011587325937.dkr.ecr.ap-northeast-2.amazonaws.com/library-management-system:커밋해시
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          
-          # 같은 이미지에 'latest' 태그도 추가 (최신 버전 표시용)
           docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
-          
-          # ECR에 커밋 해시 태그 이미지 푸시
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          
-          # ECR에 latest 태그 이미지 푸시
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
-          
-          # 다음 단계에서 사용할 수 있도록 이미지 전체 경로를 출력으로 저장
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-      # Step 5: Task Definition에 새 이미지 정보 업데이트
+      - name: Debug - Print variables and file content
+        run: |
+          echo "========================================" 
+          echo "DEBUG INFORMATION"
+          echo "========================================"
+          echo "ECS_TASK_DEFINITION: ${{ env.ECS_TASK_DEFINITION }}"
+          echo "CONTAINER_NAME: ${{ env.CONTAINER_NAME }}"
+          echo "IMAGE: ${{ steps.build-image.outputs.image }}"
+          echo ""
+          echo "========================================"
+          echo "TASK DEFINITION FILE CONTENT:"
+          echo "========================================"
+          cat ${{ env.ECS_TASK_DEFINITION }}
+          echo ""
+          echo "========================================"
+          echo "CONTAINER NAMES IN FILE:"
+          echo "========================================"
+          cat ${{ env.ECS_TASK_DEFINITION }} | grep -A 2 '"name"'
+
       - name: Fill in the new image ID in the Amazon ECS task definition
-        id: task-def  # 이 단계의 출력을 다음 단계에서 참조하기 위한 ID
-        uses: aws-actions/amazon-ecs-render-task-definition@v1  # Task Definition 렌더링 액션
-        with:  # 액션에 전달할 파라미터
-          task-definition: ${{ env.ECS_TASK_DEFINITION }}  # task-definition.json 파일 경로
-          container-name: ${{ env.CONTAINER_NAME }}  # 업데이트할 컨테이너 이름 (library-app)
-          image: ${{ steps.build-image.outputs.image }}  # 이전 단계에서 빌드한 이미지 경로 사용
-        # task-definition.json의 컨테이너 이미지를 새로 빌드한 이미지로 교체
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{ steps.build-image.outputs.image }}
 
-      # Step 6: ECS에 새 Task Definition 배포
       - name: Deploy Amazon ECS task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1  # ECS 배포 액션
-        with:  # 액션에 전달할 파라미터
-          task-definition: ${{ steps.task-def.outputs.task-definition }}  # 이전 단계에서 업데이트된 Task Definition
-          service: ${{ env.ECS_SERVICE }}  # 배포할 ECS 서비스 (library-service)
-          cluster: ${{ env.ECS_CLUSTER }}  # ECS 클러스터 (library-management-cluster)
-          wait-for-service-stability: true  # 서비스가 안정화될 때까지 대기 (새 Task가 정상 실행될 때까지)
-        # ECS Service에 새 Task Definition 적용하여 롤링 업데이트 수행
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
 
-      # Step 7: 배포 결과 요약 출력
       - name: Deployment Summary
-        run: |  # GitHub Actions 요약 페이지에 출력할 내용 작성
-          echo "### 🚀 Deployment Summary" >> $GITHUB_STEP_SUMMARY  # 마크다운 헤더
-          echo "" >> $GITHUB_STEP_SUMMARY  # 빈 줄
-          echo "- **Image**: ${{ steps.build-image.outputs.image }}" >> $GITHUB_STEP_SUMMARY  # 배포된 이미지
-          echo "- **Cluster**: ${{ env.ECS_CLUSTER }}" >> $GITHUB_STEP_SUMMARY  # 클러스터 이름
-          echo "- **Service**: ${{ env.ECS_SERVICE }}" >> $GITHUB_STEP_SUMMARY  # 서비스 이름
-          echo "- **Region**: ${{ env.AWS_REGION }}" >> $GITHUB_STEP_SUMMARY  # AWS 리전
-          echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY  # 커밋 해시
-          echo "" >> $GITHUB_STEP_SUMMARY  # 빈 줄
-          echo "✅ Deployment completed successfully!" >> $GITHUB_STEP_SUMMARY  # 완료 메시지
-        # GitHub Actions 실행 결과 페이지에 배포 요약 정보 표시
+        run: |
+          echo "### 🚀 Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Image**: ${{ steps.build-image.outputs.image }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Cluster**: ${{ env.ECS_CLUSTER }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Service**: ${{ env.ECS_SERVICE }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Region**: ${{ env.AWS_REGION }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Container Name**: ${{ env.CONTAINER_NAME }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Deployment completed successfully!" >> $GITHUB_STEP_SUMMARY
