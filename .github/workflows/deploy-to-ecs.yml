@@ -51,16 +51,13 @@ jobs:
 
       - name: Update image in task definition
         run: |
-          # task-definition.json의 이미지를 새로 빌드한 이미지로 교체
           sed -i 's|"image": "[^"]*"|"image": "${{ steps.build-image.outputs.image }}"|' ${{ env.ECS_TASK_DEFINITION }}
-          
           echo "Updated task definition:"
           cat ${{ env.ECS_TASK_DEFINITION }}
 
       - name: Register new Task Definition
         id: register-task-def
         run: |
-          # AWS CLI로 직접 Task Definition 등록
           TASK_DEF_ARN=$(aws ecs register-task-definition \
             --cli-input-json file://${{ env.ECS_TASK_DEFINITION }} \
             --query 'taskDefinition.taskDefinitionArn' \
@@ -69,13 +66,33 @@ jobs:
           echo "Registered Task Definition: $TASK_DEF_ARN"
           echo "task_definition_arn=$TASK_DEF_ARN" >> $GITHUB_OUTPUT
 
-      - name: Update ECS Service
+      - name: Delete existing service
+        continue-on-error: true
         run: |
-          aws ecs update-service \
+          echo "Deleting existing service..."
+          aws ecs delete-service \
             --cluster ${{ env.ECS_CLUSTER }} \
             --service ${{ env.ECS_SERVICE }} \
+            --force
+          
+          echo "Waiting for service to be deleted..."
+          aws ecs wait services-inactive \
+            --cluster ${{ env.ECS_CLUSTER }} \
+            --services ${{ env.ECS_SERVICE }}
+
+      - name: Create new ECS Service
+        run: |
+          echo "Creating new service with Task Definition: ${{ steps.register-task-def.outputs.task_definition_arn }}"
+          
+          aws ecs create-service \
+            --cluster ${{ env.ECS_CLUSTER }} \
+            --service-name ${{ env.ECS_SERVICE }} \
             --task-definition ${{ steps.register-task-def.outputs.task_definition_arn }} \
-            --force-new-deployment
+            --desired-count 1 \
+            --launch-type FARGATE \
+            --network-configuration "awsvpcConfiguration={subnets=[subnet-0eb8d0b96a8e96f23,subnet-08580256bc5bd0ab1],securityGroups=[$(aws ec2 describe-security-groups --filters Name=group-name,Values=library-ecs-task-sg --query 'SecurityGroups[0].GroupId' --output text)],assignPublicIp=ENABLED}" \
+            --load-balancers "targetGroupArn=$(aws elbv2 describe-target-groups --names library-blue-tg --query 'TargetGroups[0].TargetGroupArn' --output text),containerName=${{ env.CONTAINER_NAME }},containerPort=8081" \
+            --health-check-grace-period-seconds 60
 
       - name: Wait for service stability
         run: |
