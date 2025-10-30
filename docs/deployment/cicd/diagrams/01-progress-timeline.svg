@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600">
+  <defs>
+    <style>
+      .phase-box { fill: #f0f0f0; stroke: #333; stroke-width: 2; }
+      .phase-complete { fill: #4CAF50; }
+      .phase-inprogress { fill: #FFC107; }
+      .phase-pending { fill: #E0E0E0; }
+      .phase-text { font-family: Arial, sans-serif; font-size: 14px; fill: #000; }
+      .phase-title { font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #000; }
+      .progress-bar { fill: #4CAF50; }
+      .progress-bg { fill: #E0E0E0; }
+    </style>
+  </defs>
+  
+  <text x="600" y="30" text-anchor="middle" style="font-family: Arial, sans-serif; font-size: 24px; font-weight: bold; fill: #333;">
+    📊 CI/CD + ECS 배포 진행 현황
+  </text>
+  
+  <rect x="100" y="50" width="1000" height="30" class="progress-bg" rx="15"/>
+  <rect x="100" y="50" width="550" height="30" class="progress-bar" rx="15"/>
+  <text x="600" y="72" text-anchor="middle" style="font-family: Arial, sans-serif; font-size: 16px; fill: #fff; font-weight: bold;">
+    전체 진행률: 55%
+  </text>
+  
+  <g transform="translate(50, 120)">
+    <rect width="220" height="120" class="phase-box phase-complete" rx="10"/>
+    <text x="110" y="25" text-anchor="middle" class="phase-title">Phase 1: 준비 ✅</text>
+    <text x="110" y="50" text-anchor="middle" style="font-family: Arial, sans-serif; font-size: 20px; font-weight: bold; fill: #fff;">100%</text>
+    <text x="10" y="75" class="phase-text">✓ IAM 사용자 생성</text>
+    <text x="10" y="95" class="phase-text">✓ Git 브랜치 생성</text>
+    <text x="10" y="115" class="phase-text">✓ 문서 작성</text>
+  </g>
+  
+  <g transform="translate(300, 120)">
+    <rect width="220" height="120" class="phase-box phase-complete" rx="10"/>
+    <text x="110" y="25" text-anchor="middle" class="phase-title">Phase 2: 로컬 검증 ✅</text>
+    <text x="110" y="50" text-anchor="middle" style="font-family: Arial, sans-serif; font-size: 20px; font-weight: bold; fill: #fff;">100%</text>
+    <text x="10" y="75" class="phase-text">✓ Dockerfile 작성</text>
+    <text x="10" y="95" class="phase-text">✓ Docker Compose</text>
+    <text x="10" y="115" class="phase-text">✓ 로컬 테스트 성공</text>
+  </g>
+  
+  <g transform="translate(550, 120)">
+    <rect width="220" height="120" class="phase-box phase-inprogress" rx="10"/>
+    <text x="110" y="25" text-anchor="middle" class="phase-title">Phase 3: AWS 인프라 🔄</text>
+    <text x="110" y="50" text-anchor="middle" style="font-family: Arial, sans-serif; font-size: 20px; font-weight: bold; fill: #333;">60%</text>
+    <text x="10" y="75" class="phase-text">✓ ECR Repository</text>
+    <text x="10" y="95" class="phase-text">✓ ECS Cluster</text>
+    <text x="10" y="115" class="phase-text">🔄 Security Groups (2/3)</text>
+  </g>
+  
+  <g transform="translate(800, 120)">
+    <rect width="220" height="120" class="phase-box phase-pending" rx="10"/>
+    <text x="110" y="25" text-anchor="middle" class="phase-title">Phase 4: CI/CD ⏳</text>
+    <text x="110" y="50" text-anchor="middle" style="font-family: Arial, sans-serif; font-size: 20px; font-weight: bold; fill: #666;">0%</text>
+    <text x="10" y="75" class="phase-text">⏳ GitHub Secrets</text>
+    <text x="10" y="95" class="phase-text">⏳ Workflow 작성</text>
+    <text x="10" y="115" class="phase-text">⏳ 첫 배포 테스트</text>
+  </g>
+  
+  <g transform="translate(425, 270)">
+    <rect width="220" height="100" class="phase-box phase-pending" rx="10"/>
+    <text x="110" y="25" text-anchor="middle" class="phase-title">Phase 5: 모니터링 ⏳</text>
+    <text x="110" y="50" text-anchor="middle" style="font-family: Arial, sans-serif; font-size: 20px; font-weight: bold; fill: #666;">0%</text>
+    <text x="10" y="75" class="phase-text">⏳ CloudWatch Logs</text>
+    <text x="10" y="95" class="phase-text">⏳ Alarms 설정</text>
+  </g>
+  
+  <g transform="translate(50, 400)">
+    <text x="0" y="0" style="font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; fill: #333;">
+      🎯 현재 작업:
+    </text>
+    <text x="0" y="25" style="font-family: Arial, sans-serif; font-size: 14px; fill: #666;">
+      • Security Group #3 생성 (RDS용)
+    </text>
+    <text x="0" y="45" style="font-family: Arial, sans-serif; font-size: 14px; fill: #666;">
+      • Application Load Balancer 생성
+    </text>
+    <text x="0" y="65" style="font-family: Arial, sans-serif; font-size: 14px; fill: #666;">
+      • Target Groups 생성 (Blue/Green)
+    </text>
+  </g>
+  
+  <g transform="translate(550, 400)">
+    <text x="0" y="0" style="font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; fill: #333;">
+      📋 다음 단계:
+    </text>
+    <text x="0" y="25" style="font-family: Arial, sans-serif; font-size: 14px; fill: #666;">
+      1. ECS Task Definition 작성
+    </text>
+    <text x="0" y="45" style="font-family: Arial, sans-serif; font-size: 14px; fill: #666;">
+      2. GitHub Actions 워크플로우 작성
+    </text>
+    <text x="0" y="65" style="font-family: Arial, sans-serif; font-size: 14px; fill: #666;">
+      3. Git 커밋 및 푸시
+    </text>
+  </g>
+  
+  <g transform="translate(50, 520)">
+    <text x="0" y="0" style="font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #333;">범례:</text>
+    <rect x="0" y="10" width="30" height="20" class="phase-complete" rx="3"/>
+    <text x="35" y="25" style="font-family: Arial, sans-serif; font-size: 12px; fill: #333;">완료</text>
+    
+    <rect x="100" y="10" width="30" height="20" class="phase-inprogress" rx="3"/>
+    <text x="135" y="25" style="font-family: Arial, sans-serif; font-size: 12px; fill: #333;">진행 중</text>
+    
+    <rect x="220" y="10" width="30" height="20" class="phase-pending" rx="3"/>
+    <text x="255" y="25" style="font-family: Arial, sans-serif; font-size: 12px; fill: #333;">대기</text>
+  </g>
+  
+  <text x="1150" y="590" text-anchor="end" style="font-family: Arial, sans-serif; font-size: 10px; fill: #999;">
+    Updated: 2025-10-26
+  </text>
+</svg>

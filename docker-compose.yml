@@ -1,0 +1,113 @@
+# ==============================================================================
+# Library Management System - Docker Compose Configuration
+# MySQL과 Spring Boot 애플리케이션을 함께 실행하는 로컬 환경 구성
+# ==============================================================================
+
+version: '3.8'
+
+# ------------------------------------------------------------------------------
+# Docker Compose - 선언적 설정 파일
+# 
+# Docker Compose는 선언적(declarative) 설정 파일로 순차적 실행 코드가 아님
+# 
+# 실행 과정:
+#   1. 전체 파일을 먼저 읽음
+#      ├─ services 섹션 확인
+#      ├─ volumes 섹션 확인
+#      └─ networks 섹션 확인
+# 
+#   2. 모든 정의를 검증
+# 
+#   3. 필요한 리소스 생성
+#      ├─ networks 생성
+#      ├─ volumes 생성
+#      └─ services(컨테이너) 생성
+# 
+# 관례: services(주요 내용)를 상단에, networks/volumes(인프라)를 하단에 배치
+# 패턴: "하단 정의 → 상단 사용" (volumes와 networks 동일)
+# ------------------------------------------------------------------------------
+
+services:
+  # MySQL Database Service
+  mysql:
+    image: mysql:8.0
+    container_name: library-mysql
+    
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345  # ⚠️ 운영 환경에서는 반드시 변경
+      MYSQL_DATABASE: librarydb
+      MYSQL_CHARACTER_SET_SERVER: utf8mb4
+      MYSQL_COLLATION_SERVER: utf8mb4_unicode_ci
+      TZ: Asia/Seoul
+    
+    ports:
+      - "3307:3306"  # 호스트 3307 포트로 접속 (로컬 MySQL 충돌 방지)
+    
+    volumes:
+      # MySQL 데이터 디렉토리 (mysql-data=하단에서 정의한 Named Volume 사용 → /var/lib/mysql=컨테이너 내부 MySQL 데이터 저장소)
+      - mysql-data:/var/lib/mysql
+    
+    networks:
+      - library-network  # 하단에서 정의한 library-network 사용
+    
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p12345"]  # MySQL 서버가 응답하는지 확인
+      interval: 10s      # 10초마다 health check 실행
+      timeout: 5s        # 5초 안에 응답 없으면 실패로 간주
+      retries: 10        # 최대 10번까지 실패 허용
+      start_period: 40s  # 컨테이너 시작 후 40초 동안은 검사 제외 (MySQL 초기화 시간 확보)
+
+    restart: unless-stopped  # 컨테이너가 비정상 종료되면 자동 재시작, 단 수동 중지는 예외
+
+  # Application Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    container_name: library-app
+    
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      # mysql: Docker Compose 네트워크 내에서 MySQL 서비스 이름으로 접근
+      DB_URL: jdbc:mysql://mysql:3306/librarydb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+      DB_USERNAME: root
+      DB_PASSWORD: 12345
+    
+    ports:
+      - "8081:8081"
+    
+    volumes:
+      # 파일 업로드 디렉토리 (./uploads=로컬PC 실제 폴더 → /app/uploads=컨테이너 가상환경 내부 폴더)
+      - ./uploads:/app/uploads
+      # 로그 디렉토리 (./logs=로컬PC 실제 폴더 → /app/logs=컨테이너 가상환경 내부 폴더)
+      - ./logs:/app/logs
+    
+    networks:
+      - library-network  # 하단에서 정의한 library-network 사용
+    
+    depends_on:
+      mysql:
+        condition: service_healthy
+    
+    restart: unless-stopped
+
+# Networks & Volumes (하단 정의 → 상단 사용 패턴)
+
+networks:
+  library-network:
+    driver: bridge
+
+volumes:
+  mysql-data:  # Named Volume 선언 (Bind Mount인 ./uploads, ./logs와 달리 선언 필수)
+    driver: local
+
+# ==============================================================================
+# 사용 명령어
+# ==============================================================================
+# 시작: docker-compose up -d
+# 중지: docker-compose down
+# 로그: docker-compose logs -f
+# 재시작: docker-compose restart
+# 볼륨까지 삭제: docker-compose down -v
+# ==============================================================================

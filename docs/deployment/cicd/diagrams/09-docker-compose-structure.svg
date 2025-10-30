@@ -1,0 +1,220 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1400">
+  <defs>
+    <style>
+      .title { font: bold 24px sans-serif; fill: #2c3e50; }
+      .subtitle { font: bold 18px sans-serif; fill: #34495e; }
+      .section-title { font: bold 16px sans-serif; fill: #2c3e50; }
+      .label { font: 14px sans-serif; fill: #2c3e50; }
+      .small-text { font: 12px sans-serif; fill: #555; }
+      .code { font: 13px monospace; fill: #e74c3c; }
+      .comment { font: 12px sans-serif; fill: #7f8c8d; font-style: italic; }
+      
+      .exec-box { fill: #3498db; stroke: #2980b9; stroke-width: 2; }
+      .service-box { fill: #2ecc71; stroke: #27ae60; stroke-width: 2; }
+      .volume-box { fill: #f39c12; stroke: #d68910; stroke-width: 2; }
+      .network-box { fill: #9b59b6; stroke: #8e44ad; stroke-width: 2; }
+      .host-box { fill: #ecf0f1; stroke: #95a5a6; stroke-width: 2; }
+      .container-box { fill: #e8f4f8; stroke: #3498db; stroke-width: 2; }
+      
+      .arrow { fill: none; stroke: #34495e; stroke-width: 2; marker-end: url(#arrowhead); }
+      .arrow-bi { fill: none; stroke: #e74c3c; stroke-width: 2; marker-end: url(#arrowhead-red); }
+      .dashed { stroke-dasharray: 5,5; }
+    </style>
+    
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#34495e" />
+    </marker>
+    <marker id="arrowhead-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#e74c3c" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="600" y="40" text-anchor="middle" class="title">Docker Compose 구조 및 실행 과정</text>
+
+  <!-- Section 1: Execution Process -->
+  <text x="100" y="80" class="subtitle">1. 선언적 설정 파일 실행 과정</text>
+  
+  <rect x="100" y="100" width="1000" height="60" rx="5" class="exec-box" opacity="0.2"/>
+  <text x="120" y="125" class="section-title">Step 1: 전체 파일 읽기</text>
+  <text x="140" y="145" class="label">services, volumes, networks 섹션 확인</text>
+  
+  <rect x="100" y="170" width="1000" height="60" rx="5" class="exec-box" opacity="0.2"/>
+  <text x="120" y="195" class="section-title">Step 2: 검증</text>
+  <text x="140" y="215" class="label">모든 정의 검증 및 의존성 확인</text>
+  
+  <rect x="100" y="240" width="1000" height="80" rx="5" class="exec-box" opacity="0.2"/>
+  <text x="120" y="265" class="section-title">Step 3: 리소스 생성 (순서 중요)</text>
+  <text x="140" y="285" class="label">1) networks 생성</text>
+  <text x="140" y="305" class="label">2) volumes 생성</text>
+  <circle cx="450" cy="280" r="3" fill="#e74c3c"/>
+  <circle cx="450" cy="300" r="3" fill="#e74c3c"/>
+  <text x="460" y="285" class="small-text">인프라 먼저</text>
+  <text x="460" y="305" class="small-text">인프라 먼저</text>
+  <text x="530" y="285" class="label">3) services (컨테이너) 생성</text>
+  <circle cx="850" cy="280" r="3" fill="#e74c3c"/>
+  <text x="860" y="285" class="small-text">애플리케이션 나중</text>
+
+  <!-- Arrows between steps -->
+  <path d="M 600 160 L 600 170" class="arrow"/>
+  <path d="M 600 230 L 600 240" class="arrow"/>
+
+  <!-- Section 2: docker-compose.yml Structure -->
+  <text x="100" y="360" class="subtitle">2. docker-compose.yml 파일 구조 (하단 정의 - 상단 사용 패턴)</text>
+
+  <!-- Services Section -->
+  <rect x="100" y="390" width="480" height="320" rx="5" class="service-box" opacity="0.1"/>
+  <text x="340" y="415" text-anchor="middle" class="section-title">services: (상단)</text>
+  
+  <!-- MySQL Service -->
+  <rect x="120" y="430" width="200" height="130" rx="3" class="container-box"/>
+  <text x="220" y="450" text-anchor="middle" class="label" font-weight="bold">mysql</text>
+  <text x="130" y="470" class="small-text">image: mysql:8.0</text>
+  <text x="130" y="490" class="small-text">ports: 3307:3306</text>
+  <text x="130" y="510" class="code">networks:</text>
+  <text x="150" y="525" class="code">- library-network</text>
+  <text x="130" y="545" class="code">volumes:</text>
+  <text x="150" y="560" class="code">- mysql-data:/var/lib/mysql</text>
+
+  <!-- App Service -->
+  <rect x="360" y="430" width="200" height="130" rx="3" class="container-box"/>
+  <text x="460" y="450" text-anchor="middle" class="label" font-weight="bold">app</text>
+  <text x="370" y="470" class="small-text">build: ./Dockerfile</text>
+  <text x="370" y="490" class="small-text">ports: 8081:8081</text>
+  <text x="370" y="510" class="code">networks:</text>
+  <text x="390" y="525" class="code">- library-network</text>
+  <text x="370" y="545" class="code">volumes:</text>
+  <text x="390" y="560" class="code">- ./uploads:/app/uploads</text>
+
+  <!-- Comment: Use -->
+  <text x="120" y="590" class="comment">위치: 상단 / 역할: 사용</text>
+  
+  <!-- Divider -->
+  <line x1="100" y1="620" x2="580" y2="620" stroke="#7f8c8d" stroke-width="2" stroke-dasharray="5,5"/>
+
+  <!-- Networks Section -->
+  <rect x="620" y="390" width="240" height="140" rx="5" class="network-box" opacity="0.1"/>
+  <text x="740" y="415" text-anchor="middle" class="section-title">networks: (하단)</text>
+  <rect x="640" y="430" width="200" height="80" rx="3" fill="#fff" stroke="#9b59b6" stroke-width="2"/>
+  <text x="740" y="455" text-anchor="middle" class="code">library-network:</text>
+  <text x="660" y="480" class="code">driver: bridge</text>
+  <text x="640" y="525" class="comment">위치: 하단 / 역할: 정의</text>
+
+  <!-- Volumes Section -->
+  <rect x="880" y="390" width="240" height="140" rx="5" class="volume-box" opacity="0.1"/>
+  <text x="1000" y="415" text-anchor="middle" class="section-title">volumes: (하단)</text>
+  <rect x="900" y="430" width="200" height="80" rx="3" fill="#fff" stroke="#f39c12" stroke-width="2"/>
+  <text x="1000" y="455" text-anchor="middle" class="code">mysql-data:</text>
+  <text x="920" y="480" class="code">driver: local</text>
+  <text x="900" y="525" class="comment">위치: 하단 / 역할: 정의</text>
+
+  <!-- Arrows: Usage -->
+  <path d="M 220 560 Q 220 600 740 550" class="arrow dashed"/>
+  <text x="400" y="610" class="small-text" fill="#9b59b6">network 사용</text>
+  
+  <path d="M 460 560 Q 460 600 740 550" class="arrow dashed"/>
+  
+  <path d="M 220 575 Q 340 640 1000 550" class="arrow dashed"/>
+  <text x="500" y="655" class="small-text" fill="#f39c12">volume 사용</text>
+
+  <!-- Section 3: Volume Types -->
+  <text x="100" y="750" class="subtitle">3. 볼륨 타입 비교</text>
+
+  <!-- Bind Mount -->
+  <rect x="100" y="780" width="500" height="180" rx="5" class="host-box"/>
+  <text x="350" y="805" text-anchor="middle" class="section-title">Bind Mount (호스트 경로 직접 매핑)</text>
+  
+  <rect x="120" y="820" width="200" height="70" rx="3" fill="#fff" stroke="#95a5a6" stroke-width="2"/>
+  <text x="220" y="840" text-anchor="middle" class="label" font-weight="bold">호스트 (로컬 PC)</text>
+  <text x="220" y="865" text-anchor="middle" class="code">./uploads</text>
+  <text x="220" y="880" text-anchor="middle" class="small-text">실제 폴더</text>
+
+  <path d="M 320 855 L 360 855" class="arrow-bi"/>
+  <text x="325" y="845" class="small-text" fill="#e74c3c">동기화</text>
+
+  <rect x="380" y="820" width="200" height="70" rx="3" fill="#e8f4f8" stroke="#3498db" stroke-width="2"/>
+  <text x="480" y="840" text-anchor="middle" class="label" font-weight="bold">컨테이너</text>
+  <text x="480" y="865" text-anchor="middle" class="code">/app/uploads</text>
+  <text x="480" y="880" text-anchor="middle" class="small-text">가상 환경</text>
+
+  <text x="120" y="920" class="comment">특징: 호스트 경로 지정 필요, 하단 정의 불필요</text>
+  <text x="120" y="940" class="comment">용도: 개발 시 파일 실시간 반영, 로그 확인</text>
+
+  <!-- Named Volume -->
+  <rect x="650" y="780" width="500" height="180" rx="5" class="volume-box" opacity="0.1"/>
+  <text x="900" y="805" text-anchor="middle" class="section-title">Named Volume (Docker 관리)</text>
+  
+  <rect x="670" y="820" width="200" height="70" rx="3" fill="#fff" stroke="#f39c12" stroke-width="2"/>
+  <text x="770" y="840" text-anchor="middle" class="label" font-weight="bold">Docker Volume</text>
+  <text x="770" y="865" text-anchor="middle" class="code">mysql-data</text>
+  <text x="770" y="880" text-anchor="middle" class="small-text">Docker 내부 관리</text>
+
+  <path d="M 870 855 L 910 855" class="arrow"/>
+  
+  <rect x="930" y="820" width="200" height="70" rx="3" fill="#e8f4f8" stroke="#3498db" stroke-width="2"/>
+  <text x="1030" y="840" text-anchor="middle" class="label" font-weight="bold">컨테이너</text>
+  <text x="1030" y="865" text-anchor="middle" class="code">/var/lib/mysql</text>
+  <text x="1030" y="880" text-anchor="middle" class="small-text">데이터 저장소</text>
+
+  <text x="670" y="920" class="comment">특징: Docker가 자동 관리, 하단 정의 필수</text>
+  <text x="670" y="940" class="comment">용도: 데이터베이스 영속성, 컨테이너 재생성 시에도 유지</text>
+
+  <!-- Section 4: Network Communication -->
+  <text x="100" y="1000" class="subtitle">4. 네트워크 통신 (같은 네트워크에 연결된 컨테이너 간 통신)</text>
+
+  <rect x="100" y="1030" width="1000" height="320" rx="5" class="network-box" opacity="0.05"/>
+  <text x="600" y="1055" text-anchor="middle" class="section-title">library-network (bridge)</text>
+
+  <!-- MySQL Container -->
+  <rect x="150" y="1090" width="280" height="220" rx="5" class="container-box"/>
+  <text x="290" y="1115" text-anchor="middle" class="label" font-weight="bold">mysql 컨테이너</text>
+  
+  <rect x="170" y="1130" width="240" height="60" rx="3" fill="#fff" stroke="#2ecc71" stroke-width="2"/>
+  <text x="290" y="1155" text-anchor="middle" class="small-text">서비스명: mysql</text>
+  <text x="290" y="1175" text-anchor="middle" class="small-text">내부 IP: 자동할당</text>
+
+  <rect x="170" y="1200" width="240" height="90" rx="3" fill="#fff" stroke="#95a5a6" stroke-width="2"/>
+  <text x="290" y="1220" text-anchor="middle" class="label">MySQL Server</text>
+  <text x="290" y="1240" text-anchor="middle" class="code">포트: 3306</text>
+  <text x="290" y="1260" text-anchor="middle" class="small-text">외부: 3307</text>
+  <text x="290" y="1275" text-anchor="middle" class="small-text">내부: 3306</text>
+
+  <!-- Network Communication -->
+  <path d="M 430 1200 L 570 1200" class="arrow"/>
+  <text x="450" y="1190" class="label" fill="#e74c3c">서비스 이름으로 접근</text>
+  <text x="470" y="1210" class="code">mysql:3306</text>
+
+  <!-- App Container -->
+  <rect x="570" y="1090" width="280" height="220" rx="5" class="container-box"/>
+  <text x="710" y="1115" text-anchor="middle" class="label" font-weight="bold">app 컨테이너</text>
+  
+  <rect x="590" y="1130" width="240" height="60" rx="3" fill="#fff" stroke="#2ecc71" stroke-width="2"/>
+  <text x="710" y="1155" text-anchor="middle" class="small-text">서비스명: app</text>
+  <text x="710" y="1175" text-anchor="middle" class="small-text">내부 IP: 자동할당</text>
+
+  <rect x="590" y="1200" width="240" height="90" rx="3" fill="#fff" stroke="#95a5a6" stroke-width="2"/>
+  <text x="710" y="1220" text-anchor="middle" class="label">Spring Boot App</text>
+  <text x="710" y="1240" text-anchor="middle" class="code">포트: 8081</text>
+  <text x="590" y="1265" class="small-text">DB_URL:</text>
+  <text x="600" y="1280" class="code">mysql:3306</text>
+
+  <!-- Key Points -->
+  <rect x="900" y="1090" width="180" height="220" rx="5" fill="#fff8dc" stroke="#f39c12" stroke-width="2"/>
+  <text x="990" y="1115" text-anchor="middle" class="label" font-weight="bold">핵심 포인트</text>
+  <text x="910" y="1145" class="small-text">1. 같은 네트워크 연결</text>
+  <text x="920" y="1165" class="small-text">필수</text>
+  
+  <text x="910" y="1195" class="small-text">2. 서비스 이름으로</text>
+  <text x="920" y="1215" class="small-text">DNS 자동 해석</text>
+  
+  <text x="910" y="1245" class="small-text">3. IP 주소 몰라도</text>
+  <text x="920" y="1265" class="small-text">통신 가능</text>
+  
+  <text x="910" y="1295" class="small-text">4. 컨테이너 재시작</text>
+  <text x="920" y="1315" class="small-text">해도 연결 유지</text>
+
+  <!-- Footer -->
+  <text x="600" y="1380" text-anchor="middle" class="comment">
+    선언적 설정: 위치 무관, 전체 읽기 후 실행 | 패턴: 하단 정의 - 상단 사용
+  </text>
+</svg>

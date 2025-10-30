@@ -1,0 +1,225 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1200">
+  <!-- Title -->
+  <text x="700" y="30" font-size="24" font-weight="bold" text-anchor="middle" fill="#232F3E">
+    ALB 및 Target Group 생성 작업 순서
+  </text>
+  <text x="700" y="55" font-size="14" text-anchor="middle" fill="#666">
+    Application Load Balancer Setup Process
+  </text>
+
+  <!-- Current Status Box -->
+  <rect x="50" y="80" width="1300" height="60" fill="#d1e7dd" stroke="#198754" stroke-width="2" rx="8"/>
+  <text x="70" y="105" font-size="14" font-weight="bold" fill="#0a3622">현재 완료된 작업:</text>
+  <text x="70" y="128" font-size="12" fill="#212529">✓ Security Groups 3개 생성 완료 (library-alb-sg, library-ecs-task-sg, library-rds-sg)</text>
+
+  <!-- Step 1: Blue Target Group -->
+  <g id="step1">
+    <rect x="50" y="160" width="630" height="280" fill="#e3f2fd" stroke="#2196F3" stroke-width="3" rx="10"/>
+    
+    <!-- Step Number Badge -->
+    <circle cx="100" cy="190" r="25" fill="#0d6efd" stroke="#fff" stroke-width="3"/>
+    <text x="100" y="198" font-size="20" font-weight="bold" text-anchor="middle" fill="#fff">1</text>
+    
+    <text x="140" y="197" font-size="18" font-weight="bold" fill="#0d47a1">Target Group 생성 (Blue)</text>
+    <text x="70" y="220" font-size="11" fill="#666">EC2 → Target Groups → Create target group</text>
+    
+    <!-- Configuration Box -->
+    <rect x="70" y="235" width="590" height="195" fill="#fff" stroke="#2196F3" stroke-width="2" rx="5"/>
+    
+    <text x="85" y="258" font-size="13" font-weight="bold" fill="#0d47a1">기본 구성</text>
+    <rect x="85" y="265" width="560" height="60" fill="#f8f9fa" rx="3"/>
+    <text x="95" y="283" font-size="11" font-family="monospace" fill="#212529">Target type: IP addresses</text>
+    <text x="95" y="300" font-size="11" font-family="monospace" fill="#198754">Target group name: library-blue-tg</text>
+    <text x="95" y="317" font-size="11" font-family="monospace" fill="#212529">Protocol: HTTP | Port: 8081</text>
+    
+    <text x="85" y="343" font-size="13" font-weight="bold" fill="#0d47a1">Health Check 설정</text>
+    <rect x="85" y="350" width="560" height="70" fill="#f8f9fa" rx="3"/>
+    <text x="95" y="368" font-size="11" font-family="monospace" fill="#198754">Health check path: /actuator/health</text>
+    <text x="95" y="385" font-size="11" font-family="monospace" fill="#212529">Healthy threshold: 2 | Unhealthy: 3</text>
+    <text x="95" y="402" font-size="11" font-family="monospace" fill="#212529">Timeout: 5s | Interval: 30s</text>
+    <text x="95" y="415" font-size="10" fill="#dc3545">⚠️ Register targets는 스킵 (ECS가 자동 등록)</text>
+  </g>
+
+  <!-- Arrow 1 to 2 -->
+  <path d="M 365 440 L 365 470" stroke="#2196F3" stroke-width="3" marker-end="url(#arrow-blue)"/>
+  <defs>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#2196F3" />
+    </marker>
+  </defs>
+
+  <!-- Step 2: Green Target Group -->
+  <g id="step2">
+    <rect x="50" y="470" width="630" height="200" fill="#f1f8e9" stroke="#8BC34A" stroke-width="3" rx="10"/>
+    
+    <!-- Step Number Badge -->
+    <circle cx="100" cy="500" r="25" fill="#198754" stroke="#fff" stroke-width="3"/>
+    <text x="100" y="508" font-size="20" font-weight="bold" text-anchor="middle" fill="#fff">2</text>
+    
+    <text x="140" y="507" font-size="18" font-weight="bold" fill="#558B2F">Target Group 생성 (Green)</text>
+    <text x="70" y="530" font-size="11" fill="#666">동일한 설정으로 한 번 더 생성</text>
+    
+    <!-- Configuration Box -->
+    <rect x="70" y="545" width="590" height="115" fill="#fff" stroke="#8BC34A" stroke-width="2" rx="5"/>
+    
+    <text x="85" y="568" font-size="13" font-weight="bold" fill="#558B2F">기본 구성</text>
+    <rect x="85" y="575" width="560" height="75" fill="#f8f9fa" rx="3"/>
+    <text x="95" y="593" font-size="11" font-family="monospace" fill="#212529">Target type: IP addresses</text>
+    <text x="95" y="610" font-size="11" font-family="monospace" fill="#198754">Target group name: library-green-tg</text>
+    <text x="95" y="627" font-size="11" font-family="monospace" fill="#212529">Protocol: HTTP | Port: 8081</text>
+    <text x="95" y="644" font-size="10" fill="#6c757d">※ Health Check 설정은 Blue와 동일</text>
+  </g>
+
+  <!-- Step 3: ALB Creation -->
+  <g id="step3">
+    <rect x="720" y="160" width="630" height="510" fill="#fff3cd" stroke="#FF9800" stroke-width="3" rx="10"/>
+    
+    <!-- Step Number Badge -->
+    <circle cx="770" cy="190" r="25" fill="#ffc107" stroke="#fff" stroke-width="3"/>
+    <text x="770" y="198" font-size="20" font-weight="bold" text-anchor="middle" fill="#000">3</text>
+    
+    <text x="810" y="197" font-size="18" font-weight="bold" fill="#E65100">Application Load Balancer 생성</text>
+    <text x="740" y="220" font-size="11" fill="#666">EC2 → Load Balancers → Create Load Balancer → ALB 선택</text>
+    
+    <!-- Configuration Box -->
+    <rect x="740" y="235" width="590" height="425" fill="#fff" stroke="#FF9800" stroke-width="2" rx="5"/>
+    
+    <!-- Basic Config -->
+    <text x="755" y="258" font-size="13" font-weight="bold" fill="#E65100">1) 기본 구성</text>
+    <rect x="755" y="265" width="560" height="50" fill="#fff9c4" rx="3"/>
+    <text x="765" y="283" font-size="11" font-family="monospace" fill="#198754">Load balancer name: library-alb</text>
+    <text x="765" y="300" font-size="11" font-family="monospace" fill="#212529">Scheme: Internet-facing | IPv4</text>
+    
+    <!-- Network Mapping -->
+    <text x="755" y="333" font-size="13" font-weight="bold" fill="#E65100">2) Network mapping</text>
+    <rect x="755" y="340" width="560" height="75" fill="#fff9c4" rx="3"/>
+    <text x="765" y="358" font-size="11" font-family="monospace" fill="#198754">VPC: vpc-07dd414387be45a0f</text>
+    <text x="765" y="375" font-size="11" font-family="monospace" fill="#212529">Mappings (최소 2개 AZ):</text>
+    <text x="775" y="392" font-size="10" font-family="monospace" fill="#212529">✓ ap-northeast-2a → Public Subnet</text>
+    <text x="775" y="407" font-size="10" font-family="monospace" fill="#212529">✓ ap-northeast-2c → Public Subnet</text>
+    
+    <!-- Security Groups -->
+    <text x="755" y="433" font-size="13" font-weight="bold" fill="#E65100">3) Security groups</text>
+    <rect x="755" y="440" width="560" height="50" fill="#fff9c4" rx="3"/>
+    <text x="765" y="458" font-size="11" font-family="monospace" fill="#198754">✓ library-alb-sg</text>
+    <text x="765" y="475" font-size="10" fill="#dc3545">⚠️ default 보안그룹 제거</text>
+    
+    <!-- Listeners -->
+    <text x="755" y="508" font-size="13" font-weight="bold" fill="#E65100">4) Listeners and routing</text>
+    <rect x="755" y="515" width="560" height="65" fill="#fff9c4" rx="3"/>
+    <text x="765" y="533" font-size="11" font-family="monospace" fill="#212529">Protocol: HTTP | Port: 80</text>
+    <text x="765" y="550" font-size="11" font-family="monospace" fill="#198754">Default action: Forward to</text>
+    <text x="775" y="567" font-size="11" font-family="monospace" fill="#2196F3">└─ Target group: library-blue-tg</text>
+    
+    <!-- Important Note -->
+    <rect x="755" y="590" width="560" height="60" fill="#d1ecf1" stroke="#0dcaf0" stroke-width="2" rx="5"/>
+    <text x="765" y="610" font-size="12" font-weight="bold" fill="#055160">중요!</text>
+    <text x="765" y="630" font-size="11" fill="#212529">Target Group을 먼저 생성해야</text>
+    <text x="765" y="645" font-size="11" fill="#212529">ALB 생성 시 선택할 수 있습니다</text>
+  </g>
+
+  <!-- Arrow 2 to 3 -->
+  <path d="M 680 580 L 720 580" stroke="#8BC34A" stroke-width="3" marker-end="url(#arrow-green)"/>
+  <defs>
+    <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#8BC34A" />
+    </marker>
+  </defs>
+
+  <!-- Arrow down -->
+  <path d="M 700 690 L 700 720" stroke="#FF9800" stroke-width="3" marker-end="url(#arrow-orange)"/>
+  <defs>
+    <marker id="arrow-orange" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#FF9800" />
+    </marker>
+  </defs>
+
+  <!-- Step 4: Result Architecture -->
+  <g id="step4">
+    <rect x="50" y="720" width="1300" height="240" fill="#e8f5e9" stroke="#4CAF50" stroke-width="3" rx="10"/>
+    
+    <!-- Step Number Badge -->
+    <circle cx="100" cy="750" r="25" fill="#4CAF50" stroke="#fff" stroke-width="3"/>
+    <text x="100" y="758" font-size="20" font-weight="bold" text-anchor="middle" fill="#fff">4</text>
+    
+    <text x="140" y="757" font-size="18" font-weight="bold" fill="#1B5E20">생성 완료 후 구조</text>
+    
+    <!-- Architecture Diagram -->
+    <rect x="70" y="775" width="1260" height="170" fill="#fff" stroke="#4CAF50" stroke-width="2" rx="5"/>
+    
+    <!-- Internet -->
+    <circle cx="150" cy="820" r="30" fill="#F44336" stroke="#B71C1C" stroke-width="2"/>
+    <text x="150" y="828" font-size="16" text-anchor="middle" fill="#fff">🌐</text>
+    <text x="150" y="865" font-size="11" text-anchor="middle" fill="#212529">Internet</text>
+    
+    <!-- Arrow to ALB -->
+    <path d="M 180 820 L 270 820" stroke="#F44336" stroke-width="3" marker-end="url(#arrow-red)"/>
+    <defs>
+      <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L9,3 z" fill="#F44336" />
+      </marker>
+    </defs>
+    <text x="225" y="810" font-size="10" fill="#F44336">HTTP:80</text>
+    
+    <!-- ALB -->
+    <rect x="270" y="790" width="180" height="60" fill="#FF9800" stroke="#E65100" stroke-width="2" rx="5"/>
+    <text x="360" y="815" font-size="13" font-weight="bold" text-anchor="middle" fill="#fff">ALB</text>
+    <text x="360" y="833" font-size="10" text-anchor="middle" fill="#fff">library-alb</text>
+    
+    <!-- Arrow to TG Blue -->
+    <path d="M 450 810 L 540 810" stroke="#2196F3" stroke-width="3" marker-end="url(#arrow-blue)"/>
+    <text x="495" y="800" font-size="10" fill="#2196F3">Forward</text>
+    
+    <!-- TG Blue -->
+    <rect x="540" y="790" width="180" height="60" fill="#2196F3" stroke="#0d47a1" stroke-width="2" rx="5"/>
+    <text x="630" y="815" font-size="13" font-weight="bold" text-anchor="middle" fill="#fff">Blue TG</text>
+    <text x="630" y="833" font-size="10" text-anchor="middle" fill="#fff">library-blue-tg</text>
+    
+    <!-- Arrow to ECS Tasks -->
+    <path d="M 720 820 L 810 820" stroke="#4CAF50" stroke-width="3" marker-end="url(#arrow-green)"/>
+    <text x="765" y="810" font-size="10" fill="#4CAF50">8081</text>
+    
+    <!-- ECS Tasks -->
+    <rect x="810" y="790" width="180" height="60" fill="#4CAF50" stroke="#1B5E20" stroke-width="2" rx="5"/>
+    <text x="900" y="815" font-size="13" font-weight="bold" text-anchor="middle" fill="#fff">ECS Tasks</text>
+    <text x="900" y="833" font-size="10" text-anchor="middle" fill="#fff">(나중에 생성)</text>
+    
+    <!-- TG Green (dashed) -->
+    <rect x="540" y="870" width="180" height="60" fill="#8BC34A" stroke="#558B2F" stroke-width="2" stroke-dasharray="5,5" rx="5"/>
+    <text x="630" y="895" font-size="13" font-weight="bold" text-anchor="middle" fill="#fff">Green TG</text>
+    <text x="630" y="913" font-size="10" text-anchor="middle" fill="#fff">library-green-tg</text>
+    
+    <!-- Note -->
+    <rect x="1020" y="790" width="290" height="140" fill="#fff3cd" stroke="#ffc107" stroke-width="2" rx="5"/>
+    <text x="1030" y="810" font-size="12" font-weight="bold" fill="#856404">기록할 정보</text>
+    <text x="1030" y="833" font-size="10" fill="#212529">1. ALB DNS Name</text>
+    <text x="1040" y="850" font-size="9" fill="#6c757d">library-alb-xxx.elb.amazonaws.com</text>
+    <text x="1030" y="873" font-size="10" fill="#212529">2. Blue TG ARN</text>
+    <text x="1040" y="890" font-size="9" fill="#6c757d">arn:aws:elasticloadbalancing:...</text>
+    <text x="1030" y="913" font-size="10" fill="#212529">3. Green TG ARN</text>
+    <text x="1040" y="930" font-size="9" fill="#6c757d">arn:aws:elasticloadbalancing:...</text>
+  </g>
+
+  <!-- Bottom Summary -->
+  <rect x="50" y="980" width="1300" height="200" fill="#f8f9fa" stroke="#6c757d" stroke-width="2" rx="10"/>
+  <text x="700" y="1010" font-size="18" font-weight="bold" text-anchor="middle" fill="#212529">작업 체크리스트</text>
+  
+  <g id="checklist">
+    <rect x="80" y="1030" width="600" height="130" fill="#fff" stroke="#dee2e6" rx="5"/>
+    <text x="100" y="1055" font-size="13" fill="#212529">□ Step 1: Blue Target Group 생성</text>
+    <text x="110" y="1075" font-size="11" fill="#6c757d">- IP addresses 타입</text>
+    <text x="110" y="1092" font-size="11" fill="#6c757d">- Port: 8081, Health check: /actuator/health</text>
+    
+    <text x="100" y="1120" font-size="13" fill="#212529">□ Step 2: Green Target Group 생성</text>
+    <text x="110" y="1140" font-size="11" fill="#6c757d">- Blue와 동일 설정 (이름만 변경)</text>
+    
+    <rect x="700" y="1030" width="620" height="130" fill="#fff" stroke="#dee2e6" rx="5"/>
+    <text x="720" y="1055" font-size="13" fill="#212529">□ Step 3: Application Load Balancer 생성</text>
+    <text x="730" y="1075" font-size="11" fill="#6c757d">- Internet-facing, IPv4</text>
+    <text x="730" y="1092" font-size="11" fill="#6c757d">- VPC 선택, 2개 AZ의 Public Subnet 선택</text>
+    <text x="730" y="1109" font-size="11" fill="#6c757d">- Security Group: library-alb-sg</text>
+    <text x="730" y="1126" font-size="11" fill="#6c757d">- HTTP:80 → library-blue-tg</text>
+    
+    <text x="720" y="1155" font-size="13" fill="#212529">□ Step 4: 생성 정보 기록 (DNS, ARN)</text>
+  </g>
+</svg>

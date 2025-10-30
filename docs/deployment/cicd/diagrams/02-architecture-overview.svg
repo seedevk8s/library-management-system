@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900">
+  <defs>
+    <style>
+      .component-box { fill: #fff; stroke: #333; stroke-width: 2; }
+      .aws-box { fill: #FF9900; stroke: #232F3E; stroke-width: 2; }
+      .github-box { fill: #24292E; stroke: #000; stroke-width: 2; }
+      .db-box { fill: #00758F; stroke: #003B57; stroke-width: 2; }
+      .alb-box { fill: #8C4FFF; stroke: #5A2D91; stroke-width: 2; }
+      .ecs-box { fill: #FF7A00; stroke: #CC5500; stroke-width: 2; }
+      .ecr-box { fill: #FF9900; stroke: #CC7700; stroke-width: 2; }
+      .text-white { fill: #fff; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; }
+      .text-black { fill: #000; font-family: Arial, sans-serif; font-size: 12px; }
+      .arrow { fill: none; stroke: #666; stroke-width: 2; }
+      .arrow-red { fill: none; stroke: #E74C3C; stroke-width: 3; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#666" />
+    </marker>
+    <marker id="arrowhead-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#E74C3C" />
+    </marker>
+  </defs>
+  
+  <text x="700" y="40" text-anchor="middle" style="font-family: Arial, sans-serif; font-size: 28px; font-weight: bold; fill: #333;">
+    🏗️ AWS ECS Blue-Green 배포 아키텍처
+  </text>
+  
+  <rect x="50" y="100" width="280" height="200" class="github-box" rx="15"/>
+  <text x="190" y="130" text-anchor="middle" class="text-white">GitHub Actions</text>
+  
+  <rect x="70" y="150" width="240" height="50" class="component-box" rx="5"/>
+  <text x="190" y="175" text-anchor="middle" class="text-black">1. 코드 푸시</text>
+  <text x="190" y="190" text-anchor="middle" style="font-size: 10px; fill: #666;">git push → trigger</text>
+  
+  <rect x="70" y="220" width="110" height="60" class="component-box" rx="5"/>
+  <text x="125" y="245" text-anchor="middle" style="font-size: 11px; fill: #000;">2. Build</text>
+  <text x="125" y="260" text-anchor="middle" style="font-size: 9px; fill: #666;">Gradle</text>
+  <text x="125" y="272" text-anchor="middle" style="font-size: 9px; fill: #666;">Test</text>
+  
+  <rect x="200" y="220" width="110" height="60" class="component-box" rx="5"/>
+  <text x="255" y="245" text-anchor="middle" style="font-size: 11px; fill: #000;">3. Docker</text>
+  <text x="255" y="260" text-anchor="middle" style="font-size: 9px; fill: #666;">Build Image</text>
+  <text x="255" y="272" text-anchor="middle" style="font-size: 9px; fill: #666;">Push to ECR</text>
+  
+  <rect x="400" y="80" width="950" height="750" style="fill: #FFF4E6; stroke: #FF9900; stroke-width: 3; stroke-dasharray: 10,5;" rx="20"/>
+  <text x="875" y="115" text-anchor="middle" style="font-family: Arial, sans-serif; font-size: 24px; font-weight: bold; fill: #FF9900;">
+    AWS Cloud (ap-northeast-2)
+  </text>
+  
+  <rect x="450" y="150" width="180" height="120" class="ecr-box" rx="10"/>
+  <text x="540" y="180" text-anchor="middle" class="text-white">Amazon ECR</text>
+  <text x="540" y="200" text-anchor="middle" style="font-size: 12px; fill: #fff;">Container Registry</text>
+  <text x="540" y="225" text-anchor="middle" style="font-size: 11px; fill: #fff;">library-management</text>
+  <text x="540" y="240" text-anchor="middle" style="font-size: 11px; fill: #fff;">-system</text>
+  <text x="540" y="255" text-anchor="middle" style="font-size: 10px; fill: #fff;">Docker Images</text>
+  
+  <ellipse cx="875" cy="200" rx="70" ry="40" style="fill: #3498DB; stroke: #2C3E50; stroke-width: 2;"/>
+  <text x="875" y="200" text-anchor="middle" style="font-size: 24px; fill: #fff;">🌐</text>
+  <text x="875" y="220" text-anchor="middle" style="font-size: 12px; fill: #fff;">Users</text>
+  
+  <rect x="780" y="280" width="190" height="100" class="alb-box" rx="10"/>
+  <text x="875" y="310" text-anchor="middle" class="text-white">Application Load</text>
+  <text x="875" y="330" text-anchor="middle" class="text-white">Balancer</text>
+  <text x="875" y="355" text-anchor="middle" style="font-size: 11px; fill: #fff;">library-alb</text>
+  <text x="875" y="370" text-anchor="middle" style="font-size: 10px; fill: #fff;">HTTP: 80</text>
+  
+  <rect x="700" y="420" width="140" height="80" style="fill: #3498DB; stroke: #2980B9; stroke-width: 2;" rx="8"/>
+  <text x="770" y="445" text-anchor="middle" class="text-white">Target Group</text>
+  <text x="770" y="465" text-anchor="middle" class="text-white">Blue 🔵</text>
+  <text x="770" y="485" text-anchor="middle" style="font-size: 10px; fill: #fff;">library-blue-tg</text>
+  
+  <rect x="910" y="420" width="140" height="80" style="fill: #2ECC71; stroke: #27AE60; stroke-width: 2;" rx="8"/>
+  <text x="980" y="445" text-anchor="middle" class="text-white">Target Group</text>
+  <text x="980" y="465" text-anchor="middle" class="text-white">Green 🟢</text>
+  <text x="980" y="485" text-anchor="middle" style="font-size: 10px; fill: #fff;">library-green-tg</text>
+  
+  <rect x="680" y="540" width="390" height="240" style="fill: #FFE8CC; stroke: #FF7A00; stroke-width: 2;" rx="10"/>
+  <text x="875" y="570" text-anchor="middle" style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #FF7A00;">
+    ECS Cluster (Fargate)
+  </text>
+  <text x="875" y="590" text-anchor="middle" style="font-size: 12px; fill: #666;">
+    library-management-cluster
+  </text>
+  
+  <rect x="710" y="610" width="130" height="150" class="ecs-box" rx="8"/>
+  <text x="775" y="635" text-anchor="middle" class="text-white">ECS Task</text>
+  <text x="775" y="655" text-anchor="middle" class="text-white">Blue 🔵</text>
+  <text x="775" y="680" text-anchor="middle" style="font-size: 10px; fill: #fff;">Container:</text>
+  <text x="775" y="695" text-anchor="middle" style="font-size: 10px; fill: #fff;">library-app:v1</text>
+  <text x="775" y="715" text-anchor="middle" style="font-size: 10px; fill: #fff;">Port: 8081</text>
+  <text x="775" y="735" text-anchor="middle" style="font-size: 10px; fill: #fff;">CPU: 512</text>
+  <text x="775" y="750" text-anchor="middle" style="font-size: 10px; fill: #fff;">Memory: 1024</text>
+  
+  <rect x="910" y="610" width="130" height="150" class="ecs-box" rx="8"/>
+  <text x="975" y="635" text-anchor="middle" class="text-white">ECS Task</text>
+  <text x="975" y="655" text-anchor="middle" class="text-white">Green 🟢</text>
+  <text x="975" y="680" text-anchor="middle" style="font-size: 10px; fill: #fff;">Container:</text>
+  <text x="975" y="695" text-anchor="middle" style="font-size: 10px; fill: #fff;">library-app:v2</text>
+  <text x="975" y="715" text-anchor="middle" style="font-size: 10px; fill: #fff;">Port: 8081</text>
+  <text x="975" y="735" text-anchor="middle" style="font-size: 10px; fill: #fff;">CPU: 512</text>
+  <text x="975" y="750" text-anchor="middle" style="font-size: 10px; fill: #fff;">Memory: 1024</text>
+  
+  <rect x="1150" y="540" width="160" height="120" class="db-box" rx="10"/>
+  <text x="1230" y="570" text-anchor="middle" class="text-white">Amazon RDS</text>
+  <text x="1230" y="590" text-anchor="middle" class="text-white">MySQL 8.0</text>
+  <text x="1230" y="615" text-anchor="middle" style="font-size: 11px; fill: #fff;">library-db</text>
+  <text x="1230" y="635" text-anchor="middle" style="font-size: 10px; fill: #fff;">db.t3.micro</text>
+  <text x="1230" y="650" text-anchor="middle" style="font-size: 10px; fill: #fff;">Port: 3306</text>
+  
+  <g transform="translate(450, 700)">
+    <rect width="180" height="100" style="fill: #ECF0F1; stroke: #95A5A6; stroke-width: 2;" rx="8"/>
+    <text x="90" y="25" text-anchor="middle" style="font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; fill: #34495E;">
+      Security Groups
+    </text>
+    <text x="10" y="50" style="font-size: 11px; fill: #666;">🔐 library-alb-sg</text>
+    <text x="10" y="70" style="font-size: 11px; fill: #666;">🔐 library-ecs-task-sg</text>
+    <text x="10" y="90" style="font-size: 11px; fill: #666;">🔐 library-rds-sg</text>
+  </g>
+  
+  <rect x="1150" y="700" width="160" height="80" style="fill: #FF4F8B; stroke: #C4405C; stroke-width: 2;" rx="8"/>
+  <text x="1230" y="730" text-anchor="middle" class="text-white">CloudWatch</text>
+  <text x="1230" y="750" text-anchor="middle" style="font-size: 11px; fill: #fff;">Logs &amp; Metrics</text>
+  <text x="1230" y="770" text-anchor="middle" style="font-size: 10px; fill: #fff;">Monitoring</text>
+  
+  <path d="M 330 250 L 450 220" class="arrow-red" marker-end="url(#arrowhead-red)"/>
+  <text x="380" y="220" style="font-size: 11px; fill: #E74C3C; font-weight: bold;">Push Image</text>
+  
+  <path d="M 540 270 Q 540 350, 775 600" class="arrow" marker-end="url(#arrowhead)"/>
+  <text x="600" y="400" style="font-size: 11px; fill: #666;">Pull Image</text>
+  
+  <path d="M 875 240 L 875 280" class="arrow-red" marker-end="url(#arrowhead-red)"/>
+  <text x="885" y="265" style="font-size: 11px; fill: #E74C3C; font-weight: bold;">HTTP</text>
+  
+  <path d="M 825 380 L 770 420" class="arrow-red" marker-end="url(#arrowhead-red)"/>
+  <path d="M 925 380 L 980 420" class="arrow" marker-end="url(#arrowhead)"/>
+  <text x="950" y="405" style="font-size: 10px; fill: #666;">Traffic</text>
+  
+  <path d="M 770 500 L 775 610" class="arrow-red" marker-end="url(#arrowhead-red)"/>
+  <path d="M 980 500 L 975 610" class="arrow" marker-end="url(#arrowhead)"/>
+  
+  <path d="M 1070 680 L 1150 600" class="arrow" marker-end="url(#arrowhead)"/>
+  <text x="1100" y="630" style="font-size: 10px; fill: #666;">MySQL</text>
+  
+  <path d="M 1070 720 L 1150 740" class="arrow" marker-end="url(#arrowhead)"/>
+  <text x="1100" y="740" style="font-size: 10px; fill: #666;">Logs</text>
+  
+  <g transform="translate(50, 850)">
+    <text x="0" y="0" style="font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #333;">
+      배포 플로우:
+    </text>
+    <line x1="0" y1="10" x2="100" y2="10" style="stroke: #E74C3C; stroke-width: 3;"/>
+    <text x="110" y="14" style="font-size: 11px; fill: #E74C3C;">현재 트래픽 (Blue)</text>
+    
+    <line x1="250" y1="10" x2="350" y2="10" style="stroke: #666; stroke-width: 3;"/>
+    <text x="360" y="14" style="font-size: 11px; fill: #666;">대기 (Green)</text>
+  </g>
+</svg>

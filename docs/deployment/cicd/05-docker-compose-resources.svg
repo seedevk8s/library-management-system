@@ -1,0 +1,166 @@
+<svg viewBox="0 0 1000 700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font: bold 24px sans-serif; fill: #1a1a1a; }
+      .section-title { font: bold 18px sans-serif; fill: #2c3e50; }
+      .item-title { font: bold 14px sans-serif; fill: #34495e; }
+      .desc-text { font: 12px sans-serif; fill: #555; }
+      .small-text { font: 11px sans-serif; fill: #666; }
+      .code-text { font: 12px monospace; fill: #c7254e; }
+      
+      .network-box { fill: #e3f2fd; stroke: #1976d2; stroke-width: 2; }
+      .volume-box { fill: #fff3e0; stroke: #f57c00; stroke-width: 2; }
+      .service-box { fill: #f3e5f5; stroke: #7b1fa2; stroke-width: 2; }
+      .bind-mount-box { fill: #fff9c4; stroke: #f9a825; stroke-width: 2; }
+      
+      .arrow { stroke: #555; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .uses-arrow { stroke: #1976d2; stroke-width: 2; fill: none; marker-end: url(#arrowblue); stroke-dasharray: 5,5; }
+    </style>
+    
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#555" />
+    </marker>
+    
+    <marker id="arrowblue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#1976d2" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="35" text-anchor="middle" class="title">Docker Compose 리소스 생성 구조</text>
+  <text x="500" y="55" text-anchor="middle" class="small-text">services, networks, volumes의 관계</text>
+
+  <!-- ========== NETWORKS ========== -->
+  <g id="networks">
+    <text x="150" y="100" class="section-title">1. Networks</text>
+    
+    <rect x="50" y="110" width="200" height="100" class="network-box" rx="5"/>
+    <text x="150" y="135" text-anchor="middle" class="item-title">library-network</text>
+    <text x="150" y="155" text-anchor="middle" class="desc-text">driver: bridge</text>
+    <text x="150" y="175" text-anchor="middle" class="small-text">컨테이너 간 통신 네트워크</text>
+    <text x="150" y="195" text-anchor="middle" class="small-text">내부 DNS로 서비스명 접근</text>
+  </g>
+
+  <!-- ========== VOLUMES ========== -->
+  <g id="volumes">
+    <text x="450" y="100" class="section-title">2. Volumes</text>
+    
+    <!-- Named Volume -->
+    <rect x="320" y="110" width="180" height="100" class="volume-box" rx="5"/>
+    <text x="410" y="135" text-anchor="middle" class="item-title">mysql-data</text>
+    <text x="410" y="155" text-anchor="middle" class="desc-text">driver: local</text>
+    <text x="410" y="175" text-anchor="middle" class="small-text">MySQL 데이터 영구 저장</text>
+    <text x="410" y="195" text-anchor="middle" class="code-text">/var/lib/mysql</text>
+    
+    <!-- Bind Mounts -->
+    <rect x="520" y="110" width="160" height="100" class="bind-mount-box" rx="5"/>
+    <text x="600" y="135" text-anchor="middle" class="item-title">Bind Mounts</text>
+    <text x="600" y="155" text-anchor="middle" class="small-text">./uploads → /app/uploads</text>
+    <text x="600" y="175" text-anchor="middle" class="small-text">./logs → /app/logs</text>
+    <text x="600" y="195" text-anchor="middle" class="desc-text">호스트-컨테이너 동기화</text>
+  </g>
+
+  <!-- ========== SERVICES ========== -->
+  <g id="services">
+    <text x="400" y="270" class="section-title">3. Services (컨테이너)</text>
+    
+    <!-- MySQL Service -->
+    <rect x="50" y="290" width="380" height="200" class="service-box" rx="5"/>
+    <text x="240" y="315" text-anchor="middle" class="item-title">mysql (MySQL 8.0)</text>
+    
+    <!-- MySQL Details -->
+    <text x="70" y="340" class="desc-text">• container_name: library-mysql</text>
+    <text x="70" y="360" class="desc-text">• ports: 3307:3306</text>
+    <text x="70" y="380" class="desc-text">• environment:</text>
+    <text x="90" y="397" class="small-text">- MYSQL_DATABASE: librarydb</text>
+    <text x="90" y="414" class="small-text">- MYSQL_ROOT_PASSWORD: 12345</text>
+    <text x="70" y="435" class="desc-text">• volumes: mysql-data:/var/lib/mysql</text>
+    <text x="70" y="455" class="desc-text">• networks: library-network</text>
+    <text x="70" y="475" class="desc-text">• healthcheck: MySQL 상태 모니터링</text>
+    
+    <!-- App Service -->
+    <rect x="480" y="290" width="460" height="200" class="service-box" rx="5"/>
+    <text x="710" y="315" text-anchor="middle" class="item-title">app (Spring Boot Application)</text>
+    
+    <!-- App Details -->
+    <text x="500" y="340" class="desc-text">• container_name: library-app</text>
+    <text x="500" y="360" class="desc-text">• build: context: . / dockerfile: Dockerfile</text>
+    <text x="500" y="380" class="desc-text">• ports: 8081:8081</text>
+    <text x="500" y="400" class="desc-text">• environment:</text>
+    <text x="520" y="417" class="small-text">- SPRING_PROFILES_ACTIVE: prod</text>
+    <text x="520" y="434" class="small-text">- DB_URL: jdbc:mysql://mysql:3306/librarydb</text>
+    <text x="500" y="455" class="desc-text">• volumes: ./uploads, ./logs (Bind Mounts)</text>
+    <text x="500" y="475" class="desc-text">• depends_on: mysql (service_healthy)</text>
+  </g>
+
+  <!-- ========== EXECUTION ORDER ========== -->
+  <g id="execution-order">
+    <text x="500" y="530" text-anchor="middle" class="section-title">실행 순서</text>
+    
+    <rect x="150" y="545" width="140" height="50" fill="#e8f5e9" stroke="#4caf50" stroke-width="2" rx="5"/>
+    <text x="220" y="565" text-anchor="middle" class="desc-text">1단계</text>
+    <text x="220" y="583" text-anchor="middle" class="small-text">Networks 생성</text>
+    
+    <path d="M 290 570 L 340 570" class="arrow"/>
+    
+    <rect x="340" y="545" width="140" height="50" fill="#fff3e0" stroke="#ff9800" stroke-width="2" rx="5"/>
+    <text x="410" y="565" text-anchor="middle" class="desc-text">2단계</text>
+    <text x="410" y="583" text-anchor="middle" class="small-text">Volumes 생성</text>
+    
+    <path d="M 480 570 L 530 570" class="arrow"/>
+    
+    <rect x="530" y="545" width="140" height="50" fill="#f3e5f5" stroke="#9c27b0" stroke-width="2" rx="5"/>
+    <text x="600" y="565" text-anchor="middle" class="desc-text">3단계</text>
+    <text x="600" y="583" text-anchor="middle" class="small-text">MySQL 컨테이너</text>
+    
+    <path d="M 670 570 L 720 570" class="arrow"/>
+    
+    <rect x="720" y="545" width="140" height="50" fill="#f3e5f5" stroke="#9c27b0" stroke-width="2" rx="5"/>
+    <text x="790" y="565" text-anchor="middle" class="desc-text">4단계</text>
+    <text x="790" y="583" text-anchor="middle" class="small-text">App 컨테이너</text>
+  </g>
+
+  <!-- ========== RELATIONSHIPS ========== -->
+  <!-- Network to MySQL -->
+  <path d="M 150 210 L 150 290" class="uses-arrow"/>
+  
+  <!-- Network to App -->
+  <path d="M 150 210 Q 150 250, 480 340" class="uses-arrow"/>
+  
+  <!-- Volume to MySQL -->
+  <path d="M 410 210 L 320 290" class="uses-arrow"/>
+  
+  <!-- Bind Mounts to App -->
+  <path d="M 600 210 L 710 290" class="uses-arrow"/>
+
+  <!-- MySQL healthcheck to App -->
+  <path d="M 430 390 L 480 390" stroke="#4caf50" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="455" y="385" text-anchor="middle" class="small-text" fill="#4caf50">depends_on</text>
+
+  <!-- Legend -->
+  <g id="legend">
+    <text x="50" y="640" class="item-title">범례</text>
+    <line x1="50" y1="650" x2="100" y2="650" class="arrow"/>
+    <text x="110" y="655" class="small-text">생성 순서</text>
+    
+    <line x1="180" y1="650" x2="230" y2="650" class="uses-arrow"/>
+    <text x="240" y="655" class="small-text">사용 관계</text>
+    
+    <rect x="320" y="643" width="15" height="15" class="network-box"/>
+    <text x="340" y="655" class="small-text">Network</text>
+    
+    <rect x="410" y="643" width="15" height="15" class="volume-box"/>
+    <text x="430" y="655" class="small-text">Named Volume</text>
+    
+    <rect x="530" y="643" width="15" height="15" class="bind-mount-box"/>
+    <text x="550" y="655" class="small-text">Bind Mount</text>
+    
+    <rect x="650" y="643" width="15" height="15" class="service-box"/>
+    <text x="670" y="655" class="small-text">Service</text>
+  </g>
+
+  <!-- Footer -->
+  <text x="500" y="685" text-anchor="middle" class="small-text" fill="#999">
+    docker-compose up -d 명령 시 자동으로 생성됨 | docker-compose down으로 모두 제거 (볼륨 제외)
+  </text>
+</svg>

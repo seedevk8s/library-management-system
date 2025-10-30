@@ -45,3 +45,10 @@ out/
 ### Uploads ###
 uploads/*
 !uploads/.gitkeep
+
+### AWS Credentials (NEVER COMMIT!) ###
+.aws-credentials.txt
+**/aws-credentials*
+**/.aws-credentials*
+*.pem
+*.key

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1100">
+  <defs>
+    <style>
+      .title-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 32px; font-weight: bold; fill: #2C3E50; }
+      .layer-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 20px; font-weight: bold; fill: #fff; }
+      .component-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #2C3E50; }
+      .detail-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; fill: #555; }
+      .small-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; fill: #777; }
+      .emphasis-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #E74C3C; }
+      .arrow { fill: none; stroke: #E74C3C; stroke-width: 4; }
+      .dependency-arrow { fill: none; stroke: #7F8C8D; stroke-width: 2; stroke-dasharray: 5,5; }
+    </style>
+    
+    <marker id="arrowhead-red" markerWidth="12" markerHeight="12" refX="11" refY="6" orient="auto">
+      <polygon points="0 0, 12 6, 0 12" fill="#E74C3C" />
+    </marker>
+    <marker id="arrowhead-gray" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#7F8C8D" />
+    </marker>
+    
+    <linearGradient id="iam-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#DD4B39;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#C23321;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="access-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF9900;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#EC7211;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="resource-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#3498DB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2980B9;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="deploy-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2ECC71;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#27AE60;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Title -->
+  <text x="700" y="50" text-anchor="middle" class="title-text">🔐 AWS IAM 사용자 생성이 최우선인 이유</text>
+  <text x="700" y="80" text-anchor="middle" style="font-size: 18px; fill: #7F8C8D;">의존성 계층 구조 (Dependency Layer Architecture)</text>
+  
+  <!-- Main concept box -->
+  <rect x="100" y="120" width="1200" height="80" fill="#FFF9E6" stroke="#F39C12" stroke-width="3" rx="10"/>
+  <text x="700" y="155" text-anchor="middle" style="font-size: 20px; font-weight: bold; fill: #E67E22;">
+    ⚠️ 핵심 원칙: 모든 AWS 리소스 접근에는 IAM 자격 증명이 필수!
+  </text>
+  <text x="700" y="180" text-anchor="middle" class="detail-text">
+    IAM 없이는 어떤 AWS 서비스도 사용할 수 없습니다. IAM은 AWS의 "출입증"입니다.
+  </text>
+  
+  <!-- Layer 0: IAM Foundation -->
+  <rect x="200" y="240" width="1000" height="140" fill="url(#iam-gradient)" stroke="#C23321" stroke-width="4" rx="15"/>
+  <text x="700" y="275" text-anchor="middle" class="layer-title">🔐 Layer 0: IAM (Identity and Access Management)</text>
+  <text x="700" y="300" text-anchor="middle" style="font-size: 14px; fill: #fff;">인증 및 권한 관리 기반 계층</text>
+  
+  <rect x="250" y="320" width="380" height="40" fill="rgba(255,255,255,0.3)" stroke="#fff" stroke-width="2" rx="6"/>
+  <text x="440" y="345" text-anchor="middle" style="font-size: 13px; font-weight: bold; fill: #fff;">
+    👤 IAM 사용자: github-actions-deployer
+  </text>
+  
+  <rect x="670" y="320" width="480" height="40" fill="rgba(255,255,255,0.3)" stroke="#fff" stroke-width="2" rx="6"/>
+  <text x="910" y="338" text-anchor="middle" style="font-size: 12px; fill: #fff;">🔑 Access Key (AWS_ACCESS_KEY_ID + SECRET)</text>
+  <text x="910" y="353" text-anchor="middle" style="font-size: 11px; fill: #FFF9E6;">GitHub Actions에서 AWS API 호출 시 사용</text>
+  
+  <!-- Arrow from Layer 0 -->
+  <path d="M 700 380 L 700 440" class="arrow" marker-end="url(#arrowhead-red)"/>
+  <text x="720" y="415" class="emphasis-text">↓ 권한 부여</text>
+  
+  <!-- Layer 1: Access Control -->
+  <rect x="200" y="440" width="1000" height="140" fill="url(#access-gradient)" stroke="#EC7211" stroke-width="4" rx="15"/>
+  <text x="700" y="475" text-anchor="middle" class="layer-title">🎫 Layer 1: AWS 서비스 접근 권한</text>
+  <text x="700" y="500" text-anchor="middle" style="font-size: 14px; fill: #fff;">IAM 정책으로 제어되는 접근 권한</text>
+  
+  <rect x="250" y="520" width="380" height="45" fill="rgba(255,255,255,0.3)" stroke="#fff" stroke-width="2" rx="6"/>
+  <text x="440" y="538" text-anchor="middle" style="font-size: 13px; font-weight: bold; fill: #fff;">
+    📦 AmazonEC2ContainerRegistryPowerUser
+  </text>
+  <text x="440" y="555" text-anchor="middle" style="font-size: 11px; fill: #FFF9E6;">ECR 이미지 Push/Pull 권한</text>
+  
+  <rect x="670" y="520" width="480" height="45" fill="rgba(255,255,255,0.3)" stroke="#fff" stroke-width="2" rx="6"/>
+  <text x="910" y="538" text-anchor="middle" style="font-size: 13px; font-weight: bold; fill: #fff;">
+    🐳 AmazonECS_FullAccess
+  </text>
+  <text x="910" y="555" text-anchor="middle" style="font-size: 11px; fill: #FFF9E6;">ECS 태스크 배포 및 서비스 관리 권한</text>
+  
+  <!-- Arrow from Layer 1 -->
+  <path d="M 700 580 L 700 640" class="arrow" marker-end="url(#arrowhead-red)"/>
+  <text x="720" y="615" class="emphasis-text">↓ 리소스 생성/관리</text>
+  
+  <!-- Layer 2: AWS Resources -->
+  <rect x="200" y="640" width="1000" height="180" fill="url(#resource-gradient)" stroke="#2980B9" stroke-width="4" rx="15"/>
+  <text x="700" y="675" text-anchor="middle" class="layer-title">☁️ Layer 2: AWS 리소스 (Infrastructure)</text>
+  <text x="700" y="700" text-anchor="middle" style="font-size: 14px; fill: #fff;">권한이 있어야만 생성/수정/삭제 가능</text>
+  
+  <rect x="250" y="720" width="280" height="80" fill="rgba(255,255,255,0.3)" stroke="#fff" stroke-width="2" rx="8"/>
+  <text x="390" y="745" text-anchor="middle" style="font-size: 14px; font-weight: bold; fill: #fff;">📦 Amazon ECR</text>
+  <text x="390" y="765" text-anchor="middle" style="font-size: 12px; fill: #fff;">Container Registry</text>
+  <text x="390" y="785" text-anchor="middle" style="font-size: 11px; fill: #FFF9E6;">Docker 이미지 저장소</text>
+  
+  <rect x="560" y="720" width="280" height="80" fill="rgba(255,255,255,0.3)" stroke="#fff" stroke-width="2" rx="8"/>
+  <text x="700" y="745" text-anchor="middle" style="font-size: 14px; font-weight: bold; fill: #fff;">🐳 Amazon ECS</text>
+  <text x="700" y="765" text-anchor="middle" style="font-size: 12px; fill: #fff;">Container Orchestration</text>
+  <text x="700" y="785" text-anchor="middle" style="font-size: 11px; fill: #FFF9E6;">컨테이너 실행 관리</text>
+  
+  <rect x="870" y="720" width="280" height="80" fill="rgba(255,255,255,0.3)" stroke="#fff" stroke-width="2" rx="8"/>
+  <text x="1010" y="745" text-anchor="middle" style="font-size: 14px; font-weight: bold; fill: #fff;">🗄️ Amazon RDS</text>
+  <text x="1010" y="765" text-anchor="middle" style="font-size: 12px; fill: #fff;">Database Service</text>
+  <text x="1010" y="785" text-anchor="middle" style="font-size: 11px; fill: #FFF9E6;">MySQL 데이터베이스</text>
+  
+  <!-- Arrow from Layer 2 -->
+  <path d="M 700 820 L 700 880" class="arrow" marker-end="url(#arrowhead-red)"/>
+  <text x="720" y="855" class="emphasis-text">↓ 배포 실행</text>
+  
+  <!-- Layer 3: Deployment -->
+  <rect x="200" y="880" width="1000" height="140" fill="url(#deploy-gradient)" stroke="#27AE60" stroke-width="4" rx="15"/>
+  <text x="700" y="915" text-anchor="middle" class="layer-title">🚀 Layer 3: CI/CD 자동 배포</text>
+  <text x="700" y="940" text-anchor="middle" style="font-size: 14px; fill: #fff;">GitHub Actions Workflow</text>
+  
+  <rect x="250" y="955" width="180" height="50" fill="rgba(255,255,255,0.3)" stroke="#fff" stroke-width="2" rx="6"/>
+  <text x="340" y="975" text-anchor="middle" style="font-size: 12px; font-weight: bold; fill: #fff;">① Build</text>
+  <text x="340" y="993" text-anchor="middle" style="font-size: 10px; fill: #FFF9E6;">Gradle, Test</text>
+  
+  <rect x="460" y="955" width="180" height="50" fill="rgba(255,255,255,0.3)" stroke="#fff" stroke-width="2" rx="6"/>
+  <text x="550" y="975" text-anchor="middle" style="font-size: 12px; font-weight: bold; fill: #fff;">② Docker Push</text>
+  <text x="550" y="993" text-anchor="middle" style="font-size: 10px; fill: #FFF9E6;">ECR에 이미지 업로드</text>
+  
+  <rect x="670" y="955" width="180" height="50" fill="rgba(255,255,255,0.3)" stroke="#fff" stroke-width="2" rx="6"/>
+  <text x="760" y="975" text-anchor="middle" style="font-size: 12px; font-weight: bold; fill: #fff;">③ ECS Deploy</text>
+  <text x="760" y="993" text-anchor="middle" style="font-size: 10px; fill: #FFF9E6;">새 태스크 배포</text>
+  
+  <rect x="880" y="955" width="270" height="50" fill="rgba(255,255,255,0.3)" stroke="#fff" stroke-width="2" rx="6"/>
+  <text x="1015" y="975" text-anchor="middle" style="font-size: 12px; font-weight: bold; fill: #fff;">④ Blue-Green 전환</text>
+  <text x="1015" y="993" text-anchor="middle" style="font-size: 10px; fill: #FFF9E6;">트래픽 전환 완료</text>
+  
+  <!-- Dependency arrows -->
+  <path d="M 440 360 L 390 520" class="dependency-arrow" marker-end="url(#arrowhead-gray)"/>
+  <path d="M 910 360 L 910 520" class="dependency-arrow" marker-end="url(#arrowhead-gray)"/>
+  
+  <path d="M 440 565 L 390 720" class="dependency-arrow" marker-end="url(#arrowhead-gray)"/>
+  <path d="M 910 565 L 700 720" class="dependency-arrow" marker-end="url(#arrowhead-gray)"/>
+  
+  <path d="M 390 800 L 550 955" class="dependency-arrow" marker-end="url(#arrowhead-gray)"/>
+  <path d="M 700 800 L 760 955" class="dependency-arrow" marker-end="url(#arrowhead-gray)"/>
+  
+  <!-- Summary box -->
+  <rect x="50" y="1040" width="550" height="50" fill="#E8F4F8" stroke="#3498DB" stroke-width="2" rx="8"/>
+  <text x="60" y="1063" style="font-size: 14px; font-weight: bold; fill: #2C3E50;">
+    ✅ 결론: IAM을 먼저 생성해야 하는 이유
+  </text>
+  <text x="60" y="1080" class="detail-text">
+    모든 AWS 작업은 IAM 자격 증명으로 시작됩니다. IAM 없이는 아무것도 할 수 없습니다!
+  </text>
+  
+  <!-- Process order box -->
+  <rect x="650" y="1040" width="700" height="50" fill="#FEF5E7" stroke="#F39C12" stroke-width="2" rx="8"/>
+  <text x="660" y="1063" style="font-size: 14px; font-weight: bold; fill: #E67E22;">
+    📋 올바른 순서: IAM 사용자 생성 → 권한 부여 → AWS 리소스 생성 → 배포 자동화
+  </text>
+  <text x="660" y="1080" style="font-size: 11px; fill: #555;">
+    ※ 이 순서를 바꾸면 권한 오류로 인해 배포가 실패합니다!
+  </text>
+</svg>

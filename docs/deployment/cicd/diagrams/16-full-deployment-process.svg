@@ -1,0 +1,180 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1100">
+  <!-- Title -->
+  <text x="800" y="35" font-size="26" font-weight="bold" text-anchor="middle" fill="#232F3E">
+    Library Management System 배포 프로세스
+  </text>
+  <text x="800" y="60" font-size="14" text-anchor="middle" fill="#666">
+    Phase 1 → Phase 2 → Phase 3 → Phase 4 전체 흐름
+  </text>
+
+  <!-- Legend -->
+  <rect x="100" y="85" width="180" height="25" fill="#d1e7dd" stroke="#198754" stroke-width="2" rx="3"/>
+  <text x="190" y="102" font-size="11" font-weight="bold" text-anchor="middle" fill="#0a3622">✅ 완료</text>
+  
+  <rect x="300" y="85" width="180" height="25" fill="#fff3cd" stroke="#ffc107" stroke-width="2" rx="3"/>
+  <text x="390" y="102" font-size="11" font-weight="bold" text-anchor="middle" fill="#856404">🔄 진행중</text>
+  
+  <rect x="500" y="85" width="180" height="25" fill="#ffe5e5" stroke="#dc3545" stroke-width="2" rx="3"/>
+  <text x="590" y="102" font-size="11" font-weight="bold" text-anchor="middle" fill="#721c24">⚠️ 대기중</text>
+  
+  <rect x="700" y="85" width="180" height="25" fill="#f8f9fa" stroke="#6c757d" stroke-width="2" rx="3"/>
+  <text x="790" y="102" font-size="11" font-weight="bold" text-anchor="middle" fill="#495057">⏳ 예정</text>
+
+  <!-- Phase 1 -->
+  <rect x="50" y="140" width="380" height="200" fill="#d1e7dd" stroke="#198754" stroke-width="3" rx="10"/>
+  <text x="240" y="170" font-size="18" font-weight="bold" text-anchor="middle" fill="#0a3622">Phase 1: 준비</text>
+  <text x="240" y="190" font-size="12" text-anchor="middle" fill="#198754">✅ 100% 완료</text>
+  
+  <circle cx="90" cy="225" r="20" fill="#198754"/>
+  <text x="90" y="232" font-size="14" font-weight="bold" text-anchor="middle" fill="#fff">1</text>
+  <text x="120" y="232" font-size="12" fill="#212529">IAM 사용자 생성</text>
+  
+  <circle cx="90" cy="265" r="20" fill="#198754"/>
+  <text x="90" y="272" font-size="14" font-weight="bold" text-anchor="middle" fill="#fff">2</text>
+  <text x="120" y="272" font-size="12" fill="#212529">GitHub Secrets 설정</text>
+  
+  <circle cx="90" cy="305" r="20" fill="#198754"/>
+  <text x="90" y="312" font-size="14" font-weight="bold" text-anchor="middle" fill="#fff">3</text>
+  <text x="120" y="312" font-size="12" fill="#212529">Git 브랜치 & 문서</text>
+
+  <!-- Arrow -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#198754"/>
+    </marker>
+  </defs>
+  <path d="M 430 240 L 490 240" stroke="#198754" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- Phase 2 -->
+  <rect x="490" y="140" width="380" height="200" fill="#d1e7dd" stroke="#198754" stroke-width="3" rx="10"/>
+  <text x="680" y="170" font-size="18" font-weight="bold" text-anchor="middle" fill="#0a3622">Phase 2: 로컬 검증</text>
+  <text x="680" y="190" font-size="12" text-anchor="middle" fill="#198754">✅ 100% 완료</text>
+  
+  <circle cx="530" cy="225" r="20" fill="#198754"/>
+  <text x="530" y="232" font-size="14" font-weight="bold" text-anchor="middle" fill="#fff">4</text>
+  <text x="560" y="232" font-size="12" fill="#212529">Dockerfile 작성</text>
+  
+  <circle cx="530" cy="265" r="20" fill="#198754"/>
+  <text x="530" y="272" font-size="14" font-weight="bold" text-anchor="middle" fill="#fff">5</text>
+  <text x="560" y="272" font-size="12" fill="#212529">docker-compose.yml</text>
+  
+  <circle cx="530" cy="305" r="20" fill="#198754"/>
+  <text x="530" y="312" font-size="14" font-weight="bold" text-anchor="middle" fill="#fff">6</text>
+  <text x="560" y="312" font-size="12" fill="#212529">로컬 테스트 성공</text>
+
+  <!-- Arrow -->
+  <path d="M 870 240 L 930 240" stroke="#198754" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- Phase 3 -->
+  <rect x="930" y="140" width="620" height="500" fill="#fff3cd" stroke="#ffc107" stroke-width="3" rx="10"/>
+  <text x="1240" y="170" font-size="18" font-weight="bold" text-anchor="middle" fill="#856404">Phase 3: AWS 인프라</text>
+  <text x="1240" y="190" font-size="12" text-anchor="middle" fill="#ffc107">🔄 60% 완료</text>
+
+  <!-- Completed -->
+  <rect x="950" y="210" width="280" height="180" fill="#d1e7dd" stroke="#198754" stroke-width="2" rx="5"/>
+  <text x="1090" y="230" font-size="13" font-weight="bold" text-anchor="middle" fill="#0a3622">✅ 완료</text>
+  
+  <circle cx="980" cy="255" r="18" fill="#198754"/>
+  <text x="980" y="262" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">7</text>
+  <text x="1005" y="262" font-size="11" fill="#212529">ECR Repository</text>
+  
+  <circle cx="980" cy="290" r="18" fill="#198754"/>
+  <text x="980" y="297" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">8</text>
+  <text x="1005" y="297" font-size="11" fill="#212529">ECS Cluster</text>
+  
+  <circle cx="980" cy="325" r="18" fill="#198754"/>
+  <text x="980" y="332" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">9</text>
+  <text x="1005" y="332" font-size="11" fill="#212529">Security Groups (3개)</text>
+  
+  <circle cx="980" cy="360" r="18" fill="#198754"/>
+  <text x="980" y="367" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">10</text>
+  <text x="1010" y="367" font-size="11" fill="#212529">Target Groups (2개)</text>
+
+  <!-- Current -->
+  <rect x="1250" y="210" width="280" height="70" fill="#ffe5e5" stroke="#dc3545" stroke-width="2" rx="5"/>
+  <text x="1390" y="230" font-size="13" font-weight="bold" text-anchor="middle" fill="#721c24">⚠️ 현재 대기</text>
+  
+  <circle cx="1280" cy="258" r="18" fill="#dc3545"/>
+  <text x="1280" y="265" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">11</text>
+  <text x="1305" y="265" font-size="11" fill="#721c24">ALB 생성</text>
+
+  <!-- Remaining -->
+  <rect x="950" y="410" width="580" height="215" fill="#f8f9fa" stroke="#6c757d" stroke-width="2" rx="5"/>
+  <text x="1240" y="435" font-size="13" font-weight="bold" text-anchor="middle" fill="#495057">⏳ 남은 작업 (50분)</text>
+  
+  <circle cx="980" cy="465" r="18" fill="#6c757d"/>
+  <text x="980" y="472" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">12</text>
+  <text x="1005" y="472" font-size="11" fill="#495057">Parameter Store (10분)</text>
+  
+  <circle cx="980" cy="505" r="18" fill="#6c757d"/>
+  <text x="980" y="512" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">13</text>
+  <text x="1005" y="512" font-size="11" fill="#495057">CloudWatch Logs (5분)</text>
+  
+  <circle cx="980" cy="545" r="18" fill="#6c757d"/>
+  <text x="980" y="552" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">14</text>
+  <text x="1005" y="552" font-size="11" fill="#495057">IAM Roles (15분)</text>
+  
+  <circle cx="980" cy="585" r="18" fill="#6c757d"/>
+  <text x="980" y="592" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">15</text>
+  <text x="1005" y="592" font-size="11" fill="#495057">ECS Service (20분)</text>
+
+  <!-- Arrow down -->
+  <path d="M 640 340 L 640 680" stroke="#6c757d" stroke-width="3" marker-end="url(#arrow-gray)"/>
+  <defs>
+    <marker id="arrow-gray" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#6c757d"/>
+    </marker>
+  </defs>
+
+  <!-- Phase 4 -->
+  <rect x="50" y="680" width="1500" height="350" fill="#f8f9fa" stroke="#6c757d" stroke-width="3" rx="10"/>
+  <text x="800" y="710" font-size="18" font-weight="bold" text-anchor="middle" fill="#495057">Phase 4: 배포 자동화</text>
+  <text x="800" y="730" font-size="12" text-anchor="middle" fill="#6c757d">⏳ 0% 완료 (2시간 소요)</text>
+
+  <!-- Files -->
+  <rect x="70" y="750" width="680" height="130" fill="#fff" stroke="#6c757d" stroke-width="2" rx="5"/>
+  <text x="410" y="775" font-size="13" font-weight="bold" text-anchor="middle" fill="#495057">파일 작성 (35분)</text>
+  
+  <circle cx="110" cy="810" r="18" fill="#6c757d"/>
+  <text x="110" y="817" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">16</text>
+  <text x="140" y="817" font-size="11" fill="#495057">Task Definition (15분)</text>
+  
+  <circle cx="110" cy="850" r="18" fill="#6c757d"/>
+  <text x="110" y="857" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">17</text>
+  <text x="140" y="857" font-size="11" fill="#495057">GitHub Actions (20분)</text>
+
+  <!-- Deploy -->
+  <rect x="770" y="750" width="760" height="130" fill="#fff" stroke="#6c757d" stroke-width="2" rx="5"/>
+  <text x="1150" y="775" font-size="13" font-weight="bold" text-anchor="middle" fill="#495057">자동 배포 (1시간 35분)</text>
+  
+  <circle cx="810" cy="810" r="18" fill="#6c757d"/>
+  <text x="810" y="817" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">18</text>
+  <text x="840" y="817" font-size="11" fill="#495057">Git Push (5분)</text>
+  
+  <circle cx="1010" cy="810" r="18" fill="#6c757d"/>
+  <text x="1010" y="817" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">19</text>
+  <text x="1040" y="817" font-size="11" fill="#495057">Actions 실행</text>
+  
+  <circle cx="1220" cy="810" r="18" fill="#6c757d"/>
+  <text x="1220" y="817" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">20</text>
+  <text x="1250" y="817" font-size="11" fill="#495057">배포 테스트 (30분)</text>
+  
+  <circle cx="810" cy="850" r="18" fill="#6c757d"/>
+  <text x="810" y="857" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">21</text>
+  <text x="840" y="857" font-size="11" fill="#495057">Blue-Green 배포 (1시간)</text>
+
+  <!-- Result -->
+  <rect x="70" y="900" width="1460" height="110" fill="#d1e7dd" stroke="#198754" stroke-width="3" rx="8"/>
+  <text x="800" y="935" font-size="18" font-weight="bold" text-anchor="middle" fill="#0a3622">🎉 완료: CI/CD 파이프라인 구축</text>
+  
+  <text x="100" y="965" font-size="12" fill="#212529">✅ 자동 빌드 & 배포</text>
+  <text x="100" y="985" font-size="12" fill="#212529">✅ Blue-Green 무중단 배포</text>
+  
+  <text x="800" y="965" font-size="12" fill="#212529">✅ 운영 환경 자동화</text>
+  <text x="800" y="985" font-size="12" fill="#212529">✅ CloudWatch 모니터링</text>
+
+  <!-- Progress -->
+  <rect x="50" y="1050" width="1500" height="25" fill="#e9ecef" rx="12"/>
+  <rect x="50" y="1050" width="937" height="25" fill="#198754" rx="12"/>
+  <text x="800" y="1068" font-size="13" font-weight="bold" text-anchor="middle" fill="#fff">진행률: 62.5% (15/24 작업 완료)</text>
+</svg>

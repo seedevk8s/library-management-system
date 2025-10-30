@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000">
+  <defs>
+    <style>
+      .title-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 32px; font-weight: bold; fill: #2C3E50; }
+      .section-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 18px; font-weight: bold; fill: #fff; }
+      .component-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #2C3E50; }
+      .detail-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; fill: #555; }
+      .small-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 10px; fill: #777; }
+      .white-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; fill: #fff; }
+      .arrow { fill: none; stroke: #7F8C8D; stroke-width: 3; }
+      .arrow-active { fill: none; stroke: #3498DB; stroke-width: 4; }
+      .arrow-standby { fill: none; stroke: #95A5A6; stroke-width: 3; stroke-dasharray: 5,5; }
+    </style>
+    
+    <!-- Arrow markers -->
+    <marker id="arrowhead" markerWidth="12" markerHeight="12" refX="11" refY="6" orient="auto">
+      <polygon points="0 0, 12 6, 0 12" fill="#7F8C8D" />
+    </marker>
+    <marker id="arrowhead-active" markerWidth="12" markerHeight="12" refX="11" refY="6" orient="auto">
+      <polygon points="0 0, 12 6, 0 12" fill="#3498DB" />
+    </marker>
+    <marker id="arrowhead-standby" markerWidth="12" markerHeight="12" refX="11" refY="6" orient="auto">
+      <polygon points="0 0, 12 6, 0 12" fill="#95A5A6" />
+    </marker>
+    
+    <!-- Gradient definitions -->
+    <linearGradient id="github-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#24292E;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1A1F23;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="aws-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF9900;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#EC7211;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="ecr-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF9900;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#CC7700;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="alb-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#8C4FFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6A3BC2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="blue-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#3498DB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2980B9;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="green-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2ECC71;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#27AE60;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="ecs-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF7A00;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E06600;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="rds-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#527FFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3D5FC2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Title -->
+  <text x="800" y="50" text-anchor="middle" class="title-text">AWS ECS Blue-Green 배포 아키텍처</text>
+  
+  <!-- GitHub Actions Section -->
+  <rect x="50" y="120" width="300" height="280" fill="url(#github-gradient)" stroke="#000" stroke-width="3" rx="15"/>
+  <text x="200" y="155" text-anchor="middle" class="section-title">🔄 GitHub Actions</text>
+  <text x="200" y="175" text-anchor="middle" class="white-text">CI/CD Pipeline</text>
+  
+  <!-- Step 1: Code Push -->
+  <rect x="80" y="200" width="240" height="55" fill="#fff" stroke="#333" stroke-width="2" rx="8"/>
+  <text x="200" y="223" text-anchor="middle" class="component-title">① 코드 푸시 (git push)</text>
+  <text x="200" y="240" text-anchor="middle" class="small-text">main 브랜치 → Trigger</text>
+  
+  <!-- Step 2: Build & Test -->
+  <rect x="80" y="270" width="110" height="65" fill="#fff" stroke="#333" stroke-width="2" rx="8"/>
+  <text x="135" y="293" text-anchor="middle" class="component-title">② Build</text>
+  <text x="135" y="308" text-anchor="middle" class="detail-text">Gradle Build</text>
+  <text x="135" y="323" text-anchor="middle" class="small-text">Unit Test</text>
+  
+  <!-- Step 3: Docker Build & Push -->
+  <rect x="210" y="270" width="110" height="65" fill="#fff" stroke="#333" stroke-width="2" rx="8"/>
+  <text x="265" y="293" text-anchor="middle" class="component-title">③ Docker</text>
+  <text x="265" y="308" text-anchor="middle" class="detail-text">Build Image</text>
+  <text x="265" y="323" text-anchor="middle" class="small-text">Push to ECR</text>
+  
+  <!-- Step 4: Deploy -->
+  <rect x="80" y="350" width="240" height="35" fill="#2ECC71" stroke="#27AE60" stroke-width="2" rx="8"/>
+  <text x="200" y="373" text-anchor="middle" style="font-size: 13px; font-weight: bold; fill: #fff;">④ ECS 배포 트리거</text>
+  
+  <!-- AWS Cloud Container -->
+  <rect x="420" y="100" width="1130" height="860" fill="#FFF9F0" stroke="#FF9900" stroke-width="4" stroke-dasharray="10,5" rx="20"/>
+  <text x="985" y="140" text-anchor="middle" style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 28px; font-weight: bold; fill: #FF9900;">☁️ AWS Cloud (ap-northeast-2)</text>
+  
+  <!-- ECR Section -->
+  <rect x="480" y="180" width="240" height="150" fill="url(#ecr-gradient)" stroke="#CC7700" stroke-width="3" rx="12"/>
+  <text x="600" y="215" text-anchor="middle" class="section-title">📦 Amazon ECR</text>
+  <text x="600" y="235" text-anchor="middle" class="white-text">Container Registry</text>
+  <rect x="500" y="255" width="200" height="60" fill="rgba(255,255,255,0.3)" stroke="#fff" stroke-width="2" rx="6"/>
+  <text x="600" y="278" text-anchor="middle" class="white-text">library-management-system</text>
+  <text x="600" y="295" text-anchor="middle" class="white-text">🐳 Docker Images</text>
+  <text x="600" y="310" text-anchor="middle" style="font-size: 10px; fill: #fff;">v1, v2, v3...</text>
+  
+  <!-- Internet Users -->
+  <ellipse cx="985" cy="220" rx="85" ry="55" fill="#3498DB" stroke="#2980B9" stroke-width="3"/>
+  <text x="985" y="215" text-anchor="middle" style="font-size: 36px; fill: #fff;">🌐</text>
+  <text x="985" y="240" text-anchor="middle" class="section-title">Internet</text>
+  
+  <!-- Application Load Balancer -->
+  <rect x="860" y="330" width="250" height="120" fill="url(#alb-gradient)" stroke="#6A3BC2" stroke-width="3" rx="12"/>
+  <text x="985" y="365" text-anchor="middle" class="section-title">⚖️ Application Load Balancer</text>
+  <text x="985" y="390" text-anchor="middle" class="white-text">library-alb</text>
+  <text x="985" y="410" text-anchor="middle" class="white-text">HTTP: 80 → 8081</text>
+  <text x="985" y="430" text-anchor="middle" style="font-size: 11px; fill: #fff;">트래픽 분산 &amp; 라우팅</text>
+  
+  <!-- Target Group Blue -->
+  <rect x="750" y="510" width="180" height="100" fill="url(#blue-gradient)" stroke="#2980B9" stroke-width="3" rx="10"/>
+  <text x="840" y="540" text-anchor="middle" class="section-title">🔵 Blue Target Group</text>
+  <text x="840" y="565" text-anchor="middle" class="white-text">library-blue-tg</text>
+  <text x="840" y="585" text-anchor="middle" style="font-size: 11px; fill: #fff;">✅ 활성 트래픽 (100%)</text>
+  
+  <!-- Target Group Green -->
+  <rect x="1040" y="510" width="180" height="100" fill="url(#green-gradient)" stroke="#27AE60" stroke-width="3" rx="10"/>
+  <text x="1130" y="540" text-anchor="middle" class="section-title">🟢 Green Target Group</text>
+  <text x="1130" y="565" text-anchor="middle" class="white-text">library-green-tg</text>
+  <text x="1130" y="585" text-anchor="middle" style="font-size: 11px; fill: #fff;">⏸️ 대기 중 (0%)</text>
+  
+  <!-- ECS Cluster Container -->
+  <rect x="730" y="660" width="510" height="250" fill="#FFE8CC" stroke="#FF7A00" stroke-width="3" rx="15"/>
+  <text x="985" y="695" text-anchor="middle" style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 20px; font-weight: bold; fill: #FF7A00;">
+    🐳 Amazon ECS Cluster (Fargate)
+  </text>
+  <text x="985" y="715" text-anchor="middle" class="detail-text">library-management-cluster</text>
+  
+  <!-- Blue ECS Task -->
+  <rect x="770" y="740" width="180" height="150" fill="url(#ecs-gradient)" stroke="#CC5500" stroke-width="3" rx="10"/>
+  <text x="860" y="765" text-anchor="middle" class="section-title">Blue Task 🔵</text>
+  <rect x="785" y="775" width="150" height="105" fill="rgba(255,255,255,0.3)" stroke="#fff" stroke-width="2" rx="6"/>
+  <text x="860" y="795" text-anchor="middle" class="white-text">📦 library-app:v1</text>
+  <text x="860" y="815" text-anchor="middle" class="white-text">🔌 Port: 8081</text>
+  <text x="860" y="835" text-anchor="middle" class="white-text">💻 CPU: 512</text>
+  <text x="860" y="855" text-anchor="middle" class="white-text">💾 Memory: 1024MB</text>
+  <text x="860" y="872" text-anchor="middle" style="font-size: 10px; fill: #fff;">현재 운영 중</text>
+  
+  <!-- Green ECS Task -->
+  <rect x="1020" y="740" width="180" height="150" fill="url(#ecs-gradient)" stroke="#CC5500" stroke-width="3" rx="10"/>
+  <text x="1110" y="765" text-anchor="middle" class="section-title">Green Task 🟢</text>
+  <rect x="1035" y="775" width="150" height="105" fill="rgba(255,255,255,0.3)" stroke="#fff" stroke-width="2" rx="6"/>
+  <text x="1110" y="795" text-anchor="middle" class="white-text">📦 library-app:v2</text>
+  <text x="1110" y="815" text-anchor="middle" class="white-text">🔌 Port: 8081</text>
+  <text x="1110" y="835" text-anchor="middle" class="white-text">💻 CPU: 512</text>
+  <text x="1110" y="855" text-anchor="middle" class="white-text">💾 Memory: 1024MB</text>
+  <text x="1110" y="872" text-anchor="middle" style="font-size: 10px; fill: #fff;">새 버전 대기</text>
+  
+  <!-- RDS Database -->
+  <rect x="1300" y="660" width="210" height="140" fill="url(#rds-gradient)" stroke="#3D5FC2" stroke-width="3" rx="12"/>
+  <text x="1405" y="695" text-anchor="middle" class="section-title">🗄️ Amazon RDS</text>
+  <text x="1405" y="720" text-anchor="middle" class="white-text">MySQL 8.0</text>
+  <text x="1405" y="745" text-anchor="middle" class="white-text">library-db</text>
+  <text x="1405" y="765" text-anchor="middle" style="font-size: 11px; fill: #fff;">db.t3.micro</text>
+  <text x="1405" y="785" text-anchor="middle" style="font-size: 11px; fill: #fff;">Port: 3306</text>
+  
+  <!-- Security Groups -->
+  <rect x="480" y="660" width="200" height="140" fill="#ECF0F1" stroke="#95A5A6" stroke-width="3" rx="10"/>
+  <text x="580" y="690" text-anchor="middle" style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #34495E;">
+    🔐 Security Groups
+  </text>
+  <rect x="495" y="705" width="170" height="25" fill="#fff" stroke="#95A5A6" stroke-width="1" rx="4"/>
+  <text x="510" y="722" class="detail-text">library-alb-sg</text>
+  <rect x="495" y="735" width="170" height="25" fill="#fff" stroke="#95A5A6" stroke-width="1" rx="4"/>
+  <text x="510" y="752" class="detail-text">library-ecs-task-sg</text>
+  <rect x="495" y="765" width="170" height="25" fill="#fff" stroke="#95A5A6" stroke-width="1" rx="4"/>
+  <text x="510" y="782" class="detail-text">library-rds-sg</text>
+  
+  <!-- CloudWatch -->
+  <rect x="1300" y="840" width="210" height="100" fill="#FF4F8B" stroke="#C4405C" stroke-width="3" rx="12"/>
+  <text x="1405" y="875" text-anchor="middle" class="section-title">📊 CloudWatch</text>
+  <text x="1405" y="900" text-anchor="middle" class="white-text">Logs &amp; Metrics</text>
+  <text x="1405" y="920" text-anchor="middle" style="font-size: 11px; fill: #fff;">모니터링 &amp; 알람</text>
+  
+  <!-- Arrows and Flow -->
+  
+  <!-- GitHub to ECR -->
+  <path d="M 320 310 L 480 280" class="arrow-active" marker-end="url(#arrowhead-active)"/>
+  <text x="380" y="285" style="font-size: 12px; font-weight: bold; fill: #3498DB;">Push Image</text>
+  
+  <!-- Internet to ALB -->
+  <path d="M 985 275 L 985 330" class="arrow-active" marker-end="url(#arrowhead-active)"/>
+  <text x="1000" y="310" style="font-size: 12px; font-weight: bold; fill: #3498DB;">HTTP 요청</text>
+  
+  <!-- ALB to Blue TG (Active) -->
+  <path d="M 920 450 L 860 510" class="arrow-active" marker-end="url(#arrowhead-active)" stroke-width="5"/>
+  <text x="875" y="475" style="font-size: 13px; font-weight: bold; fill: #3498DB;">100%</text>
+  
+  <!-- ALB to Green TG (Standby) -->
+  <path d="M 1050 450 L 1110 510" class="arrow-standby" marker-end="url(#arrowhead-standby)"/>
+  <text x="1065" y="475" style="font-size: 13px; font-weight: bold; fill: #95A5A6;">0%</text>
+  
+  <!-- Blue TG to Blue Task -->
+  <path d="M 840 610 L 850 740" class="arrow-active" marker-end="url(#arrowhead-active)"/>
+  
+  <!-- Green TG to Green Task -->
+  <path d="M 1130 610 L 1120 740" class="arrow-standby" marker-end="url(#arrowhead-standby)"/>
+  
+  <!-- ECR to Blue Task -->
+  <path d="M 640 330 Q 700 480, 770 790" class="arrow" marker-end="url(#arrowhead)"/>
+  <text x="680" y="550" style="font-size: 11px; fill: #7F8C8D;">Pull v1</text>
+  
+  <!-- ECR to Green Task -->
+  <path d="M 680 330 Q 850 480, 1020 790" class="arrow" marker-end="url(#arrowhead)"/>
+  <text x="820" y="550" style="font-size: 11px; fill: #7F8C8D;">Pull v2</text>
+  
+  <!-- Tasks to RDS -->
+  <path d="M 950 815 L 1300 730" class="arrow" marker-end="url(#arrowhead)"/>
+  <text x="1100" y="760" style="font-size: 11px; fill: #7F8C8D;">MySQL</text>
+  
+  <path d="M 1200 815 L 1300 730" class="arrow" marker-end="url(#arrowhead)"/>
+  
+  <!-- Tasks to CloudWatch -->
+  <path d="M 1200 850 L 1300 880" class="arrow" marker-end="url(#arrowhead)"/>
+  <text x="1240" y="875" style="font-size: 11px; fill: #7F8C8D;">Logs</text>
+  
+  <!-- Legend -->
+  <rect x="50" y="920" width="320" height="60" fill="#fff" stroke="#333" stroke-width="2" rx="8"/>
+  <text x="60" y="940" style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #2C3E50;">
+    배포 플로우 범례:
+  </text>
+  <line x1="60" y1="955" x2="140" y2="955" class="arrow-active"/>
+  <text x="150" y="960" class="detail-text">활성 트래픽 (Blue)</text>
+  <line x1="60" y1="970" x2="140" y2="970" class="arrow-standby"/>
+  <text x="150" y="975" class="detail-text">대기 상태 (Green)</text>
+  
+  <!-- Description Box -->
+  <rect x="420" y="920" width="600" height="60" fill="#E8F4F8" stroke="#3498DB" stroke-width="2" rx="8"/>
+  <text x="430" y="940" style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; font-weight: bold; fill: #2C3E50;">
+    💡 Blue-Green 배포 전략:
+  </text>
+  <text x="430" y="960" class="detail-text">
+    ① Blue(v1) 버전이 현재 운영 중 (100% 트래픽)
+  </text>
+  <text x="430" y="975" class="detail-text">
+    ② Green(v2) 버전은 대기 중 → 테스트 완료 후 → 트래픽 전환 (0% → 100%)
+  </text>
+</svg>

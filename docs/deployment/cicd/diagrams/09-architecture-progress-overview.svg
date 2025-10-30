@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1400">
+  <defs>
+    <style>
+      .status-pending { fill: #ECEFF1; stroke: #90A4AE; stroke-width: 3; }
+      .status-progress { fill: #FFF9C4; stroke: #FBC02D; stroke-width: 3; }
+      .status-complete { fill: #C8E6C9; stroke: #43A047; stroke-width: 3; }
+      .layer-app { fill: #FFEBEE; stroke: #E74C3C; stroke-width: 3; }
+      .layer-platform { fill: #E3F2FD; stroke: #3498DB; stroke-width: 3; }
+      .layer-network { fill: #E8F5E9; stroke: #27AE60; stroke-width: 3; }
+      .text-title { fill: #2C3E50; font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; }
+      .text-desc { fill: #555; font-family: Arial, sans-serif; font-size: 13px; }
+      .text-small { fill: #777; font-family: Arial, sans-serif; font-size: 11px; }
+      .arrow { fill: none; stroke: #7F8C8D; stroke-width: 2; }
+      .arrow-dependency { fill: none; stroke: #E74C3C; stroke-width: 2.5; stroke-dasharray: 5,3; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#7F8C8D" />
+    </marker>
+    <marker id="arrowhead-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#E74C3C" />
+    </marker>
+  </defs>
+  
+  <!-- Main Title -->
+  <text x="900" y="50" text-anchor="middle" style="font-size: 36px; fill: #2C3E50; font-weight: bold;">
+    AWS ECS 배포 아키텍처 - 계층별 구성 현황
+  </text>
+  <text x="900" y="85" text-anchor="middle" style="font-size: 16px; fill: #7F8C8D;">
+    OSI 모델 기반 계층 구조 + 생성 순서 + 현재 진행 상황
+  </text>
+  
+  <!-- Progress Legend -->
+  <g transform="translate(100, 110)">
+    <text x="0" y="0" style="font-size: 16px; fill: #2C3E50; font-weight: bold;">진행 상황 범례:</text>
+    <rect x="0" y="10" width="120" height="30" class="status-pending" rx="5"/>
+    <text x="10" y="30" class="text-desc">시작 전</text>
+    
+    <rect x="140" y="10" width="120" height="30" class="status-progress" rx="5"/>
+    <text x="150" y="30" class="text-desc">진행 중</text>
+    
+    <rect x="280" y="10" width="120" height="30" class="status-complete" rx="5"/>
+    <text x="290" y="30" class="text-desc">완료</text>
+  </g>
+  
+  <!-- Left Side: OSI Layer Reference -->
+  <g transform="translate(50, 200)">
+    <rect width="350" height="1100" style="fill: #F8F9FA; stroke: #ADB5BD; stroke-width: 2;" rx="15"/>
+    <text x="175" y="40" text-anchor="middle" style="font-size: 20px; fill: #495057; font-weight: bold;">
+      OSI 7 Layer 참조
+    </text>
+    
+    <!-- Layer 7 -->
+    <g transform="translate(20, 70)">
+      <rect width="310" height="140" style="fill: #FFEBEE; stroke: #E57373; stroke-width: 2;" rx="8"/>
+      <text x="15" y="25" style="font-size: 16px; fill: #C62828; font-weight: bold;">Layer 7: Application</text>
+      <text x="15" y="45" class="text-small">사용자 인터페이스</text>
+      <text x="15" y="62" class="text-small">HTTP, DNS, FTP</text>
+      <text x="15" y="85" class="text-desc" style="fill: #E74C3C; font-weight: bold;">대응하는 AWS 리소스</text>
+      <text x="15" y="105" class="text-small" style="fill: #E74C3C;">- ECS Task Definition</text>
+      <text x="15" y="122" class="text-small" style="fill: #E74C3C;">- ECS Service</text>
+    </g>
+    
+    <!-- Layer 4-6 -->
+    <g transform="translate(20, 230)">
+      <rect width="310" height="290" style="fill: #E3F2FD; stroke: #64B5F6; stroke-width: 2;" rx="8"/>
+      <text x="15" y="25" style="font-size: 16px; fill: #1976D2; font-weight: bold;">Layer 4-6: Transport~Presentation</text>
+      <text x="15" y="45" class="text-small">전송/세션/표현 계층</text>
+      <text x="15" y="62" class="text-small">TCP/UDP, TLS/SSL</text>
+      <text x="15" y="85" class="text-desc" style="fill: #3498DB; font-weight: bold;">대응하는 AWS 리소스</text>
+      <text x="15" y="105" class="text-small" style="fill: #3498DB;">- ECS Cluster (Fargate)</text>
+      <text x="15" y="122" class="text-small" style="fill: #3498DB;">- ECR (Container Registry)</text>
+      <text x="15" y="139" class="text-small" style="fill: #3498DB;">- CodeDeploy</text>
+      <text x="15" y="156" class="text-small" style="fill: #3498DB;">- IAM Roles</text>
+      <text x="15" y="173" class="text-small" style="fill: #3498DB;">- CloudWatch Logs</text>
+      <text x="15" y="190" class="text-small" style="fill: #3498DB;">- Parameter Store</text>
+      <text x="15" y="207" class="text-small" style="fill: #3498DB;">- RDS (Database)</text>
+      <text x="15" y="224" class="text-small" style="fill: #3498DB;">- S3 (CodeDeploy Files)</text>
+      <text x="15" y="241" class="text-small" style="fill: #3498DB;">- SNS (Notifications)</text>
+      <text x="15" y="258" class="text-small" style="fill: #3498DB;">- Target Groups (Blue/Green)</text>
+      <text x="15" y="275" class="text-small" style="fill: #3498DB;">- CloudWatch Alarms</text>
+    </g>
+    
+    <!-- Layer 1-3 -->
+    <g transform="translate(20, 540)">
+      <rect width="310" height="230" style="fill: #E8F5E9; stroke: #4DB6AC; stroke-width: 2;" rx="8"/>
+      <text x="15" y="25" style="font-size: 16px; fill: #2E7D32; font-weight: bold;">Layer 1-3: Physical~Network</text>
+      <text x="15" y="45" class="text-small">물리/데이터링크/네트워크</text>
+      <text x="15" y="62" class="text-small">IP, Ethernet, Router</text>
+      <text x="15" y="85" class="text-desc" style="fill: #27AE60; font-weight: bold;">대응하는 AWS 리소스</text>
+      <text x="15" y="105" class="text-small" style="fill: #27AE60;">- VPC (Virtual Private Cloud)</text>
+      <text x="15" y="122" class="text-small" style="fill: #27AE60;">- Subnets (Public/Private)</text>
+      <text x="15" y="139" class="text-small" style="fill: #27AE60;">- Internet Gateway</text>
+      <text x="15" y="156" class="text-small" style="fill: #27AE60;">- NAT Gateway</text>
+      <text x="15" y="173" class="text-small" style="fill: #27AE60;">- Route Tables</text>
+      <text x="15" y="190" class="text-small" style="fill: #27AE60;">- Security Groups</text>
+      <text x="15" y="207" class="text-small" style="fill: #27AE60;">- ALB (Load Balancer)</text>
+    </g>
+    
+    <!-- OSI Flow -->
+    <g transform="translate(20, 790)">
+      <rect width="310" height="280" style="fill: #FFF9C4; stroke: #FBC02D; stroke-width: 2;" rx="8"/>
+      <text x="155" y="25" text-anchor="middle" style="font-size: 16px; fill: #F57C00; font-weight: bold;">OSI 계층 흐름</text>
+      <text x="15" y="55" class="text-desc">1. 사용자 to Layer 7</text>
+      <text x="25" y="75" class="text-small">웹 브라우저에서 요청</text>
+      
+      <text x="15" y="100" class="text-desc">2. Layer 7 to Layer 4</text>
+      <text x="25" y="120" class="text-small">HTTP to TCP 변환</text>
+      
+      <text x="15" y="145" class="text-desc">3. Layer 4 to Layer 3</text>
+      <text x="25" y="165" class="text-small">TCP to IP 패킷화</text>
+      
+      <text x="15" y="190" class="text-desc">4. Layer 3 to Layer 2</text>
+      <text x="25" y="210" class="text-small">IP to MAC 주소 변환</text>
+      
+      <text x="15" y="235" class="text-desc">5. Layer 2 to Layer 1</text>
+      <text x="25" y="255" class="text-small">프레임 to 전기신호</text>
+    </g>
+  </g>
+  
+  <!-- Right Side: AWS Architecture with Order -->
+  <g transform="translate(450, 200)">
+    <!-- Title -->
+    <text x="600" y="0" text-anchor="middle" style="font-size: 24px; fill: #FF9900; font-weight: bold;">
+      AWS 리소스 생성 순서 및 계층 구조
+    </text>
+    <text x="600" y="25" text-anchor="middle" class="text-desc">
+      하위 계층부터 순차적으로 생성 (의존성 기반)
+    </text>
+    
+    <!-- INFRASTRUCTURE LAYER (Layer 1-3) -->
+    <g transform="translate(0, 60)">
+      <rect width="1200" height="380" class="layer-network" rx="15"/>
+      <text x="20" y="35" style="font-size: 22px; fill: #27AE60; font-weight: bold;">
+        Infrastructure Layer (OSI Layer 1-3 대응)
+      </text>
+      <text x="20" y="60" class="text-desc" style="fill: #27AE60;">
+        네트워크 인프라 기반 - 가장 먼저 생성해야 함
+      </text>
+      
+      <!-- Phase 1: IAM -->
+      <g transform="translate(30, 80)">
+        <rect width="250" height="110" class="status-pending" rx="8"/>
+        <text x="10" y="25" style="font-size: 16px; fill: #E74C3C; font-weight: bold;">Phase 1: IAM 설정</text>
+        <text x="10" y="45" class="text-small">생성 순서: 1번</text>
+        <text x="10" y="63" class="text-small">- GitHub Actions IAM User</text>
+        <text x="10" y="80" class="text-small">- ECS Task Execution Role</text>
+        <text x="10" y="97" class="text-small">- CodeDeploy Service Role</text>
+      </g>
+      
+      <!-- Phase 3: Network -->
+      <g transform="translate(310, 80)">
+        <rect width="290" height="110" class="status-pending" rx="8"/>
+        <text x="10" y="25" style="font-size: 16px; fill: #E74C3C; font-weight: bold;">Phase 3: 네트워크 설정</text>
+        <text x="10" y="45" class="text-small">생성 순서: 2번</text>
+        <text x="10" y="63" class="text-small">- VPC (10.0.0.0/16)</text>
+        <text x="10" y="80" class="text-small">- Subnets (Public x2, Private x2)</text>
+        <text x="10" y="97" class="text-small">- IGW, NAT, Route Tables</text>
+      </g>
+      
+      <!-- RDS Database -->
+      <g transform="translate(630, 80)">
+        <rect width="250" height="110" class="status-pending" rx="8"/>
+        <text x="10" y="25" style="font-size: 16px; fill: #E74C3C; font-weight: bold;">데이터베이스</text>
+        <text x="10" y="45" class="text-small">생성 순서: 3번</text>
+        <text x="10" y="63" class="text-small">- RDS MySQL 8.0</text>
+        <text x="10" y="80" class="text-small">- Private Subnet 배치</text>
+        <text x="10" y="97" class="text-small">- library-rds-sg</text>
+      </g>
+      
+      <!-- Security Groups -->
+      <g transform="translate(910, 80)">
+        <rect width="250" height="110" class="status-pending" rx="8"/>
+        <text x="10" y="25" style="font-size: 16px; fill: #E74C3C; font-weight: bold;">보안 그룹</text>
+        <text x="10" y="45" class="text-small">생성 순서: 4번</text>
+        <text x="10" y="63" class="text-small">- library-alb-sg (80)</text>
+        <text x="10" y="80" class="text-small">- library-ecs-task-sg (8081)</text>
+        <text x="10" y="97" class="text-small">- library-rds-sg (3306)</text>
+      </g>
+      
+      <!-- Phase 4: ALB -->
+      <g transform="translate(30, 210)">
+        <rect width="540" height="110" class="status-pending" rx="8"/>
+        <text x="10" y="25" style="font-size: 16px; fill: #E74C3C; font-weight: bold;">Phase 4: ALB 설정</text>
+        <text x="10" y="45" class="text-small">생성 순서: 5번</text>
+        <text x="10" y="63" class="text-small">- Application Load Balancer (library-alb)</text>
+        <text x="10" y="80" class="text-small">- Target Group Blue (library-blue-tg)</text>
+        <text x="10" y="97" class="text-small">- Target Group Green (library-green-tg)</text>
+      </g>
+      
+      <!-- Additional Network Resources -->
+      <g transform="translate(600, 210)">
+        <rect width="560" height="110" class="status-pending" rx="8"/>
+        <text x="10" y="25" style="font-size: 16px; fill: #E74C3C; font-weight: bold;">기타 네트워크 리소스</text>
+        <text x="10" y="45" class="text-small">생성 순서: 병렬 가능</text>
+        <text x="10" y="63" class="text-small">- CloudWatch Log Groups - Parameter Store (DB 정보)</text>
+        <text x="10" y="80" class="text-small">- S3 Bucket (CodeDeploy 파일 저장용)</text>
+        <text x="10" y="97" class="text-small">- SNS Topic (배포 알림용)</text>
+      </g>
+    </g>
+    
+    <!-- PLATFORM LAYER (Layer 4-6) -->
+    <g transform="translate(0, 470)">
+      <rect width="1200" height="300" class="layer-platform" rx="15"/>
+      <text x="20" y="35" style="font-size: 22px; fill: #3498DB; font-weight: bold;">
+        Platform Layer (OSI Layer 4-6 대응)
+      </text>
+      <text x="20" y="60" class="text-desc" style="fill: #3498DB;">
+        컨테이너 실행 플랫폼 - Infrastructure Layer 이후 생성
+      </text>
+      
+      <!-- Phase 2: ECR -->
+      <g transform="translate(30, 80)">
+        <rect width="350" height="160" class="status-pending" rx="8"/>
+        <text x="10" y="25" style="font-size: 16px; fill: #E74C3C; font-weight: bold;">Phase 2: ECR 설정</text>
+        <text x="10" y="45" class="text-small">생성 순서: 6번 (독립적)</text>
+        <text x="10" y="63" class="text-small">- ECR Repository 생성</text>
+        <text x="10" y="80" class="text-small">  library-management-system</text>
+        <text x="10" y="97" class="text-small">- Docker Image Push</text>
+        <text x="10" y="114" class="text-small">- 이미지 태그: latest, v1.0.0</text>
+        <text x="10" y="131" class="text-small">- 취약점 스캔 설정</text>
+      </g>
+      
+      <!-- Phase 5: ECS -->
+      <g transform="translate(410, 80)">
+        <rect width="360" height="160" class="status-pending" rx="8"/>
+        <text x="10" y="25" style="font-size: 16px; fill: #E74C3C; font-weight: bold;">Phase 5: ECS 설정</text>
+        <text x="10" y="45" class="text-small">생성 순서: 7번</text>
+        <text x="10" y="63" class="text-small">- ECS Cluster (Fargate)</text>
+        <text x="10" y="80" class="text-small">  library-management-cluster</text>
+        <text x="10" y="97" class="text-small">- Task Definition</text>
+        <text x="10" y="114" class="text-small">  CPU: 512, Memory: 1024</text>
+        <text x="10" y="131" class="text-small">- ECS Service (Blue)</text>
+        <text x="10" y="148" class="text-small">  Desired Count: 2</text>
+      </g>
+      
+      <!-- Phase 6: CodeDeploy -->
+      <g transform="translate(800, 80)">
+        <rect width="370" height="160" class="status-pending" rx="8"/>
+        <text x="10" y="25" style="font-size: 16px; fill: #E74C3C; font-weight: bold;">Phase 6: CodeDeploy 설정</text>
+        <text x="10" y="45" class="text-small">생성 순서: 8번</text>
+        <text x="10" y="63" class="text-small">- CodeDeploy Application</text>
+        <text x="10" y="80" class="text-small">- Deployment Group</text>
+        <text x="10" y="97" class="text-small">- Blue/Green 배포 설정</text>
+        <text x="10" y="114" class="text-small">- appspec.yml 구성</text>
+        <text x="10" y="131" class="text-small">- Deployment Config</text>
+        <text x="10" y="148" class="text-small">  (트래픽 전환 방식)</text>
+      </g>
+    </g>
+    
+    <!-- APPLICATION LAYER (Layer 7) -->
+    <g transform="translate(0, 800)">
+      <rect width="1200" height="230" class="layer-app" rx="15"/>
+      <text x="20" y="35" style="font-size: 22px; fill: #E74C3C; font-weight: bold;">
+        Application Layer (OSI Layer 7 대응)
+      </text>
+      <text x="20" y="60" class="text-desc" style="fill: #E74C3C;">
+        애플리케이션 배포 및 운영 - Platform Layer 이후 실행
+      </text>
+      
+      <!-- GitHub Actions CI/CD -->
+      <g transform="translate(30, 80)">
+        <rect width="370" height="100" class="status-pending" rx="8"/>
+        <text x="10" y="25" style="font-size: 16px; fill: #E74C3C; font-weight: bold;">GitHub Actions CI/CD</text>
+        <text x="10" y="45" class="text-small">실행 순서: 9번 (자동화)</text>
+        <text x="10" y="63" class="text-small">- Code Push - Build - Test</text>
+        <text x="10" y="80" class="text-small">- Docker Build - ECR Push</text>
+      </g>
+      
+      <!-- Blue-Green Deployment -->
+      <g transform="translate(430, 80)">
+        <rect width="370" height="100" class="status-pending" rx="8"/>
+        <text x="10" y="25" style="font-size: 16px; fill: #E74C3C; font-weight: bold;">Blue-Green 배포</text>
+        <text x="10" y="45" class="text-small">실행 순서: 10번 (자동)</text>
+        <text x="10" y="63" class="text-small">- Green 환경에 새 버전 배포</text>
+        <text x="10" y="80" class="text-small">- 트래픽 전환 Blue - Green</text>
+      </g>
+      
+      <!-- Phase 7: Monitoring -->
+      <g transform="translate(830, 80)">
+        <rect width="340" height="100" class="status-pending" rx="8"/>
+        <text x="10" y="25" style="font-size: 16px; fill: #E74C3C; font-weight: bold;">Phase 7: 모니터링</text>
+        <text x="10" y="45" class="text-small">설정 순서: 11번</text>
+        <text x="10" y="63" class="text-small">- CloudWatch Alarms</text>
+        <text x="10" y="80" class="text-small">- SNS 알림 연결</text>
+      </g>
+    </g>
+  </g>
+  
+  <!-- Dependency Arrows -->
+  <line x1="675" y1="360" x2="675" y2="670" class="arrow-dependency" marker-end="url(#arrowhead-red)"/>
+  <text x="690" y="520" class="text-small" style="fill: #E74C3C; font-weight: bold;">의존성</text>
+  
+  <line x1="1050" y1="770" x2="1050" y2="1000" class="arrow-dependency" marker-end="url(#arrowhead-red)"/>
+  <text x="1065" y="890" class="text-small" style="fill: #E74C3C; font-weight: bold;">의존성</text>
+  
+  <!-- Summary Box -->
+  <g transform="translate(50, 1250)">
+    <rect width="1700" height="110" style="fill: #FFF9C4; stroke: #FBC02D; stroke-width: 3;" rx="12"/>
+    <text x="850" y="30" text-anchor="middle" style="font-size: 20px; fill: #F57C00; font-weight: bold;">
+      핵심 포인트: 계층별 의존성과 생성 순서
+    </text>
+    <text x="30" y="60" class="text-desc">
+      1. Infrastructure Layer (하위)를 먼저 구축 - VPC, 네트워크, IAM, 보안 그룹 등
+    </text>
+    <text x="30" y="82" class="text-desc">
+      2. Platform Layer (중간)을 그 위에 구축 - ECR, ECS Cluster, CodeDeploy 등
+    </text>
+    <text x="30" y="95" class="text-desc">
+      3. Application Layer (상위)는 마지막에 배포 - GitHub Actions CI/CD, 실제 애플리케이션 실행
+    </text>
+  </g>
+  
+  <!-- Footer -->
+  <text x="1750" y="1390" text-anchor="end" class="text-small" style="fill: #95A5A6;">
+    AWS ECS Architecture Progress Overview - 2025-10-27
+  </text>
+</svg>

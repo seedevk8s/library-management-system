@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1100">
+  <defs>
+    <style>
+      .sg-box { stroke: #333; stroke-width: 3; }
+      .sg-alb { fill: #8C4FFF; }
+      .sg-ecs { fill: #FF7A00; }
+      .sg-rds { fill: #00758F; }
+      .component { fill: #fff; stroke: #666; stroke-width: 2; }
+      .user { fill: #3498DB; stroke: #2980B9; stroke-width: 2; }
+      .source-box { fill: #FFF3CD; stroke: #FFC107; stroke-width: 2; }
+      .text-white { fill: #fff; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; }
+      .text-title { fill: #333; font-family: Arial, sans-serif; font-size: 20px; font-weight: bold; }
+      .text-desc { fill: #666; font-family: Arial, sans-serif; font-size: 12px; }
+      .arrow { fill: none; stroke-width: 4; }
+      .arrow-red { stroke: #E74C3C; }
+      .arrow-orange { stroke: #FF8C00; }
+      .arrow-blue { stroke: #3498DB; }
+      .highlight { fill: #FFEB3B; opacity: 0.3; }
+    </style>
+    <marker id="arrow-red" markerWidth="12" markerHeight="12" refX="10" refY="3" orient="auto">
+      <polygon points="0 0, 12 3, 0 6" fill="#E74C3C" />
+    </marker>
+    <marker id="arrow-orange" markerWidth="12" markerHeight="12" refX="10" refY="3" orient="auto">
+      <polygon points="0 0, 12 3, 0 6" fill="#FF8C00" />
+    </marker>
+    <marker id="arrow-blue" markerWidth="12" markerHeight="12" refX="10" refY="3" orient="auto">
+      <polygon points="0 0, 12 3, 0 6" fill="#3498DB" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="800" y="40" text-anchor="middle" class="text-title" style="font-size: 32px;">
+    🔐 보안 그룹 완벽 이해 가이드
+  </text>
+  <text x="800" y="70" text-anchor="middle" class="text-desc" style="font-size: 18px; fill: #E74C3C; font-weight: bold;">
+    "소스(Source)"의 의미와 보안 그룹 간 연결 관계
+  </text>
+  
+  <!-- Internet Users -->
+  <g transform="translate(80, 180)">
+    <ellipse cx="60" cy="60" rx="60" ry="50" class="user"/>
+    <text x="60" y="50" text-anchor="middle" style="font-size: 36px; fill: #fff;">🌐</text>
+    <text x="60" y="75" text-anchor="middle" class="text-white">Internet</text>
+    <text x="60" y="95" text-anchor="middle" style="font-size: 12px; fill: #fff;">모든 사용자</text>
+    <text x="60" y="140" text-anchor="middle" style="font-size: 11px; fill: #666; font-weight: bold;">소스: 0.0.0.0/0</text>
+    <text x="60" y="155" text-anchor="middle" style="font-size: 10px; fill: #999;">(전세계 모든 IP)</text>
+  </g>
+  
+  <!-- Security Group 1: ALB -->
+  <g transform="translate(240, 130)">
+    <rect width="340" height="280" class="sg-box sg-alb" rx="15"/>
+    
+    <!-- Title -->
+    <text x="170" y="35" text-anchor="middle" class="text-white" style="font-size: 20px;">
+      ① Security Group
+    </text>
+    <text x="170" y="60" text-anchor="middle" class="text-white" style="font-size: 18px; font-weight: bold;">
+      library-alb-sg
+    </text>
+    
+    <!-- Component -->
+    <rect x="50" y="85" width="240" height="100" class="component" rx="8"/>
+    <text x="170" y="115" text-anchor="middle" style="font-size: 16px; fill: #000; font-weight: bold;">
+      Application Load Balancer
+    </text>
+    <text x="170" y="140" text-anchor="middle" style="font-size: 13px; fill: #666;">
+      (사용자 요청을 받는 입구)
+    </text>
+    <text x="170" y="165" text-anchor="middle" style="font-size: 12px; fill: #666;">
+      리스닝 포트: 80, 443
+    </text>
+    
+    <!-- Inbound Rules Box -->
+    <rect x="15" y="200" width="310" height="65" class="source-box" rx="8"/>
+    <text x="25" y="220" style="font-size: 13px; fill: #333; font-weight: bold;">📥 Inbound Rule (들어오는 규칙)</text>
+    <text x="25" y="240" style="font-size: 12px; fill: #333;">✓ 포트: HTTP(80), HTTPS(443)</text>
+    <text x="25" y="260" style="font-size: 12px; fill: #333;">✓ 소스: <tspan style="font-weight: bold; fill: #E74C3C;">0.0.0.0/0</tspan> (인터넷 어디서든 OK)</text>
+  </g>
+  
+  <!-- Arrow 1: Internet to ALB -->
+  <path d="M 200 240 L 240 240" class="arrow arrow-red" marker-end="url(#arrow-red)"/>
+  <rect x="155" y="195" width="90" height="50" style="fill: #fff; stroke: #E74C3C; stroke-width: 2;" rx="5"/>
+  <text x="200" y="213" text-anchor="middle" style="font-size: 12px; fill: #E74C3C; font-weight: bold;">
+    HTTP/HTTPS
+  </text>
+  <text x="200" y="228" text-anchor="middle" style="font-size: 11px; fill: #E74C3C;">
+    Port 80, 443
+  </text>
+  <text x="200" y="241" text-anchor="middle" style="font-size: 9px; fill: #999;">
+    누구나 접근 가능
+  </text>
+  
+  <!-- Security Group 2: ECS -->
+  <g transform="translate(660, 130)">
+    <rect width="340" height="280" class="sg-box sg-ecs" rx="15"/>
+    
+    <!-- Title -->
+    <text x="170" y="35" text-anchor="middle" class="text-white" style="font-size: 20px;">
+      ② Security Group
+    </text>
+    <text x="170" y="60" text-anchor="middle" class="text-white" style="font-size: 18px; font-weight: bold;">
+      library-ecs-task-sg
+    </text>
+    
+    <!-- Component -->
+    <rect x="50" y="85" width="240" height="100" class="component" rx="8"/>
+    <text x="170" y="115" text-anchor="middle" style="font-size: 16px; fill: #000; font-weight: bold;">
+      ECS Tasks
+    </text>
+    <text x="170" y="140" text-anchor="middle" style="font-size: 13px; fill: #666;">
+      (Spring Boot 애플리케이션)
+    </text>
+    <text x="170" y="165" text-anchor="middle" style="font-size: 12px; fill: #666;">
+      리스닝 포트: 8081
+    </text>
+    
+    <!-- Inbound Rules Box -->
+    <rect x="15" y="200" width="310" height="65" class="source-box" rx="8"/>
+    <text x="25" y="220" style="font-size: 13px; fill: #333; font-weight: bold;">📥 Inbound Rule (들어오는 규칙)</text>
+    <text x="25" y="240" style="font-size: 12px; fill: #333;">✓ 포트: TCP 8081</text>
+    <text x="25" y="260" style="font-size: 12px; fill: #333;">✓ 소스: <tspan style="font-weight: bold; fill: #FF8C00;">library-alb-sg</tspan> (ALB만 접근 가능)</text>
+  </g>
+  
+  <!-- Arrow 2: ALB to ECS -->
+  <path d="M 580 270 L 660 270" class="arrow arrow-orange" marker-end="url(#arrow-orange)"/>
+  <rect x="575" y="225" width="90" height="50" style="fill: #fff; stroke: #FF8C00; stroke-width: 2;" rx="5"/>
+  <text x="620" y="243" text-anchor="middle" style="font-size: 12px; fill: #FF8C00; font-weight: bold;">
+    HTTP
+  </text>
+  <text x="620" y="258" text-anchor="middle" style="font-size: 11px; fill: #FF8C00;">
+    Port 8081
+  </text>
+  <text x="620" y="271" text-anchor="middle" style="font-size: 9px; fill: #999;">
+    ALB만 가능
+  </text>
+  
+  <!-- Security Group 3: RDS -->
+  <g transform="translate(1080, 130)">
+    <rect width="340" height="280" class="sg-box sg-rds" rx="15"/>
+    
+    <!-- Title -->
+    <text x="170" y="35" text-anchor="middle" class="text-white" style="font-size: 20px;">
+      ③ Security Group
+    </text>
+    <text x="170" y="60" text-anchor="middle" class="text-white" style="font-size: 18px; font-weight: bold;">
+      library-rds-sg
+    </text>
+    
+    <!-- Component -->
+    <rect x="50" y="85" width="240" height="100" class="component" rx="8"/>
+    <text x="170" y="115" text-anchor="middle" style="font-size: 16px; fill: #000; font-weight: bold;">
+      RDS MySQL
+    </text>
+    <text x="170" y="140" text-anchor="middle" style="font-size: 13px; fill: #666;">
+      (데이터베이스)
+    </text>
+    <text x="170" y="165" text-anchor="middle" style="font-size: 12px; fill: #666;">
+      리스닝 포트: 3306
+    </text>
+    
+    <!-- Inbound Rules Box -->
+    <rect x="15" y="200" width="310" height="65" class="source-box" rx="8"/>
+    <text x="25" y="220" style="font-size: 13px; fill: #333; font-weight: bold;">📥 Inbound Rule (들어오는 규칙)</text>
+    <text x="25" y="240" style="font-size: 12px; fill: #333;">✓ 포트: MySQL 3306</text>
+    <text x="25" y="260" style="font-size: 12px; fill: #333;">✓ 소스: <tspan style="font-weight: bold; fill: #3498DB;">library-ecs-task-sg</tspan> (ECS만 접근 가능)</text>
+  </g>
+  
+  <!-- Arrow 3: ECS to RDS -->
+  <path d="M 1000 270 L 1080 270" class="arrow arrow-blue" marker-end="url(#arrow-blue)"/>
+  <rect x="995" y="225" width="90" height="50" style="fill: #fff; stroke: #3498DB; stroke-width: 2;" rx="5"/>
+  <text x="1040" y="243" text-anchor="middle" style="font-size: 12px; fill: #3498DB; font-weight: bold;">
+    MySQL
+  </text>
+  <text x="1040" y="258" text-anchor="middle" style="font-size: 11px; fill: #3498DB;">
+    Port 3306
+  </text>
+  <text x="1040" y="271" text-anchor="middle" style="font-size: 9px; fill: #999;">
+    ECS만 가능
+  </text>
+  
+  <!-- Key Concept Section -->
+  <g transform="translate(40, 460)">
+    <rect width="1520" height="600" style="fill: #F8F9FA; stroke: #DEE2E6; stroke-width: 3;" rx="15"/>
+    
+    <text x="760" y="40" text-anchor="middle" style="font-size: 26px; fill: #333; font-weight: bold;">
+      💡 핵심 개념: "소스(Source)"가 뭔가요?
+    </text>
+    
+    <!-- Concept 1 -->
+    <g transform="translate(40, 70)">
+      <rect width="1440" height="110" style="fill: #E3F2FD; stroke: #2196F3; stroke-width: 2;" rx="10"/>
+      <text x="20" y="30" style="font-size: 20px; fill: #1976D2; font-weight: bold;">
+        1️⃣ 소스 = "누구한테서 오는 트래픽을 허용할 것인가?"
+      </text>
+      <text x="40" y="60" style="font-size: 15px; fill: #333;">
+        • <tspan style="font-weight: bold;">0.0.0.0/0</tspan> → 전세계 모든 IP 주소 허용 (인터넷 공개)
+      </text>
+      <text x="40" y="85" style="font-size: 15px; fill: #333;">
+        • <tspan style="font-weight: bold;">library-alb-sg</tspan> → library-alb-sg 보안 그룹이 붙은 리소스(ALB)에서만 허용
+      </text>
+    </g>
+    
+    <!-- Concept 2 -->
+    <g transform="translate(40, 200)">
+      <rect width="1440" height="140" style="fill: #FFF3E0; stroke: #FF9800; stroke-width: 2;" rx="10"/>
+      <text x="20" y="30" style="font-size: 20px; fill: #E65100; font-weight: bold;">
+        2️⃣ 왜 이렇게 체인으로 연결했나요? (보안 강화)
+      </text>
+      <text x="40" y="60" style="font-size: 15px; fill: #333;">
+        <tspan style="font-weight: bold; fill: #E74C3C;">❌ 나쁜 예:</tspan> RDS를 0.0.0.0/0으로 열면 → 전세계 누구나 DB 접근 가능 (해킹 위험!)
+      </text>
+      <text x="40" y="85" style="font-size: 15px; fill: #333;">
+        <tspan style="font-weight: bold; fill: #4CAF50;">✅ 좋은 예:</tspan> RDS는 ECS에서만 접근 가능 → 다른 곳에서는 절대 접근 불가 (안전!)
+      </text>
+      <text x="40" y="115" style="font-size: 15px; fill: #666; font-style: italic;">
+        💡 즉, 계층별로 필요한 곳에서만 접근하도록 제한하는 것이 핵심입니다.
+      </text>
+    </g>
+    
+    <!-- Concept 3: Flow Diagram -->
+    <g transform="translate(40, 360)">
+      <rect width="1440" height="210" style="fill: #F3E5F5; stroke: #9C27B0; stroke-width: 2;" rx="10"/>
+      <text x="20" y="30" style="font-size: 20px; fill: #6A1B9A; font-weight: bold;">
+        3️⃣ 트래픽 흐름 단계별 정리
+      </text>
+      
+      <!-- Step 1 -->
+      <g transform="translate(20, 50)">
+        <circle cx="15" cy="15" r="15" style="fill: #E74C3C;"/>
+        <text x="15" y="20" text-anchor="middle" style="font-size: 14px; fill: #fff; font-weight: bold;">1</text>
+        <text x="40" y="20" style="font-size: 15px; fill: #333; font-weight: bold;">
+          인터넷 사용자 → ALB (Port 80, 443)
+        </text>
+        <text x="60" y="42" style="font-size: 13px; fill: #666;">
+          누구나 웹사이트에 접속할 수 있어야 하므로 <tspan style="font-weight: bold; fill: #E74C3C;">0.0.0.0/0</tspan> 허용
+        </text>
+      </g>
+      
+      <!-- Step 2 -->
+      <g transform="translate(20, 100)">
+        <circle cx="15" cy="15" r="15" style="fill: #FF8C00;"/>
+        <text x="15" y="20" text-anchor="middle" style="font-size: 14px; fill: #fff; font-weight: bold;">2</text>
+        <text x="40" y="20" style="font-size: 15px; fill: #333; font-weight: bold;">
+          ALB → ECS Tasks (Port 8081)
+        </text>
+        <text x="60" y="42" style="font-size: 13px; fill: #666;">
+          ALB가 요청을 애플리케이션에 전달. <tspan style="font-weight: bold; fill: #FF8C00;">library-alb-sg</tspan>만 허용 (다른 곳에서는 차단)
+        </text>
+      </g>
+      
+      <!-- Step 3 -->
+      <g transform="translate(20, 150)">
+        <circle cx="15" cy="15" r="15" style="fill: #3498DB;"/>
+        <text x="15" y="20" text-anchor="middle" style="font-size: 14px; fill: #fff; font-weight: bold;">3</text>
+        <text x="40" y="20" style="font-size: 15px; fill: #333; font-weight: bold;">
+          ECS Tasks → RDS (Port 3306)
+        </text>
+        <text x="60" y="42" style="font-size: 13px; fill: #666;">
+          애플리케이션이 DB에 쿼리. <tspan style="font-weight: bold; fill: #3498DB;">library-ecs-task-sg</tspan>만 허용 (직접 접근 차단)
+        </text>
+      </g>
+    </g>
+  </g>
+  
+  <!-- Summary Box -->
+  <rect x="40" y="1010" width="1520" height="60" style="fill: #4CAF50; stroke: #2E7D32; stroke-width: 2;" rx="10"/>
+  <text x="800" y="1037" text-anchor="middle" style="font-size: 18px; fill: #fff; font-weight: bold;">
+    📌 결론: 각 보안 그룹은 "이전 단계에서만" 접근을 허용하여 보안을 강화합니다!
+  </text>
+  <text x="800" y="1058" text-anchor="middle" style="font-size: 14px; fill: #fff;">
+    Internet → ALB → ECS → RDS 순서로만 접근 가능하며, 단계를 건너뛰거나 역방향 접근은 불가능합니다.
+  </text>
+</svg>
