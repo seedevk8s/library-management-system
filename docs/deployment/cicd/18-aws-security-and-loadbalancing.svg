@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800">
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 24px; font-weight: bold; fill: #232F3E; }
+      .subtitle { font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #232F3E; }
+      .text { font-family: Arial, sans-serif; font-size: 14px; fill: #232F3E; }
+      .small-text { font-family: Arial, sans-serif; font-size: 12px; fill: #545B64; }
+      .box { fill: #FFFFFF; stroke: #232F3E; stroke-width: 2; }
+      .sg-box { fill: #E8F4F8; stroke: #FF9900; stroke-width: 2; }
+      .alb-box { fill: #FFF4E6; stroke: #FF9900; stroke-width: 2; }
+      .tg-box { fill: #E6F2FF; stroke: #0073BB; stroke-width: 2; }
+      .arrow { fill: none; stroke: #545B64; stroke-width: 2; marker-end: url(#arrowhead); }
+      .arrow-primary { fill: none; stroke: #FF9900; stroke-width: 3; marker-end: url(#arrowhead-primary); }
+      .section-bg { fill: #F7F9FA; stroke: #AAB7B8; stroke-width: 1; stroke-dasharray: 5,5; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#545B64" />
+    </marker>
+    <marker id="arrowhead-primary" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#FF9900" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="40" text-anchor="middle" class="title">AWS 배포 구성 요소의 유기적 관계</text>
+  <text x="500" y="65" text-anchor="middle" class="small-text">보안 그룹 - 로드밸런서 - 대상 그룹</text>
+
+  <!-- Section 1: 보안 그룹 (Security Groups) -->
+  <rect x="50" y="100" width="280" height="350" class="section-bg" rx="5"/>
+  <text x="190" y="130" text-anchor="middle" class="subtitle">보안 그룹 (Security Groups)</text>
+  
+  <!-- ALB Security Group -->
+  <rect x="80" y="150" width="220" height="80" class="sg-box" rx="5"/>
+  <text x="190" y="175" text-anchor="middle" class="text" font-weight="bold">library-alb-sg</text>
+  <text x="190" y="195" text-anchor="middle" class="small-text">인터넷 → ALB</text>
+  <text x="190" y="212" text-anchor="middle" class="small-text">Inbound: 80, 443</text>
+  
+  <!-- ECS Task Security Group -->
+  <rect x="80" y="250" width="220" height="80" class="sg-box" rx="5"/>
+  <text x="190" y="275" text-anchor="middle" class="text" font-weight="bold">library-ecs-task-sg</text>
+  <text x="190" y="295" text-anchor="middle" class="small-text">ALB → ECS Task</text>
+  <text x="190" y="312" text-anchor="middle" class="small-text">Inbound: 8081 (from ALB)</text>
+  
+  <!-- RDS Security Group -->
+  <rect x="80" y="350" width="220" height="80" class="sg-box" rx="5"/>
+  <text x="190" y="375" text-anchor="middle" class="text" font-weight="bold">library-rds-sg</text>
+  <text x="190" y="395" text-anchor="middle" class="small-text">ECS Task → RDS</text>
+  <text x="190" y="412" text-anchor="middle" class="small-text">Inbound: 3306 (from ECS)</text>
+
+  <!-- Section 2: 로드밸런서 (Load Balancer) -->
+  <rect x="370" y="100" width="280" height="350" class="section-bg" rx="5"/>
+  <text x="510" y="130" text-anchor="middle" class="subtitle">로드밸런서 (ALB)</text>
+  
+  <!-- Application Load Balancer -->
+  <rect x="400" y="150" width="220" height="120" class="alb-box" rx="5"/>
+  <text x="510" y="180" text-anchor="middle" class="text" font-weight="bold">Application Load Balancer</text>
+  <text x="510" y="202" text-anchor="middle" class="small-text">library-management-alb</text>
+  <line x1="410" y1="215" x2="600" y2="215" stroke="#AAB7B8" stroke-width="1"/>
+  <text x="510" y="235" text-anchor="middle" class="small-text">리스너: HTTP (80)</text>
+  <text x="510" y="255" text-anchor="middle" class="small-text">보안: library-alb-sg</text>
+  
+  <!-- Traffic Routing -->
+  <rect x="400" y="290" width="220" height="60" class="box" rx="5"/>
+  <text x="510" y="312" text-anchor="middle" class="text">트래픽 라우팅</text>
+  <text x="510" y="332" text-anchor="middle" class="small-text">Blue-Green 전환</text>
+
+  <!-- Section 3: 대상 그룹 (Target Groups) -->
+  <rect x="690" y="100" width="280" height="350" class="section-bg" rx="5"/>
+  <text x="830" y="130" text-anchor="middle" class="subtitle">대상 그룹 (Target Groups)</text>
+  
+  <!-- Blue Target Group -->
+  <rect x="720" y="180" width="220" height="80" class="tg-box" rx="5"/>
+  <text x="830" y="205" text-anchor="middle" class="text" font-weight="bold">library-blue-tg</text>
+  <text x="830" y="225" text-anchor="middle" class="small-text">Target Type: IP</text>
+  <text x="830" y="242" text-anchor="middle" class="small-text">Port: 8081</text>
+  
+  <!-- Green Target Group -->
+  <rect x="720" y="290" width="220" height="80" class="tg-box" rx="5"/>
+  <text x="830" y="315" text-anchor="middle" class="text" font-weight="bold">library-green-tg</text>
+  <text x="830" y="335" text-anchor="middle" class="small-text">Target Type: IP</text>
+  <text x="830" y="352" text-anchor="middle" class="small-text">Port: 8081</text>
+
+  <!-- Arrows showing relationships -->
+  
+  <!-- Security Group to ALB -->
+  <path d="M 300 190 L 400 210" class="arrow-primary"/>
+  <text x="340" y="195" class="small-text">적용</text>
+  
+  <!-- ALB to Target Groups -->
+  <path d="M 620 220 L 720 220" class="arrow-primary"/>
+  <text x="650" y="215" class="small-text">트래픽 전달</text>
+  
+  <!-- ALB to Blue TG -->
+  <path d="M 620 320 L 680 280 L 720 250" class="arrow"/>
+  
+  <!-- ALB to Green TG -->
+  <path d="M 620 320 L 680 320 L 720 330" class="arrow"/>
+  
+  <!-- Security Group to ECS (implied by arrow to TG area) -->
+  <path d="M 300 290 L 350 290 L 350 450 L 830 450 L 830 370" class="arrow"/>
+  <text x="360" y="445" class="small-text">ECS Task 보호</text>
+
+  <!-- Bottom section: Flow diagram -->
+  <rect x="50" y="480" width="920" height="280" class="section-bg" rx="5"/>
+  <text x="510" y="510" text-anchor="middle" class="subtitle">트래픽 흐름도</text>
+  
+  <!-- Flow boxes -->
+  <rect x="80" y="540" width="120" height="60" class="box" rx="5"/>
+  <text x="140" y="565" text-anchor="middle" class="text">인터넷</text>
+  <text x="140" y="585" text-anchor="middle" class="small-text">사용자 요청</text>
+  
+  <rect x="240" y="540" width="120" height="60" class="box" rx="5"/>
+  <text x="300" y="565" text-anchor="middle" class="text">ALB</text>
+  <text x="300" y="585" text-anchor="middle" class="small-text">library-alb-sg</text>
+  
+  <rect x="400" y="520" width="120" height="50" class="tg-box" rx="5"/>
+  <text x="460" y="545" text-anchor="middle" class="small-text">Blue TG</text>
+  
+  <rect x="400" y="590" width="120" height="50" class="tg-box" rx="5"/>
+  <text x="460" y="615" text-anchor="middle" class="small-text">Green TG</text>
+  
+  <rect x="560" y="540" width="120" height="60" class="box" rx="5"/>
+  <text x="620" y="565" text-anchor="middle" class="text">ECS Task</text>
+  <text x="620" y="585" text-anchor="middle" class="small-text">library-ecs-task-sg</text>
+  
+  <rect x="720" y="540" width="120" height="60" class="box" rx="5"/>
+  <text x="780" y="565" text-anchor="middle" class="text">RDS MySQL</text>
+  <text x="780" y="585" text-anchor="middle" class="small-text">library-rds-sg</text>
+  
+  <!-- Flow arrows -->
+  <path d="M 200 570 L 240 570" class="arrow-primary"/>
+  <path d="M 360 560 L 400 545" class="arrow"/>
+  <path d="M 360 580 L 400 615" class="arrow"/>
+  <path d="M 520 545 L 560 560" class="arrow-primary"/>
+  <path d="M 520 615 L 560 580" class="arrow"/>
+  <path d="M 680 570 L 720 570" class="arrow-primary"/>
+  
+  <!-- Labels on flow -->
+  <text x="220" y="560" text-anchor="middle" class="small-text">80/443</text>
+  <text x="380" y="530" text-anchor="middle" class="small-text">라우팅</text>
+  <text x="540" y="555" text-anchor="middle" class="small-text">8081</text>
+  <text x="700" y="560" text-anchor="middle" class="small-text">3306</text>
+  
+  <!-- Legend -->
+  <text x="80" y="680" class="text" font-weight="bold">배포 전략:</text>
+  <text x="80" y="700" class="small-text">1. Blue 환경에서 기존 버전 운영</text>
+  <text x="80" y="718" class="small-text">2. Green 환경에 새 버전 배포</text>
+  <text x="80" y="736" class="small-text">3. ALB 리스너 규칙으로 Green으로 트래픽 전환</text>
+  
+  <text x="500" y="680" class="text" font-weight="bold">보안 계층:</text>
+  <text x="500" y="700" class="small-text">Internet → ALB (80/443) → ECS (8081) → RDS (3306)</text>
+  <text x="500" y="718" class="small-text">각 계층마다 독립적인 보안 그룹으로 보호</text>
+  <text x="500" y="736" class="small-text">최소 권한 원칙 적용</text>
+
+</svg>

@@ -96,6 +96,8 @@ public class SecurityConfig {
                             .requestMatchers("/", "/home").permitAll()
                             .requestMatchers("/css/**", "/images/**").permitAll()
                             .requestMatchers("/auth/**", "/register", "/login").permitAll()
+                            // Actuator Health Check (ALB용)
+                            .requestMatchers("/actuator/**").permitAll()
                             // 게시판 URL (목록/상세 조회는 모두 허용)
                             .requestMatchers("/boards/**").permitAll()
                             
