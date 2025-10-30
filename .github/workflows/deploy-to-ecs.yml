@@ -90,7 +90,7 @@ jobs:
             --task-definition ${{ steps.register-task-def.outputs.task_definition_arn }} \
             --desired-count 1 \
             --launch-type FARGATE \
-            --network-configuration "awsvpcConfiguration={subnets=[subnet-0eb8d0b96a8e96f23,subnet-08580256bc5bd0ab1],securityGroups=[$(aws ec2 describe-security-groups --filters Name=group-name,Values=library-ecs-task-sg --query 'SecurityGroups[0].GroupId' --output text)],assignPublicIp=ENABLED}" \
+            --network-configuration "awsvpcConfiguration={subnets=[subnet-0eb8d0b96a8e96f23,subnet-08580256bc3bd0ab1],securityGroups=[$(aws ec2 describe-security-groups --filters Name=group-name,Values=library-ecs-task-sg --query 'SecurityGroups[0].GroupId' --output text)],assignPublicIp=ENABLED}" \
             --load-balancers "targetGroupArn=$(aws elbv2 describe-target-groups --names library-blue-tg --query 'TargetGroups[0].TargetGroupArn' --output text),containerName=${{ env.CONTAINER_NAME }},containerPort=8081" \
             --health-check-grace-period-seconds 60
 
