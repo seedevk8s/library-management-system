@@ -49,46 +49,47 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-      - name: Debug - Print variables and file content
+      - name: Update image in task definition
         run: |
-          echo "========================================" 
-          echo "DEBUG INFORMATION"
-          echo "========================================"
-          echo "ECS_TASK_DEFINITION: ${{ env.ECS_TASK_DEFINITION }}"
-          echo "CONTAINER_NAME: ${{ env.CONTAINER_NAME }}"
-          echo "IMAGE: ${{ steps.build-image.outputs.image }}"
-          echo ""
-          echo "========================================"
-          echo "TASK DEFINITION FILE CONTENT:"
-          echo "========================================"
+          # task-definition.json의 이미지를 새로 빌드한 이미지로 교체
+          sed -i 's|"image": "[^"]*"|"image": "${{ steps.build-image.outputs.image }}"|' ${{ env.ECS_TASK_DEFINITION }}
+          
+          echo "Updated task definition:"
           cat ${{ env.ECS_TASK_DEFINITION }}
-          echo ""
-          echo "========================================"
-          echo "CONTAINER NAMES IN FILE:"
-          echo "========================================"
-          cat ${{ env.ECS_TASK_DEFINITION }} | grep -A 2 '"name"'
 
-      - name: Fill in the new image ID in the Amazon ECS task definition
-        id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: ${{ env.ECS_TASK_DEFINITION }}
-          container-name: ${{ env.CONTAINER_NAME }}
-          image: ${{ steps.build-image.outputs.image }}
+      - name: Register new Task Definition
+        id: register-task-def
+        run: |
+          # AWS CLI로 직접 Task Definition 등록
+          TASK_DEF_ARN=$(aws ecs register-task-definition \
+            --cli-input-json file://${{ env.ECS_TASK_DEFINITION }} \
+            --query 'taskDefinition.taskDefinitionArn' \
+            --output text)
+          
+          echo "Registered Task Definition: $TASK_DEF_ARN"
+          echo "task_definition_arn=$TASK_DEF_ARN" >> $GITHUB_OUTPUT
 
-      - name: Deploy Amazon ECS task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: ${{ env.ECS_SERVICE }}
-          cluster: ${{ env.ECS_CLUSTER }}
-          wait-for-service-stability: true
+      - name: Update ECS Service
+        run: |
+          aws ecs update-service \
+            --cluster ${{ env.ECS_CLUSTER }} \
+            --service ${{ env.ECS_SERVICE }} \
+            --task-definition ${{ steps.register-task-def.outputs.task_definition_arn }} \
+            --force-new-deployment
+
+      - name: Wait for service stability
+        run: |
+          echo "Waiting for service to become stable..."
+          aws ecs wait services-stable \
+            --cluster ${{ env.ECS_CLUSTER }} \
+            --services ${{ env.ECS_SERVICE }}
 
       - name: Deployment Summary
         run: |
           echo "### 🚀 Deployment Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- **Image**: ${{ steps.build-image.outputs.image }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Task Definition**: ${{ steps.register-task-def.outputs.task_definition_arn }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Cluster**: ${{ env.ECS_CLUSTER }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Service**: ${{ env.ECS_SERVICE }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Region**: ${{ env.AWS_REGION }}" >> $GITHUB_STEP_SUMMARY
