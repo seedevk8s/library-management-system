@@ -1,0 +1,62 @@
+name: Deploy to Railway
+
+# 워크플로우 트리거 조건
+on:
+  push:
+    branches:
+      - main
+      - claude/deploy-to-aws-011CV5PvDYXxRMgE1vDEaxCo  # 현재 작업 브랜치
+  workflow_dispatch:  # GitHub UI에서 수동 실행 가능
+
+# 워크플로우 전체에서 사용할 환경 변수
+env:
+  RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+jobs:
+  deploy:
+    name: Deploy to Railway
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      # Step 1: 소스 코드 체크아웃
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Railway CLI 설치
+      - name: Install Railway CLI
+        run: |
+          # Railway CLI 최신 버전 설치
+          curl -fsSL https://railway.app/install.sh | sh
+          echo "$HOME/.railway/bin" >> $GITHUB_PATH
+
+      # Step 3: Railway CLI 버전 확인
+      - name: Verify Railway CLI installation
+        run: railway version
+
+      # Step 4: Railway에 배포
+      - name: Deploy to Railway
+        run: |
+          # Railway 토큰으로 인증
+          echo "🔐 Authenticating with Railway..."
+
+          # Railway 프로젝트에 배포
+          echo "🚀 Deploying to Railway..."
+          railway up --detach
+
+          echo "✅ Deployment initiated successfully!"
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+      # Step 5: 배포 결과 요약
+      - name: Deployment Summary
+        run: |
+          echo "### 🚀 Railway Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Triggered by**: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Deployment to Railway completed!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 Check your deployment status at: https://railway.app" >> $GITHUB_STEP_SUMMARY

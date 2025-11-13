@@ -24,7 +24,7 @@ spring:
       enabled: true
 
 server:
-  port: 8081
+  port: ${PORT:8081}  # Railway는 PORT 환경 변수 제공, 로컬은 8081 사용
 
 # 파일 저장 경로
 file:

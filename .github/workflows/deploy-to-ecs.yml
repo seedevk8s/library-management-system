@@ -7,6 +7,7 @@ on:
       - main  # main 브랜치
       - feature/cicd-ecs-blue-green-deployment  # feature 브랜치
       - feature/phase4-github-actions-workflow  # Phase 4 작업 브랜치
+      - claude/deploy-to-aws-011CV5PvDYXxRMgE1vDEaxCo  # 현재 작업 브랜치
   workflow_dispatch:  # GitHub UI에서 수동 실행 가능
 
 # 워크플로우 전체에서 사용할 환경 변수 정의
